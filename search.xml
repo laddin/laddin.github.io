@@ -144,7 +144,7 @@
 <h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><h5 id="设置用户名和邮箱"><a href="#设置用户名和邮箱" class="headerlink" title="设置用户名和邮箱"></a>设置用户名和邮箱</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git config --global user.name "laddin"</span><br><span class="line">git config --global user.email laddin@163.com</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h5 id="创建新仓库"><a href="#创建新仓库" class="headerlink" title="创建新仓库"></a>创建新仓库</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir git_testcd git_testgit init</span><br></pre></td></tr></table></figure>
+<h5 id="创建新仓库"><a href="#创建新仓库" class="headerlink" title="创建新仓库"></a>创建新仓库</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir git_test </span><br><span class="line">cd git_test </span><br><span class="line">git init</span><br></pre></td></tr></table></figure>
 
 <h5 id="克隆仓库"><a href="#克隆仓库" class="headerlink" title="克隆仓库"></a>克隆仓库</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git clone ladd@192.168.16.1:/path</span><br></pre></td></tr></table></figure>
 
@@ -781,6 +781,57 @@
 <li>maxClientCnxns:限制连接到 ZooKeeper 的客户端的数量</li>
 <li>minSessionTimeout:最小会话时间</li>
 <li>maxSessionTimeout:最长会话时间 </li>
+</ul>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>macfee安装</title>
+    <url>/macfee/</url>
+    <content><![CDATA[<p>由于某些jar包版本过低，部分服务器被入侵，这里记录安装过程<a id="more"></a></p>
+<h4 id="liunx上安装macfee安装过程"><a href="#liunx上安装macfee安装过程" class="headerlink" title="liunx上安装macfee安装过程"></a>liunx上安装macfee安装过程</h4><h5 id="将脚本和压缩包上传至服务器"><a href="#将脚本和压缩包上传至服务器" class="headerlink" title="将脚本和压缩包上传至服务器"></a>将脚本和压缩包上传至服务器</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">install.sh</span><br><span class="line">McAfeeTP-10.6.8-115-Release-standalone.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h5 id="创建mcafee目录"><a href="#创建mcafee目录" class="headerlink" title="创建mcafee目录"></a>创建mcafee目录</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo mkdir linux_mcafee</span><br><span class="line">cd linux_mcafee/</span><br></pre></td></tr></table></figure>
+
+<h5 id="创建mfe的用户和组"><a href="#创建mfe的用户和组" class="headerlink" title="创建mfe的用户和组"></a>创建mfe的用户和组</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">groupadd macfee</span><br><span class="line">useradd  macfee -g macfee</span><br></pre></td></tr></table></figure>
+
+<h5 id="设定权限"><a href="#设定权限" class="headerlink" title="设定权限"></a>设定权限</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "chmod +x install.sh"</span><br><span class="line">sudo tar -zxvf McAfeeTP-10.6.8-115-Release-standalone.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h5 id="安装macfee-agent"><a href="#安装macfee-agent" class="headerlink" title="安装macfee agent"></a>安装macfee agent</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./install.sh -i"</span><br></pre></td></tr></table></figure>
+
+<h5 id="安装macfee-threat-prevention-使用空白键一直到100-输入accepet"><a href="#安装macfee-threat-prevention-使用空白键一直到100-输入accepet" class="headerlink" title="安装macfee threat prevention(使用空白键一直到100% 输入accepet)"></a>安装macfee threat prevention(使用空白键一直到100% 输入accepet)</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./install-mfetp.sh"</span><br></pre></td></tr></table></figure>
+
+<h5 id="安装完成之后到此路径进行扫描"><a href="#安装完成之后到此路径进行扫描" class="headerlink" title="安装完成之后到此路径进行扫描"></a>安装完成之后到此路径进行扫描</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd /opt/isec/ens/threatprevention/bin/</span><br><span class="line">sudo sh -c "./isecav --setapstatus enable"</span><br><span class="line">sudo sh -c "./isecav --getapstatus"</span><br></pre></td></tr></table></figure>
+
+<h5 id="设定事件档案大小-可设定1MB-999MB-25即是25MB"><a href="#设定事件档案大小-可设定1MB-999MB-25即是25MB" class="headerlink" title="设定事件档案大小,可设定1MB-999MB 25即是25MB"></a>设定事件档案大小,可设定1MB-999MB 25即是25MB</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./isecav --setmaxproductlogsize 25"</span><br></pre></td></tr></table></figure>
+
+<h5 id="开启产品事件"><a href="#开启产品事件" class="headerlink" title="开启产品事件"></a>开启产品事件</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./isecav --productlog enable"</span><br></pre></td></tr></table></figure>
+
+<h5 id="选择完整扫描"><a href="#选择完整扫描" class="headerlink" title="选择完整扫描"></a>选择完整扫描</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./isecav --runtask --index 2"</span><br></pre></td></tr></table></figure>
+
+<h5 id="显示扫描列表"><a href="#显示扫描列表" class="headerlink" title="显示扫描列表"></a>显示扫描列表</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./isecav --listtask"</span><br></pre></td></tr></table></figure>
+
+<h5 id="查看扫描日志"><a href="#查看扫描日志" class="headerlink" title="查看扫描日志"></a>查看扫描日志</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo tail -f /var/McAfee/ens/log/tp/mfeoasmgr.log</span><br></pre></td></tr></table></figure>
+
+<h5 id="设定规则排除该文件夹路径"><a href="#设定规则排除该文件夹路径" class="headerlink" title="设定规则排除该文件夹路径"></a>设定规则排除该文件夹路径</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c './isecav --setoasprofileconfig --profile standard --addexclusionrw --excludepaths "/root/sample*"'</span><br></pre></td></tr></table></figure>
+
+<h5 id="列出排除规则"><a href="#列出排除规则" class="headerlink" title="列出排除规则"></a>列出排除规则</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./isecav --getoasconfig --exclusionlist --profile standard"</span><br></pre></td></tr></table></figure>
+
+<h4 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h4><ul>
+<li><p>完整扫描是会去扫描所有文件夹包括那些没有做存取动作的文件夹</p>
+</li>
+<li><p>非完整扫描是一直检测的但只会扫描有存取动作的文件</p>
+</li>
+<li><p>扫描的log : /var/McAfee/ens/log/tp/mfeoasmgr.log </p>
+</li>
+<li><p>设定/更新/报错的log : /var/McAfee/ens/log/tp/mfetpd</p>
+</li>
+<li><p>windows可以选择想扫描的文件，linux是全局扫描</p>
+</li>
+<li><p>其实linux用mcafee没什么效果，后面也直接下掉了。</p>
+</li>
 </ul>
 ]]></content>
       <categories>
