@@ -94,14 +94,14 @@
 
 
 
-<meta name="description" content="整理使用过程，方便以后学习。">
+<meta name="description" content="优化TCP减少TIME_WAIT。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="rsync">
-<meta property="og:url" content="http://laddin.me/rsync/index.html">
+<meta property="og:title" content="优化tcp减少TIME_WAIT">
+<meta property="og:url" content="http://laddin.me/tcp-01/index.html">
 <meta property="og:site_name" content="Laddin&#39;Blog">
-<meta property="og:description" content="整理使用过程，方便以后学习。">
-<meta property="article:published_time" content="2017-02-12T18:10:43.000Z">
-<meta property="article:modified_time" content="2020-04-04T17:12:54.198Z">
+<meta property="og:description" content="优化TCP减少TIME_WAIT。">
+<meta property="article:published_time" content="2019-07-15T09:49:17.000Z">
+<meta property="article:modified_time" content="2020-04-05T09:52:45.733Z">
 <meta property="article:author" content="多多">
 <meta name="twitter:card" content="summary">
 
@@ -132,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://laddin.me/rsync/"/>
+  <link rel="canonical" href="http://laddin.me/tcp-01/"/>
 
 
 
 
 
-  <title>rsync | Laddin'Blog</title>
+  <title>优化tcp减少TIME_WAIT | Laddin'Blog</title>
   
 
 
@@ -295,7 +295,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://laddin.me/rsync/">
+    <link itemprop="mainEntityOfPage" href="http://laddin.me/tcp-01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="多多">
@@ -312,7 +312,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">rsync</h1>
+          <h1 class="post-title" itemprop="name headline">优化tcp减少TIME_WAIT</h1>
         
 
         <div class="post-meta">
@@ -324,8 +324,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-12T13:10:43-05:00">
-                2017-02-12
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-15T05:49:17-04:00">
+                2019-07-15
               </time>
             
 
@@ -384,29 +384,21 @@
       
 
       
-        <p> 整理使用过程，方便以后学习。 <a id="more"></a></p>
-<h4 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h4><ul>
-<li>centos 6.8 x64</li>
-<li>推送端IP：192.168.0.10</li>
-<li>接收端IP：192.168.0.20</li>
+        <p>优化TCP减少TIME_WAIT。<a id="more"></a></p>
+<h4 id="TIME-WAIT"><a href="#TIME-WAIT" class="headerlink" title="TIME_WAIT"></a>TIME_WAIT</h4><p>TIME_WAIT是TCP连接中的一个状态，每一个TCP连接都会在内存中维护一个控制块TCB(Transmission Control Block），用来记录TCP连接的IP和端口等信息。TIME_WAIT状态会维持2个MSL时间(MSL：<code>Maximum Segment Lifetime 最大分节生命期</code>，不同系统时间也不一样，大概是2分钟左右），以确保这段时间内不会有相同的IP和端口号的新连接，目的是为了预防，上一个连接的分组包延迟到达，而被新的连接接受而导致TCP流被破坏。 但是TIME_WAIT状态的TCP连接过多也会造成性能问题，比如我们的可用源端口只有60000个，而在2MSL内是无法被重用的，也就是说我们的tcp连接率就限制在了在60000/120 = 500次/秒。</p>
+<hr>
+<h4 id="计算TCP并发"><a href="#计算TCP并发" class="headerlink" title="计算TCP并发"></a>计算TCP并发</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看可用端口数目</span></span><br><span class="line">cat /proc/sys/net/ipv4/ip_local_port_range</span><br><span class="line">32768   60999</span><br><span class="line"><span class="meta">#</span><span class="bash"> 计算tcp并发数</span></span><br><span class="line">echo "(60999-32768)/60"|bc</span><br><span class="line">470</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h4><ul>
+<li><p>增加可用端口范围，如上计算tcp并发</p>
+</li>
+<li><p>对tcp进行优化</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/sysctl.conf</span><br><span class="line"><span class="meta">#</span><span class="bash"> 启用tcp的时间戳配置，只有启用这个，下面reuse和recycle才生效。</span></span><br><span class="line">net.ipv4.tcp_timestamps = 1</span><br><span class="line"><span class="meta">#</span><span class="bash"> 允许TIME_WAIT SOCKETS重新用于新的TCP连接，依赖开启tcp优化中的tcp_timestamp</span></span><br><span class="line">net.ipv4.tcp_tw_reuse = 1</span><br><span class="line"><span class="meta">#</span><span class="bash"> 开启TCP连接中的TIME_WAIT SOCKETS快速回收，依赖开启tcp优化中的tcp_timestamp</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> nat网络下不建议开，自行谷歌</span></span><br><span class="line">net.ipv4.tcp_tw_recycle = 1</span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改FIN_WAIT2状态tcp的超时时间为30s</span></span><br><span class="line">net.ipv4.tcp_fin_timeout = 30</span><br></pre></td></tr></table></figure>
+
+</li>
 </ul>
-<hr>
-<h4 id="接收端"><a href="#接收端" class="headerlink" title="接收端"></a>接收端</h4><p> 下面先在192.168.0.20上进行操作，添加配置文件和密码文件，需要注意的是密码文件权限必须为<code>600</code>，密码文件格式是<code>账号</code>:<code>密码</code>，这里的账号可以不是password里面的账号。 </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@test2 ~]# vim /etc/rsync.passwd</span><br><span class="line">[root@test2 ~]# chmod 600 /etc/rsync.passwd</span><br><span class="line">[root@test2 ~]# cat /etc/rsync.passwd </span><br><span class="line">leoo:leo1314leo</span><br><span class="line"></span><br><span class="line">[root@test2 ~]# cat /etc/rsyncd.conf</span><br><span class="line">uid = root</span><br><span class="line">gid = root</span><br><span class="line">use chroot = no</span><br><span class="line">max connections = 50</span><br><span class="line">timeout = 600</span><br><span class="line">strict modes = yes</span><br><span class="line">port = 873</span><br><span class="line">pid file = /var/run/rsyncd.pid</span><br><span class="line">lock file = /var/run/rsyncd.lock</span><br><span class="line">log file = /var/run/rsyncd.log</span><br><span class="line"></span><br><span class="line">[demo_web]				</span><br><span class="line">path =/home</span><br><span class="line">read only = no</span><br><span class="line">list = yes</span><br><span class="line">auth users = leoo</span><br><span class="line">secrets file = /etc/rsyncd.secrets</span><br></pre></td></tr></table></figure>
-
-<p> 这里只是一个简单的配置示例，配置文件中还能写很多的规则，这里就不一一介绍了，有其他需求时google走起，下面启动服务，顺便查看本机是否开放873端口和检查防火墙策略。 </p>
-<hr>
-<h4 id="推送端"><a href="#推送端" class="headerlink" title="推送端"></a>推送端</h4><p> 192.168.0.10安装好rsync就可以了，直接av选项走起。这里要注意的是密码文件，必须为<code>600</code>权限，直接写入192.168.0.20配置文件的密码即可，演示如下。 </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@test1 ~]# touch rsync_test.txt</span><br><span class="line">[root@test1 ~]# cat /etc/rsync.password </span><br><span class="line">leo1314leo</span><br><span class="line"></span><br><span class="line">[root@test1 ~]# rsync -av --progress --delete --password-file=rsync.pass rsync_test.txt  leoo@192.168.0.20::demo_web</span><br><span class="line">sending incremental file list</span><br><span class="line">rsync_test.txt</span><br><span class="line">           0 100%    0.00kB/s    0:00:00 (xfer#1， to-check=0/1)</span><br><span class="line"></span><br><span class="line">sent 75 bytes  received 27 bytes  68.00 bytes/sec</span><br><span class="line">total size is 0  speedup is 0.00</span><br></pre></td></tr></table></figure>
-
-<p>在接收端 <code>192.168.0.20</code> 上查看是否有推送到<code>demo_web</code>的目录下。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@test2 ~]# ll /home</span><br><span class="line">总用量 0</span><br><span class="line">-rw-r--r-- 1 test test 0 2月  20 00:51 rsync_test.txt</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h4 id="Win操作"><a href="#Win操作" class="headerlink" title="Win操作"></a>Win操作</h4><p> 还有一些情况是需要在win上进行传送的，下载rsync程序<a href="https://github.com/laddin/pro_file/raw/98e693bab9d17e1f672e868d1fbfc8d660c01256/cwRsync-v5.5.0.zip" target="_blank" rel="noopener">下载地址</a>，直接解压，我是放到F盘的，然后创建一个etc目录，将密码<code>leo1314leo</code>写到etc目录下面的密码文件，在cdm中就可以直接运行rsync命令了（ win和linux环境不一样，<code>/cygdrive/f/laddin/CNAME</code>这个代表的是F盘下面的laddin这个目录的CNAME这个文件。 ）。 </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\laddin&gt;F:\cwRsync_5.5.0_x86_Free\bin\rsync.exe  -avzcrP --delete  --password-file=/cygdrive/f/cwRsync_5.5.0_x86_Free/etc/rsync.pass  /cygdrive/f/laddin/CNAME leoo@192.168.254.11::demo_web</span><br><span class="line">sending incremental file list</span><br><span class="line">CNAME</span><br><span class="line">              9 100%    0.00kB/s    0:00:00 (xfr#1， to-chk=0/1)</span><br><span class="line"></span><br><span class="line">sent 126 bytes  received 34 bytes  106.67 bytes/sec</span><br><span class="line">total size is 9  speedup is 0.06</span><br><span class="line"></span><br><span class="line">C:\Users\laddin&gt;</span><br></pre></td></tr></table></figure>
-
-
+<p>关于 sysctl每一项优化请查看<a href="https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt" target="_blank" rel="noopener">官方文档</a>。</p>
 
       
     </div>
@@ -431,8 +423,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/pureftp/" rel="next" title="pure-ftp部署">
-                <i class="fa fa-chevron-left"></i> pure-ftp部署
+              <a href="/nf-conntrack/" rel="next" title="nf_conntrack优化解决tcp包被drop">
+                <i class="fa fa-chevron-left"></i> nf_conntrack优化解决tcp包被drop
               </a>
             
           </div>
@@ -441,8 +433,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/openpyxl/" rel="prev" title="openpyxl">
-                openpyxl <i class="fa fa-chevron-right"></i>
+              <a href="/ulimit/" rel="prev" title="Too many open files">
+                Too many open files <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -581,7 +573,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装环境"><span class="nav-number">1.</span> <span class="nav-text">安装环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接收端"><span class="nav-number">2.</span> <span class="nav-text">接收端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#推送端"><span class="nav-number">3.</span> <span class="nav-text">推送端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Win操作"><span class="nav-number">4.</span> <span class="nav-text">Win操作</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#TIME-WAIT"><span class="nav-number">1.</span> <span class="nav-text">TIME_WAIT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算TCP并发"><span class="nav-number">2.</span> <span class="nav-text">计算TCP并发</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优化"><span class="nav-number">3.</span> <span class="nav-text">优化</span></a></li></ol></div>
             
 
           </div>

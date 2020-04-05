@@ -94,14 +94,14 @@
 
 
 
-<meta name="description" content="整理使用过程，方便以后学习。">
+<meta name="description" content="由于公司已经使用堡垒机进行权限控制，现在都是使用运维账号进行日常管理，今天在执行ulimit，提示异常Operation not permitted">
 <meta property="og:type" content="article">
-<meta property="og:title" content="rsync">
-<meta property="og:url" content="http://laddin.me/rsync/index.html">
+<meta property="og:title" content="普通用户无法执行ulimit">
+<meta property="og:url" content="http://laddin.me/ulimit-01/index.html">
 <meta property="og:site_name" content="Laddin&#39;Blog">
-<meta property="og:description" content="整理使用过程，方便以后学习。">
-<meta property="article:published_time" content="2017-02-12T18:10:43.000Z">
-<meta property="article:modified_time" content="2020-04-04T17:12:54.198Z">
+<meta property="og:description" content="由于公司已经使用堡垒机进行权限控制，现在都是使用运维账号进行日常管理，今天在执行ulimit，提示异常Operation not permitted">
+<meta property="article:published_time" content="2019-03-05T10:34:42.000Z">
+<meta property="article:modified_time" content="2020-04-05T09:37:43.690Z">
 <meta property="article:author" content="多多">
 <meta name="twitter:card" content="summary">
 
@@ -132,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://laddin.me/rsync/"/>
+  <link rel="canonical" href="http://laddin.me/ulimit-01/"/>
 
 
 
 
 
-  <title>rsync | Laddin'Blog</title>
+  <title>普通用户无法执行ulimit | Laddin'Blog</title>
   
 
 
@@ -295,7 +295,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://laddin.me/rsync/">
+    <link itemprop="mainEntityOfPage" href="http://laddin.me/ulimit-01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="多多">
@@ -312,7 +312,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">rsync</h1>
+          <h1 class="post-title" itemprop="name headline">普通用户无法执行ulimit</h1>
         
 
         <div class="post-meta">
@@ -324,8 +324,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-12T13:10:43-05:00">
-                2017-02-12
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-05T05:34:42-05:00">
+                2019-03-05
               </time>
             
 
@@ -384,27 +384,14 @@
       
 
       
-        <p> 整理使用过程，方便以后学习。 <a id="more"></a></p>
-<h4 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h4><ul>
-<li>centos 6.8 x64</li>
-<li>推送端IP：192.168.0.10</li>
-<li>接收端IP：192.168.0.20</li>
-</ul>
-<hr>
-<h4 id="接收端"><a href="#接收端" class="headerlink" title="接收端"></a>接收端</h4><p> 下面先在192.168.0.20上进行操作，添加配置文件和密码文件，需要注意的是密码文件权限必须为<code>600</code>，密码文件格式是<code>账号</code>:<code>密码</code>，这里的账号可以不是password里面的账号。 </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@test2 ~]# vim /etc/rsync.passwd</span><br><span class="line">[root@test2 ~]# chmod 600 /etc/rsync.passwd</span><br><span class="line">[root@test2 ~]# cat /etc/rsync.passwd </span><br><span class="line">leoo:leo1314leo</span><br><span class="line"></span><br><span class="line">[root@test2 ~]# cat /etc/rsyncd.conf</span><br><span class="line">uid = root</span><br><span class="line">gid = root</span><br><span class="line">use chroot = no</span><br><span class="line">max connections = 50</span><br><span class="line">timeout = 600</span><br><span class="line">strict modes = yes</span><br><span class="line">port = 873</span><br><span class="line">pid file = /var/run/rsyncd.pid</span><br><span class="line">lock file = /var/run/rsyncd.lock</span><br><span class="line">log file = /var/run/rsyncd.log</span><br><span class="line"></span><br><span class="line">[demo_web]				</span><br><span class="line">path =/home</span><br><span class="line">read only = no</span><br><span class="line">list = yes</span><br><span class="line">auth users = leoo</span><br><span class="line">secrets file = /etc/rsyncd.secrets</span><br></pre></td></tr></table></figure>
+        <p>由于公司已经使用堡垒机进行权限控制，现在都是使用运维账号进行日常管理，今天在执行ulimit，提示异常Operation not permitted<a id="more"></a>，记录如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ulimit -c unlimited</span><br><span class="line">-bash: ulimit: core file size: cannot modify limit: Operation not permitted</span><br></pre></td></tr></table></figure>
 
-<p> 这里只是一个简单的配置示例，配置文件中还能写很多的规则，这里就不一一介绍了，有其他需求时google走起，下面启动服务，顺便查看本机是否开放873端口和检查防火墙策略。 </p>
-<hr>
-<h4 id="推送端"><a href="#推送端" class="headerlink" title="推送端"></a>推送端</h4><p> 192.168.0.10安装好rsync就可以了，直接av选项走起。这里要注意的是密码文件，必须为<code>600</code>权限，直接写入192.168.0.20配置文件的密码即可，演示如下。 </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@test1 ~]# touch rsync_test.txt</span><br><span class="line">[root@test1 ~]# cat /etc/rsync.password </span><br><span class="line">leo1314leo</span><br><span class="line"></span><br><span class="line">[root@test1 ~]# rsync -av --progress --delete --password-file=rsync.pass rsync_test.txt  leoo@192.168.0.20::demo_web</span><br><span class="line">sending incremental file list</span><br><span class="line">rsync_test.txt</span><br><span class="line">           0 100%    0.00kB/s    0:00:00 (xfer#1， to-check=0/1)</span><br><span class="line"></span><br><span class="line">sent 75 bytes  received 27 bytes  68.00 bytes/sec</span><br><span class="line">total size is 0  speedup is 0.00</span><br></pre></td></tr></table></figure>
-
-<p>在接收端 <code>192.168.0.20</code> 上查看是否有推送到<code>demo_web</code>的目录下。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@test2 ~]# ll /home</span><br><span class="line">总用量 0</span><br><span class="line">-rw-r--r-- 1 test test 0 2月  20 00:51 rsync_test.txt</span><br></pre></td></tr></table></figure>
+<p> 在man page中发现hard limit和soft limit ，意思是root账号可以设置hard limit，所有用户的soft limit不能超过root设置的值</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">A hard limit cannot be increased by a non-root user once it is set;</span><br><span class="line">a soft limit may be increased up to the value of the hard limit.</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h4 id="Win操作"><a href="#Win操作" class="headerlink" title="Win操作"></a>Win操作</h4><p> 还有一些情况是需要在win上进行传送的，下载rsync程序<a href="https://github.com/laddin/pro_file/raw/98e693bab9d17e1f672e868d1fbfc8d660c01256/cwRsync-v5.5.0.zip" target="_blank" rel="noopener">下载地址</a>，直接解压，我是放到F盘的，然后创建一个etc目录，将密码<code>leo1314leo</code>写到etc目录下面的密码文件，在cdm中就可以直接运行rsync命令了（ win和linux环境不一样，<code>/cygdrive/f/laddin/CNAME</code>这个代表的是F盘下面的laddin这个目录的CNAME这个文件。 ）。 </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\laddin&gt;F:\cwRsync_5.5.0_x86_Free\bin\rsync.exe  -avzcrP --delete  --password-file=/cygdrive/f/cwRsync_5.5.0_x86_Free/etc/rsync.pass  /cygdrive/f/laddin/CNAME leoo@192.168.254.11::demo_web</span><br><span class="line">sending incremental file list</span><br><span class="line">CNAME</span><br><span class="line">              9 100%    0.00kB/s    0:00:00 (xfr#1， to-chk=0/1)</span><br><span class="line"></span><br><span class="line">sent 126 bytes  received 34 bytes  106.67 bytes/sec</span><br><span class="line">total size is 9  speedup is 0.06</span><br><span class="line"></span><br><span class="line">C:\Users\laddin&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建<span class="built_in">test</span>用户</span></span><br><span class="line">useradd test</span><br><span class="line">cat /etc/passwd|grep test</span><br><span class="line">test:x:501:502::/home/test:/bin/bash</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> root下设置hard <span class="built_in">limit</span></span></span><br><span class="line">ulimit -Hc 51200</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">test</span>用户测试</span></span><br><span class="line">su - test</span><br><span class="line">ulimit -c 51201</span><br><span class="line">-bash: ulimit: core file size: cannot modify limit: Operation not permitted</span><br><span class="line"></span><br><span class="line">ulimit -c 51200</span><br></pre></td></tr></table></figure>
 
 
 
@@ -431,8 +418,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/pureftp/" rel="next" title="pure-ftp部署">
-                <i class="fa fa-chevron-left"></i> pure-ftp部署
+              <a href="/configparser/" rel="next" title="py文件配置">
+                <i class="fa fa-chevron-left"></i> py文件配置
               </a>
             
           </div>
@@ -441,8 +428,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/openpyxl/" rel="prev" title="openpyxl">
-                openpyxl <i class="fa fa-chevron-right"></i>
+              <a href="/hello-blog/" rel="prev" title="hello-blog">
+                hello-blog <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -581,7 +568,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装环境"><span class="nav-number">1.</span> <span class="nav-text">安装环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接收端"><span class="nav-number">2.</span> <span class="nav-text">接收端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#推送端"><span class="nav-number">3.</span> <span class="nav-text">推送端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Win操作"><span class="nav-number">4.</span> <span class="nav-text">Win操作</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#测试"><span class="nav-number">1.</span> <span class="nav-text">测试</span></a></li></ol></div>
             
 
           </div>

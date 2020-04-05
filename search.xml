@@ -269,6 +269,27 @@
       </categories>
   </entry>
   <entry>
+    <title>nf_conntrack优化解决tcp包被drop</title>
+    <url>/nf-conntrack/</url>
+    <content><![CDATA[<p>nf_conntrack: table full, dropping packet.<a id="more"></a></p>
+<h4 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h4><p>机房redis服务器无法访问，机房监控这台服务器还有流量，但是zabbix监控显示这台服务器流量全部断掉，服务排查正常，查看日志<code>/var/log/message</code>有大量的相同报错，如下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">kernel: nf_conntrack: table full, dropping packet.</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h4><p>谷歌一波，和组内同事讨论一下，开始以为是tcp的问题，调整<code>nf_conntrack</code>的上线后面还是出现过，最后检测是防火墙iptables的问题，iptables是基于 netfilter的， 因为线上都是启用了iptables，开启了tcp包的追踪。追踪文件是在/proc/net/nf_conntrack，里面会跟踪每个tcp连接的状态。 </p>
+<p>解决方案</p>
+<ul>
+<li>关闭防火墙（临时方案）</li>
+<li>提高 netfilter跟踪tcp表的max值 </li>
+<li>iptables里面使用<code>-j notrace</code>关闭tcp包的追踪 </li>
+<li>优化程序，降低短连接的数量 </li>
+</ul>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
     <title>nginx-proxy</title>
     <url>/nginx-proxy/</url>
     <content><![CDATA[<p>Nginx代理，方便后期查询。<a id="more"></a></p>
@@ -623,6 +644,29 @@
       </categories>
   </entry>
   <entry>
+    <title>优化tcp减少TIME_WAIT</title>
+    <url>/tcp-01/</url>
+    <content><![CDATA[<p>优化TCP减少TIME_WAIT。<a id="more"></a></p>
+<h4 id="TIME-WAIT"><a href="#TIME-WAIT" class="headerlink" title="TIME_WAIT"></a>TIME_WAIT</h4><p>TIME_WAIT是TCP连接中的一个状态，每一个TCP连接都会在内存中维护一个控制块TCB(Transmission Control Block），用来记录TCP连接的IP和端口等信息。TIME_WAIT状态会维持2个MSL时间(MSL：<code>Maximum Segment Lifetime 最大分节生命期</code>，不同系统时间也不一样，大概是2分钟左右），以确保这段时间内不会有相同的IP和端口号的新连接，目的是为了预防，上一个连接的分组包延迟到达，而被新的连接接受而导致TCP流被破坏。 但是TIME_WAIT状态的TCP连接过多也会造成性能问题，比如我们的可用源端口只有60000个，而在2MSL内是无法被重用的，也就是说我们的tcp连接率就限制在了在60000/120 = 500次/秒。</p>
+<hr>
+<h4 id="计算TCP并发"><a href="#计算TCP并发" class="headerlink" title="计算TCP并发"></a>计算TCP并发</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看可用端口数目</span></span><br><span class="line">cat /proc/sys/net/ipv4/ip_local_port_range</span><br><span class="line">32768   60999</span><br><span class="line"><span class="meta">#</span><span class="bash"> 计算tcp并发数</span></span><br><span class="line">echo "(60999-32768)/60"|bc</span><br><span class="line">470</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h4><ul>
+<li><p>增加可用端口范围，如上计算tcp并发</p>
+</li>
+<li><p>对tcp进行优化</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim /etc/sysctl.conf</span><br><span class="line"><span class="meta">#</span><span class="bash"> 启用tcp的时间戳配置，只有启用这个，下面reuse和recycle才生效。</span></span><br><span class="line">net.ipv4.tcp_timestamps = 1</span><br><span class="line"><span class="meta">#</span><span class="bash"> 允许TIME_WAIT SOCKETS重新用于新的TCP连接，依赖开启tcp优化中的tcp_timestamp</span></span><br><span class="line">net.ipv4.tcp_tw_reuse = 1</span><br><span class="line"><span class="meta">#</span><span class="bash"> 开启TCP连接中的TIME_WAIT SOCKETS快速回收，依赖开启tcp优化中的tcp_timestamp</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> nat网络下不建议开，自行谷歌</span></span><br><span class="line">net.ipv4.tcp_tw_recycle = 1</span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改FIN_WAIT2状态tcp的超时时间为30s</span></span><br><span class="line">net.ipv4.tcp_fin_timeout = 30</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>关于 sysctl每一项优化请查看<a href="https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt" target="_blank" rel="noopener">官方文档</a>。</p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
     <title>故障排查思路</title>
     <url>/thinking/</url>
     <content><![CDATA[<h4 id="故障排查"><a href="#故障排查" class="headerlink" title="故障排查"></a>故障排查</h4><p> 网站出现突发故障， 如果领导同事在旁边围观，心里素质不强，会出现手足无措，不知如何下手的感觉，这里介绍一些我工作上的故障排查思路 。<a id="more"></a></p>
@@ -648,6 +692,24 @@
 </ul>
 <hr>
 <h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>遇事不要谎，思路要清晰，不用的xshell直接闭掉，免得操作错误，处理之前问一下有其他人员在同时处理吗，最后一个小提示善用搜索引擎。 </p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>普通用户无法执行ulimit</title>
+    <url>/ulimit-01/</url>
+    <content><![CDATA[<p>由于公司已经使用堡垒机进行权限控制，现在都是使用运维账号进行日常管理，今天在执行ulimit，提示异常Operation not permitted<a id="more"></a>，记录如下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ulimit -c unlimited</span><br><span class="line">-bash: ulimit: core file size: cannot modify limit: Operation not permitted</span><br></pre></td></tr></table></figure>
+
+<p> 在man page中发现hard limit和soft limit ，意思是root账号可以设置hard limit，所有用户的soft limit不能超过root设置的值</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">A hard limit cannot be increased by a non-root user once it is set;</span><br><span class="line">a soft limit may be increased up to the value of the hard limit.</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建<span class="built_in">test</span>用户</span></span><br><span class="line">useradd test</span><br><span class="line">cat /etc/passwd|grep test</span><br><span class="line">test:x:501:502::/home/test:/bin/bash</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> root下设置hard <span class="built_in">limit</span></span></span><br><span class="line">ulimit -Hc 51200</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">test</span>用户测试</span></span><br><span class="line">su - test</span><br><span class="line">ulimit -c 51201</span><br><span class="line">-bash: ulimit: core file size: cannot modify limit: Operation not permitted</span><br><span class="line"></span><br><span class="line">ulimit -c 51200</span><br></pre></td></tr></table></figure>
+
+
 ]]></content>
       <categories>
         <category>linux</category>
