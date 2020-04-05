@@ -1,6 +1,536 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>ansible安装</title>
+    <url>/ansible-01/</url>
+    <content><![CDATA[<p>ansible安装记录。<a id="more"></a></p>
+<h4 id="Ansible-安装部署"><a href="#Ansible-安装部署" class="headerlink" title="Ansible 安装部署"></a>Ansible 安装部署</h4><ul>
+<li>Ansible在epel的yum中有提供，所以配置好epel源，直接使用yum命令安装即可</li>
+<li>关闭防火墙和selinux</li>
+<li>centso7 演示</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">systemctl disable firewalld</span><br><span class="line">systemctl stop firewalld</span><br><span class="line">sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config</span><br><span class="line">setenforce 0</span><br><span class="line">reboot</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 管理端安装软件</span></span><br><span class="line">yum install -y ansible</span><br><span class="line"><span class="meta">#</span><span class="bash"> 被管理端安装软件(如果关闭selinux，那么被管理端可以不安装,建议安装)</span></span><br><span class="line">yum install -y libselinux-python</span><br></pre></td></tr></table></figure>
+
+<h4 id="安装目录"><a href="#安装目录" class="headerlink" title="安装目录"></a>安装目录</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">配置文件目录：&#x2F;etc&#x2F;ansible&#x2F;</span><br><span class="line">执行文件目录：&#x2F;usr&#x2F;bin&#x2F;</span><br><span class="line">Lib库依赖目录：&#x2F;usr&#x2F;lib&#x2F;pythonX.X&#x2F;site-packages&#x2F;ansible&#x2F;</span><br><span class="line">Help文档目录：&#x2F;usr&#x2F;share&#x2F;doc&#x2F;ansible-X.X.X&#x2F;</span><br><span class="line">Man文档目录：&#x2F;usr&#x2F;share&#x2F;man&#x2F;man1&#x2F;</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置和被管理的主机直接建立基于ssh的密钥认证"><a href="#配置和被管理的主机直接建立基于ssh的密钥认证" class="headerlink" title="配置和被管理的主机直接建立基于ssh的密钥认证"></a>配置和被管理的主机直接建立基于ssh的密钥认证</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 生成密码</span></span><br><span class="line">[root@master~]#ssh-keygen</span><br><span class="line">Generatingpublic/privatersakeypair.</span><br><span class="line">Enterfileinwhichtosavethekey(/root/.ssh/id_rsa):</span><br><span class="line">Createddirectory'/root/.ssh'.</span><br><span class="line">Enterpassphrase(emptyfornopassphrase):</span><br><span class="line">Entersamepassphraseagain:</span><br><span class="line">Youridentificationhasbeensavedin/root/.ssh/id_rsa.</span><br><span class="line">Yourpublickeyhasbeensavedin/root/.ssh/id_rsa.pub.</span><br><span class="line">Thekeyfingerprintis:</span><br><span class="line">2c:b0:df:16:26:8e:c7:e6:b4:c6:6a:22:e1:18:89:e9root@master</span><br><span class="line">Thekey'srandomartimageis:</span><br><span class="line">+--[RSA2048]----+</span><br><span class="line">||</span><br><span class="line">||</span><br><span class="line">|.|</span><br><span class="line">|o.|</span><br><span class="line">|.o.oS|</span><br><span class="line">|*==.|</span><br><span class="line">|+o..Bo|</span><br><span class="line">|oE..=oo|</span><br><span class="line">|.o.oo|</span><br><span class="line">+-----------------+</span><br></pre></td></tr></table></figure>
+
+<h4 id="添加认证"><a href="#添加认证" class="headerlink" title="添加认证"></a>添加认证</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@master~]#ssh-copy-id root@192.168.21.8</span><br><span class="line"></span><br><span class="line">[root@master~]#ssh root@192.168.21.8</span><br></pre></td></tr></table></figure>
+
+<h4 id="定义主机"><a href="#定义主机" class="headerlink" title="定义主机"></a>定义主机</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@master~]#vim /etc/ansible/hosts</span><br><span class="line">[web]</span><br><span class="line">192.168.21.8</span><br></pre></td></tr></table></figure>
+
+<h4 id="执行ping存活检测"><a href="#执行ping存活检测" class="headerlink" title="执行ping存活检测"></a>执行ping存活检测</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@master~]#ansible web -m ping</span><br><span class="line">192.168.21.8|SUCCESS=&gt;&#123;</span><br><span class="line">"changed":false,</span><br><span class="line">"ping":"pong"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>ansible</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>ansible常规介绍</title>
+    <url>/ansible-02/</url>
+    <content><![CDATA[<p>ansible常规配置命令记录。<a id="more"></a></p>
+<h4 id="Ansible-主要组成部分功能说明"><a href="#Ansible-主要组成部分功能说明" class="headerlink" title="Ansible 主要组成部分功能说明"></a>Ansible 主要组成部分功能说明</h4><ul>
+<li><p>PLAYBOOKS：任务剧本（任务集），编排定义Ansible任务集的配置文件，由Ansible顺序依次执行，通常是JSON格式的YML文件</p>
+</li>
+<li><p>INVENTORY：Ansible管理主机的清单/etc/anaible/hosts</p>
+</li>
+<li><p>MODULES：Ansible执行命令的功能模块，多数为内置的核心模块，也可自定义,ansible-doc –l 可查看模块</p>
+</li>
+<li><p>PLUGINS：模块功能的补充，如连接类型插件、循环插件、变量插件、过滤插件等，该功能不常用</p>
+</li>
+<li><p>API：供第三方程序调用的应用程序编程接口</p>
+</li>
+<li><p>ANSIBLE：组合INVENTORY、 API、 MODULES、PLUGINS的绿框，可以理解为是ansible命令工具，其为核心执行工具</p>
+</li>
+</ul>
+<h4 id="Ansible-配置文件详解"><a href="#Ansible-配置文件详解" class="headerlink" title="Ansible 配置文件详解"></a>Ansible 配置文件详解</h4><p>配置文件优先级如下：</p>
+<ul>
+<li><p>ANSIBLE_CONFIG （如果设置了环境变量）</p>
+</li>
+<li><p>ansible.cfg （在当前目录中）</p>
+</li>
+<li><p>~/.ansible.cfg （在主目录中）</p>
+</li>
+<li><p>/etc/ansible/ansible.cfg</p>
+</li>
+</ul>
+<hr>
+<table>
+<thead>
+<tr>
+<th>配置文件</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>/etc/ansible/ansible.cfg</td>
+<td>主配置文件，配置ansible工作特性</td>
+</tr>
+<tr>
+<td>/etc/ansible/hosts</td>
+<td>主机清单</td>
+</tr>
+<tr>
+<td>/etc/ansible/roles/</td>
+<td>存放角色的目录</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible</td>
+<td>主程序，临时命令执行工具</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible-doc</td>
+<td>查看配置文档，模块功能查看工具</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible-galaxy</td>
+<td>下载、上传优秀代码或Roles模块的官网平台</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible-playbook</td>
+<td>定制自动化任务，编排剧本工具</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible-pull</td>
+<td>远程执行命令的工具</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible-vault</td>
+<td>文件加密工具</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible-console</td>
+<td>基于Console界面与用户交互的执行工具</td>
+</tr>
+</tbody></table>
+<hr>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>inventory = /etc/ansible/hosts</td>
+<td>主机列表配置文件</td>
+</tr>
+<tr>
+<td>library = /usr/share/my_modules/</td>
+<td>库文件存放目录</td>
+</tr>
+<tr>
+<td>remote_tmp = $HOME/.ansible/tmp</td>
+<td>临时py命令文件存放在远程主机目录</td>
+</tr>
+<tr>
+<td>local_tmp = $HOME/.ansible/tmp</td>
+<td>本机的临时命令执行目录</td>
+</tr>
+<tr>
+<td>forks = 5</td>
+<td>默认并发数</td>
+</tr>
+<tr>
+<td>sudo_user = root</td>
+<td>默认sudo 用户</td>
+</tr>
+<tr>
+<td>ask_sudo_pass = True</td>
+<td>每次执行ansible命令是否询问ssh密码</td>
+</tr>
+<tr>
+<td>ask_pass = True</td>
+<td>连接时提示输入ssh密码</td>
+</tr>
+<tr>
+<td>remote_port = 22</td>
+<td>远程主机的默认端口，生产中这个端口应该会不同</td>
+</tr>
+<tr>
+<td>log_path = /var/log/ansible.log</td>
+<td>日志</td>
+</tr>
+<tr>
+<td>host_key_checking = False</td>
+<td>检查对应服务器的host_key，建议取消注释。也就是不会弹出</td>
+</tr>
+</tbody></table>
+<h4 id="Inventory-参数说明"><a href="#Inventory-参数说明" class="headerlink" title="Inventory 参数说明"></a>Inventory 参数说明</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ansible_ssh_host</td>
+<td>远程主机名</td>
+</tr>
+<tr>
+<td>ansible_ssh_port</td>
+<td>ssh端口号</td>
+</tr>
+<tr>
+<td>ansible_ssh_user</td>
+<td>ssh 用户名</td>
+</tr>
+<tr>
+<td>ansible_ssh_pass</td>
+<td>ssh 密码</td>
+</tr>
+<tr>
+<td>ansible_sudo_pass</td>
+<td>sudo 密码</td>
+</tr>
+<tr>
+<td>ansible_sudo_exe (new in version 1.8)</td>
+<td>sudo 命令路径(适用于1.8及以上版本)</td>
+</tr>
+<tr>
+<td>ansible_connection</td>
+<td>与主机的连接类型</td>
+</tr>
+<tr>
+<td>ansible_ssh_private_key_file</td>
+<td>ssh 使用的私钥文件</td>
+</tr>
+<tr>
+<td>ansible_shell_type</td>
+<td>目标系统的shell类型</td>
+</tr>
+<tr>
+<td>ansible_python_interpreter</td>
+<td>目标主机的 python 路径</td>
+</tr>
+</tbody></table>
+<h4 id="Ansible-常用命令语法"><a href="#Ansible-常用命令语法" class="headerlink" title="Ansible 常用命令语法"></a>Ansible 常用命令语法</h4><ul>
+<li><p>ansible <host-pattern> [-m module_name] [options]</host-pattern></p>
+</li>
+<li><p>指令 匹配规则的主机清单 -m 模块名 选项</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>–version</td>
+<td>显示版本</td>
+</tr>
+<tr>
+<td>-a</td>
+<td>模块参数（如果有）</td>
+</tr>
+<tr>
+<td>-m module</td>
+<td>指定模块，默认为command</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>详细过程 –vv -vvv更详细</td>
+</tr>
+<tr>
+<td>–list-hosts</td>
+<td>显示主机列表，可简写–list</td>
+</tr>
+<tr>
+<td>-k, –ask-pass</td>
+<td>提示连接密码，默认Key验证</td>
+</tr>
+<tr>
+<td>-K，–ask-become-pass</td>
+<td>提示使用sudo密码</td>
+</tr>
+<tr>
+<td>-C, –check</td>
+<td>检查，并不执行</td>
+</tr>
+<tr>
+<td>-T, –timeout=TIMEOUT</td>
+<td>执行命令的超时时间，默认10s</td>
+</tr>
+<tr>
+<td>-u, –user=REMOTE_USER</td>
+<td>执行远程执行的用户</td>
+</tr>
+<tr>
+<td>-U， SUDO_USER, –sudo-user</td>
+<td>指定sudu用户</td>
+</tr>
+<tr>
+<td>-b, –become</td>
+<td>代替旧版的sudo 切换</td>
+</tr>
+</tbody></table>
+<h4 id="Ansible-常用参数"><a href="#Ansible-常用参数" class="headerlink" title="Ansible 常用参数"></a>Ansible 常用参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>功能</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ping</td>
+<td>尝试连接到主机，验证并返回pong成功</td>
+<td>ansible all -m ping</td>
+</tr>
+<tr>
+<td>command</td>
+<td>在远程节点上执行命令</td>
+<td>ansible all -m command -a ‘echo $PATH’</td>
+</tr>
+<tr>
+<td>shell</td>
+<td>在远程节点上执行命令</td>
+<td>ansible all -m shell -a df</td>
+</tr>
+<tr>
+<td>script</td>
+<td>把脚本复制到远程节点后，在远程节点本地运行脚本</td>
+<td>ansible all -m script -a ‘./shell.sh’</td>
+</tr>
+<tr>
+<td>copy</td>
+<td>复制文件或目录到远程节点。默认会覆盖目标文件</td>
+<td>ansible all -m copy -a ‘src=/tmp/abc.txt  dest=/app backup=yes’<br>ansible all -m copy -a ‘src=/tmp/dir1  dest=/app’</td>
+</tr>
+<tr>
+<td>fetch</td>
+<td>从远程节点获取文件(只能是文件)到本地目录</td>
+<td>ansible all -m fetch -a ‘src=/var/log/messages dest=/app’</td>
+</tr>
+<tr>
+<td>file</td>
+<td>设置远程节点的文件的文件属性</td>
+<td>ansible all -m file -a ‘path=/tmp/abc.txt state=touch mode=0666 owner=ftp’<br> ansible all -m file -a ‘path=/tmp/abc state=directory mode=0666 owner=ftp’</td>
+</tr>
+<tr>
+<td>hostname</td>
+<td>设置远程节点主机名</td>
+<td>ansible all -m hostname -a ‘name=node1’</td>
+</tr>
+<tr>
+<td>cron</td>
+<td>管理计划任务</td>
+<td>ansible all -m cron -a ‘name=”test” minute=*/2 job=”/etc/init.d/tomcat restart”‘<br>ansible all -m cron -a ‘state=absent name=test’</td>
+</tr>
+<tr>
+<td>yum</td>
+<td>使用yum包管理器来管理软件包</td>
+<td>ansible all -m yum -a ‘name=tree state=present’</td>
+</tr>
+<tr>
+<td>yum_repository</td>
+<td>配置管理yum源</td>
+<td>ansible all -m yum_repository -a ‘state=present name=epel enabled=yes gpgcheck=yes description=”Aliyun EPEL” baseurl=”http://…,http://…” gpgkey=”https://…”‘</td>
+</tr>
+<tr>
+<td>service</td>
+<td>配置管理服务</td>
+<td>ansible all -m service -a ‘name=httpd state=started’</td>
+</tr>
+<tr>
+<td>setup</td>
+<td>收集关于远程主机的信息</td>
+<td>ansible all -m setup -a ‘filter=ansible_distribution_version’ –tree /tmp/</td>
+</tr>
+<tr>
+<td>user</td>
+<td>管理用户账号</td>
+<td>ansible all -m user -a ‘name=hunk4 shell=/sbin/nologin system=yes comment=”name is hunk”‘<br>ansible all -m user -a ‘name=hunk3 state=absent remove=yes’</td>
+</tr>
+<tr>
+<td>group</td>
+<td>添加组或删除组</td>
+<td>groupadd, groupdel, groupmod</td>
+</tr>
+<tr>
+<td>get_url</td>
+<td>从 HTTP, HTTPS, FTP 下载文件</td>
+<td>ansible all -m get_url -a ‘dest=/tmp/ url=”https://….”‘</td>
+</tr>
+<tr>
+<td>fail</td>
+<td>自定义消息失败</td>
+<td>默认返回 ‘Failed as requested from task’</td>
+</tr>
+<tr>
+<td>lineinfile</td>
+<td>替换一个文件中特定的行，或者使用一个反引用的正则表达式替换一个现有的行</td>
+<td></td>
+</tr>
+<tr>
+<td>replace</td>
+<td>替换一个文件中符合匹配的所有行，或者使用一个反引用的正则表达式替换所有的行</td>
+<td></td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>ansible</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>ansible-playbook</title>
+    <url>/ansible-03/</url>
+    <content><![CDATA[<p>ansible-playbook记录。<a id="more"></a></p>
+<h4 id="Ansible-playbook"><a href="#Ansible-playbook" class="headerlink" title="Ansible-playbook"></a>Ansible-playbook</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ansible-playbook &lt;filename.yml&gt; ... [options]</span><br></pre></td></tr></table></figure>
+<hr>
+<table>
+<thead>
+<tr>
+<th>常见选项</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>–check</td>
+<td>只检测可能会发生的改变，但不真正执行操作</td>
+</tr>
+<tr>
+<td>–list-hosts</td>
+<td>列出运行任务的主机</td>
+</tr>
+<tr>
+<td>–list-tasks</td>
+<td>列出此playbook中的所有任务</td>
+</tr>
+<tr>
+<td>–list-tags</td>
+<td>列出此playbook中的所有的tags</td>
+</tr>
+<tr>
+<td>–limit</td>
+<td>主机列表 只针对主机列表中的主机执行</td>
+</tr>
+<tr>
+<td>–step</td>
+<td>一步一步执行脚本</td>
+</tr>
+<tr>
+<td>–flush-cache</td>
+<td>清除fact缓存</td>
+</tr>
+<tr>
+<td>-C</td>
+<td>文件名     执行前先检查语法</td>
+</tr>
+<tr>
+<td>-D</td>
+<td>显示出执行前后的变化内容</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>显示过程 -vv -vvv 更详细</td>
+</tr>
+</tbody></table>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">整个playbook是以task为中心，表明要执行的任务。hosts和remote_user表明在哪些远程主机以何种身份执行。其他组件让其能够更加灵活。</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>基础组件</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Hosts</td>
+<td>运行执行任务（task）的目标主机</td>
+</tr>
+<tr>
+<td>remote_user</td>
+<td>在远程主机上执行任务的用户</td>
+</tr>
+<tr>
+<td>tasks</td>
+<td>任务列表</td>
+</tr>
+<tr>
+<td>handlers</td>
+<td>任务，与tasks不同的是只有在接受到通知时才会被触发</td>
+</tr>
+<tr>
+<td>templates</td>
+<td>使用模板语言的文本文件，使用jinja2语法</td>
+</tr>
+<tr>
+<td>variables</td>
+<td>变量，变量替换</td>
+</tr>
+</tbody></table>
+<hr>
+<blockquote>
+<p>hello.yml例子</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line"></span><br><span class="line">- hosts: all</span><br><span class="line">  remote_user: root</span><br><span class="line"></span><br><span class="line">  tasks:</span><br><span class="line">    - name: test yml</span><br><span class="line">      command: /usr/bin/wall "hello world"</span><br></pre></td></tr></table></figure>
+
+<h4 id="YAML语法"><a href="#YAML语法" class="headerlink" title="YAML语法"></a>YAML语法</h4><p>在单一档案中，可用连续三个连字号(—)区分多个档案。另外，还有选择性的连续三个点号( … )用来表示档案结尾</p>
+<ul>
+<li><p>次行开始正常写Playbook的内容，一般建议写明该Playbook的功能</p>
+</li>
+<li><p>使用#号注释代码</p>
+</li>
+<li><p>缩进必须是统一的，不能空格和tab混用,一般缩进2个空格</p>
+</li>
+<li><p>缩进的级别也必须是一致的，同样的缩进代表同样的级别，程序判别配置的级别是通过缩进结合换行来实现的</p>
+</li>
+<li><p>YAML文件内容和Linux系统大小写判断方式保持一致，是区别大小写的，key/value的值均需大小写敏感</p>
+</li>
+<li><p>key/value的值可以写在同一行，也可换行写。同一行使用 , 逗号分隔</p>
+</li>
+<li><p>value可是个字符串，也可是另一个列表</p>
+</li>
+<li><p>一个完整的代码块功能需最少元素需包括 name和task</p>
+</li>
+<li><p>一个name只能包括一个task</p>
+</li>
+<li><p>使用| 和 &gt; 来分隔多行，实际上这只是一行</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">include_newlines: |</span><br><span class="line">    exactly as you see</span><br><span class="line">    will appear these three</span><br><span class="line">    lines of poetry</span><br><span class="line"></span><br><span class="line">ignore_newlines: &gt;</span><br><span class="line">    this is really a</span><br><span class="line">    single line of text</span><br><span class="line">    despite appearances</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Yaml中不允许在双引号中出现转义符号，所以都是以单引号来避免转义符错误           </p>
+</li>
+<li><p>YAML文件扩展名通常为yml或yaml</p>
+</li>
+</ul>
+<hr>
+<h4 id="Playbook核心元素"><a href="#Playbook核心元素" class="headerlink" title="Playbook核心元素"></a>Playbook核心元素</h4><ul>
+<li>1.hosts</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">- hosts: web,app</span><br><span class="line">  remote_user: root</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>hosts 行的内容是一个或多个组或主机的 patterns,以逗号为分隔符。通常是/etc/ansible/hosts定义的主机列表</p>
+</blockquote>
+<blockquote>
+<p>remote_user 就是远程执行任务的账户名:</p>
+</blockquote>
+<ul>
+<li>2.tasks 任务集</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tasks:</span><br><span class="line">  - name: install httpd</span><br><span class="line">    yum: name&#x3D;httpd</span><br><span class="line"></span><br><span class="line">  - name: start httpd</span><br><span class="line">    service: name&#x3D;httpd state&#x3D;started</span><br><span class="line"></span><br><span class="line">  - name: check http port</span><br><span class="line">    shell: ss -ntl|grep 80 &gt; &#x2F;tmp&#x2F;httpd.txt</span><br><span class="line"></span><br><span class="line">  - name: fetch</span><br><span class="line">    fetch: src&#x3D;&#x2F;tmp&#x2F;httpd.txt dest&#x3D;&#x2F;tmp</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>3.Handlers 和 notity</li>
+</ul>
+<blockquote>
+<p>在 notify 中定义内容一定要和handlers中定义的 - name 内容一样，这样才能达到触发的效果，否则会不生效。<br>只有接收到通知才会执行这里的任务<br>由特定条件触发的操作，满足条件方才执行，否则不执行。<br>Handlers也是task列表，这些task与前述的tasks并没有本质上的不同,用于当关注的资源发生变化时，才会采取一定的操作</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>ansible</category>
+      </categories>
+  </entry>
+  <entry>
     <title>百度统计API</title>
     <url>/baidu-api/</url>
     <content><![CDATA[<p>记录百度统计api使用，方便后期查询。<a id="more"></a></p>
@@ -154,6 +684,10 @@
 
 <h5 id="缓存区提交到HEAD"><a href="#缓存区提交到HEAD" class="headerlink" title="缓存区提交到HEAD"></a>缓存区提交到HEAD</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git commit -m "代码修改信息"</span><br></pre></td></tr></table></figure>
 
+<h5 id="如果提交到新仓库使用这个"><a href="#如果提交到新仓库使用这个" class="headerlink" title="如果提交到新仓库使用这个"></a>如果提交到新仓库使用这个</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git remote add origin git@github.com:xxx/xxx.git</span><br></pre></td></tr></table></figure>
+
+
+
 <h5 id="提交到master分支"><a href="#提交到master分支" class="headerlink" title="提交到master分支"></a>提交到master分支</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
 
 <hr>
@@ -266,6 +800,57 @@
 ]]></content>
       <categories>
         <category>ELK</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>macfee安装</title>
+    <url>/macfee/</url>
+    <content><![CDATA[<p>由于某些jar包版本过低，部分服务器被入侵，这里记录安装过程<a id="more"></a></p>
+<h4 id="liunx上安装macfee安装过程"><a href="#liunx上安装macfee安装过程" class="headerlink" title="liunx上安装macfee安装过程"></a>liunx上安装macfee安装过程</h4><h5 id="将脚本和压缩包上传至服务器"><a href="#将脚本和压缩包上传至服务器" class="headerlink" title="将脚本和压缩包上传至服务器"></a>将脚本和压缩包上传至服务器</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">install.sh</span><br><span class="line">McAfeeTP-10.6.8-115-Release-standalone.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h5 id="创建mcafee目录"><a href="#创建mcafee目录" class="headerlink" title="创建mcafee目录"></a>创建mcafee目录</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo mkdir linux_mcafee</span><br><span class="line">cd linux_mcafee/</span><br></pre></td></tr></table></figure>
+
+<h5 id="创建mfe的用户和组"><a href="#创建mfe的用户和组" class="headerlink" title="创建mfe的用户和组"></a>创建mfe的用户和组</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">groupadd macfee</span><br><span class="line">useradd  macfee -g macfee</span><br></pre></td></tr></table></figure>
+
+<h5 id="设定权限"><a href="#设定权限" class="headerlink" title="设定权限"></a>设定权限</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "chmod +x install.sh"</span><br><span class="line">sudo tar -zxvf McAfeeTP-10.6.8-115-Release-standalone.tar.gz</span><br></pre></td></tr></table></figure>
+
+<h5 id="安装macfee-agent"><a href="#安装macfee-agent" class="headerlink" title="安装macfee agent"></a>安装macfee agent</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./install.sh -i"</span><br></pre></td></tr></table></figure>
+
+<h5 id="安装macfee-threat-prevention-使用空白键一直到100-输入accepet"><a href="#安装macfee-threat-prevention-使用空白键一直到100-输入accepet" class="headerlink" title="安装macfee threat prevention(使用空白键一直到100% 输入accepet)"></a>安装macfee threat prevention(使用空白键一直到100% 输入accepet)</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./install-mfetp.sh"</span><br></pre></td></tr></table></figure>
+
+<h5 id="安装完成之后到此路径进行扫描"><a href="#安装完成之后到此路径进行扫描" class="headerlink" title="安装完成之后到此路径进行扫描"></a>安装完成之后到此路径进行扫描</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd /opt/isec/ens/threatprevention/bin/</span><br><span class="line">sudo sh -c "./isecav --setapstatus enable"</span><br><span class="line">sudo sh -c "./isecav --getapstatus"</span><br></pre></td></tr></table></figure>
+
+<h5 id="设定事件档案大小-可设定1MB-999MB-25即是25MB"><a href="#设定事件档案大小-可设定1MB-999MB-25即是25MB" class="headerlink" title="设定事件档案大小,可设定1MB-999MB 25即是25MB"></a>设定事件档案大小,可设定1MB-999MB 25即是25MB</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./isecav --setmaxproductlogsize 25"</span><br></pre></td></tr></table></figure>
+
+<h5 id="开启产品事件"><a href="#开启产品事件" class="headerlink" title="开启产品事件"></a>开启产品事件</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./isecav --productlog enable"</span><br></pre></td></tr></table></figure>
+
+<h5 id="选择完整扫描"><a href="#选择完整扫描" class="headerlink" title="选择完整扫描"></a>选择完整扫描</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./isecav --runtask --index 2"</span><br></pre></td></tr></table></figure>
+
+<h5 id="显示扫描列表"><a href="#显示扫描列表" class="headerlink" title="显示扫描列表"></a>显示扫描列表</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./isecav --listtask"</span><br></pre></td></tr></table></figure>
+
+<h5 id="查看扫描日志"><a href="#查看扫描日志" class="headerlink" title="查看扫描日志"></a>查看扫描日志</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo tail -f /var/McAfee/ens/log/tp/mfeoasmgr.log</span><br></pre></td></tr></table></figure>
+
+<h5 id="设定规则排除该文件夹路径"><a href="#设定规则排除该文件夹路径" class="headerlink" title="设定规则排除该文件夹路径"></a>设定规则排除该文件夹路径</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c './isecav --setoasprofileconfig --profile standard --addexclusionrw --excludepaths "/root/sample*"'</span><br></pre></td></tr></table></figure>
+
+<h5 id="列出排除规则"><a href="#列出排除规则" class="headerlink" title="列出排除规则"></a>列出排除规则</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./isecav --getoasconfig --exclusionlist --profile standard"</span><br></pre></td></tr></table></figure>
+
+<h4 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h4><ul>
+<li><p>完整扫描是会去扫描所有文件夹包括那些没有做存取动作的文件夹</p>
+</li>
+<li><p>非完整扫描是一直检测的但只会扫描有存取动作的文件</p>
+</li>
+<li><p>扫描的log : /var/McAfee/ens/log/tp/mfeoasmgr.log </p>
+</li>
+<li><p>设定/更新/报错的log : /var/McAfee/ens/log/tp/mfetpd</p>
+</li>
+<li><p>windows可以选择想扫描的文件，linux是全局扫描</p>
+</li>
+<li><p>其实linux用mcafee没什么效果，后面也直接下掉了。</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>linux</category>
       </categories>
   </entry>
   <entry>
@@ -781,57 +1366,6 @@
 <li>maxClientCnxns:限制连接到 ZooKeeper 的客户端的数量</li>
 <li>minSessionTimeout:最小会话时间</li>
 <li>maxSessionTimeout:最长会话时间 </li>
-</ul>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>macfee安装</title>
-    <url>/macfee/</url>
-    <content><![CDATA[<p>由于某些jar包版本过低，部分服务器被入侵，这里记录安装过程<a id="more"></a></p>
-<h4 id="liunx上安装macfee安装过程"><a href="#liunx上安装macfee安装过程" class="headerlink" title="liunx上安装macfee安装过程"></a>liunx上安装macfee安装过程</h4><h5 id="将脚本和压缩包上传至服务器"><a href="#将脚本和压缩包上传至服务器" class="headerlink" title="将脚本和压缩包上传至服务器"></a>将脚本和压缩包上传至服务器</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">install.sh</span><br><span class="line">McAfeeTP-10.6.8-115-Release-standalone.tar.gz</span><br></pre></td></tr></table></figure>
-
-<h5 id="创建mcafee目录"><a href="#创建mcafee目录" class="headerlink" title="创建mcafee目录"></a>创建mcafee目录</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo mkdir linux_mcafee</span><br><span class="line">cd linux_mcafee/</span><br></pre></td></tr></table></figure>
-
-<h5 id="创建mfe的用户和组"><a href="#创建mfe的用户和组" class="headerlink" title="创建mfe的用户和组"></a>创建mfe的用户和组</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">groupadd macfee</span><br><span class="line">useradd  macfee -g macfee</span><br></pre></td></tr></table></figure>
-
-<h5 id="设定权限"><a href="#设定权限" class="headerlink" title="设定权限"></a>设定权限</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "chmod +x install.sh"</span><br><span class="line">sudo tar -zxvf McAfeeTP-10.6.8-115-Release-standalone.tar.gz</span><br></pre></td></tr></table></figure>
-
-<h5 id="安装macfee-agent"><a href="#安装macfee-agent" class="headerlink" title="安装macfee agent"></a>安装macfee agent</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./install.sh -i"</span><br></pre></td></tr></table></figure>
-
-<h5 id="安装macfee-threat-prevention-使用空白键一直到100-输入accepet"><a href="#安装macfee-threat-prevention-使用空白键一直到100-输入accepet" class="headerlink" title="安装macfee threat prevention(使用空白键一直到100% 输入accepet)"></a>安装macfee threat prevention(使用空白键一直到100% 输入accepet)</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./install-mfetp.sh"</span><br></pre></td></tr></table></figure>
-
-<h5 id="安装完成之后到此路径进行扫描"><a href="#安装完成之后到此路径进行扫描" class="headerlink" title="安装完成之后到此路径进行扫描"></a>安装完成之后到此路径进行扫描</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd /opt/isec/ens/threatprevention/bin/</span><br><span class="line">sudo sh -c "./isecav --setapstatus enable"</span><br><span class="line">sudo sh -c "./isecav --getapstatus"</span><br></pre></td></tr></table></figure>
-
-<h5 id="设定事件档案大小-可设定1MB-999MB-25即是25MB"><a href="#设定事件档案大小-可设定1MB-999MB-25即是25MB" class="headerlink" title="设定事件档案大小,可设定1MB-999MB 25即是25MB"></a>设定事件档案大小,可设定1MB-999MB 25即是25MB</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./isecav --setmaxproductlogsize 25"</span><br></pre></td></tr></table></figure>
-
-<h5 id="开启产品事件"><a href="#开启产品事件" class="headerlink" title="开启产品事件"></a>开启产品事件</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./isecav --productlog enable"</span><br></pre></td></tr></table></figure>
-
-<h5 id="选择完整扫描"><a href="#选择完整扫描" class="headerlink" title="选择完整扫描"></a>选择完整扫描</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./isecav --runtask --index 2"</span><br></pre></td></tr></table></figure>
-
-<h5 id="显示扫描列表"><a href="#显示扫描列表" class="headerlink" title="显示扫描列表"></a>显示扫描列表</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./isecav --listtask"</span><br></pre></td></tr></table></figure>
-
-<h5 id="查看扫描日志"><a href="#查看扫描日志" class="headerlink" title="查看扫描日志"></a>查看扫描日志</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo tail -f /var/McAfee/ens/log/tp/mfeoasmgr.log</span><br></pre></td></tr></table></figure>
-
-<h5 id="设定规则排除该文件夹路径"><a href="#设定规则排除该文件夹路径" class="headerlink" title="设定规则排除该文件夹路径"></a>设定规则排除该文件夹路径</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c './isecav --setoasprofileconfig --profile standard --addexclusionrw --excludepaths "/root/sample*"'</span><br></pre></td></tr></table></figure>
-
-<h5 id="列出排除规则"><a href="#列出排除规则" class="headerlink" title="列出排除规则"></a>列出排除规则</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo sh -c "./isecav --getoasconfig --exclusionlist --profile standard"</span><br></pre></td></tr></table></figure>
-
-<h4 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h4><ul>
-<li><p>完整扫描是会去扫描所有文件夹包括那些没有做存取动作的文件夹</p>
-</li>
-<li><p>非完整扫描是一直检测的但只会扫描有存取动作的文件</p>
-</li>
-<li><p>扫描的log : /var/McAfee/ens/log/tp/mfeoasmgr.log </p>
-</li>
-<li><p>设定/更新/报错的log : /var/McAfee/ens/log/tp/mfetpd</p>
-</li>
-<li><p>windows可以选择想扫描的文件，linux是全局扫描</p>
-</li>
-<li><p>其实linux用mcafee没什么效果，后面也直接下掉了。</p>
-</li>
 </ul>
 ]]></content>
       <categories>
