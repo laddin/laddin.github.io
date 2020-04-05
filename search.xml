@@ -1,0 +1,728 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>百度统计API</title>
+    <url>/baidu-api/</url>
+    <content><![CDATA[<p>记录百度统计api使用，方便后期查询。<a id="more"></a></p>
+<h4 id="百度统计api的实例"><a href="#百度统计api的实例" class="headerlink" title="百度统计api的实例"></a>百度统计api的实例</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Baidu</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, siteId, username, password, token)</span>:</span></span><br><span class="line">        self.siteId = siteId</span><br><span class="line">        self.username = username</span><br><span class="line">        self.password = password</span><br><span class="line">        self.token = token</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getresult</span><span class="params">(self, metrics=<span class="string">'ip_count'</span>)</span>:</span></span><br><span class="line">        base_url = <span class="string">"https://api.baidu.com/json/tongji/v1/ReportService/getData"</span></span><br><span class="line">        today = datetime.date.today()</span><br><span class="line">        yesterday = today - datetime.timedelta(days=<span class="number">1</span>)</span><br><span class="line">        start_date, end_date = str(yesterday).replace(<span class="string">"-"</span>, <span class="string">""</span>), str(today).replace(<span class="string">"-"</span>, <span class="string">""</span>)</span><br><span class="line"></span><br><span class="line">        body = &#123;<span class="string">"header"</span>: &#123;<span class="string">"account_type"</span>: <span class="number">1</span>,</span><br><span class="line">                           <span class="string">"password"</span>: self.password,</span><br><span class="line">                           <span class="string">"token"</span>: self.token,</span><br><span class="line">                           <span class="string">"username"</span>: self.username</span><br><span class="line">                           &#125;,</span><br><span class="line">                <span class="string">"body"</span>: &#123;<span class="string">"siteId"</span>: self.siteId,</span><br><span class="line">                         <span class="string">"method"</span>: <span class="string">"overview/getTimeTrendRpt"</span>,  <span class="comment"># 趋势数据</span></span><br><span class="line">                         <span class="string">"start_date"</span>: start_date,</span><br><span class="line">                         <span class="string">"end_date"</span>: end_date,</span><br><span class="line">                         <span class="string">"metrics"</span>: metrics</span><br><span class="line">                         &#125;</span><br><span class="line">                &#125;</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            r = requests.post(url=base_url, json=body)</span><br><span class="line">            data_info = json.loads(r.text)</span><br><span class="line">            ip_num = data_info[<span class="string">'body'</span>][<span class="string">'data'</span>][<span class="number">0</span>][<span class="string">'result'</span>][<span class="string">'items'</span>][<span class="number">1</span>][<span class="number">0</span>]</span><br><span class="line">            <span class="keyword">return</span> ip_num[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    bd = Baidu(yousiteId, username, password, youtoken)</span><br><span class="line">    result = bd.getresult()</span><br><span class="line">    print(result)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><p><code>yousiteId</code>网站siteid，获取方式如下图所示。<br><code>username</code>百度统计账号。<br><code>password</code>百度统计密码。<br><code>youtoken</code>网站token，获取方式如下图所示。 </p>
+<hr>
+<p> 以上只简单的查询了网站的昨日的ip访问，如果还需要其他的信息添加metrics即可，如多添加一个pv，<code>metrics=&#39;ip_count,pv_count&#39;</code>即可，如果有多添加的信息，下面的数据获取也需要调整。<a href="https://tongji.baidu.com/dataapi/file/TongjiApiFile.pdf" target="_blank" rel="noopener">官方API说明</a> </p>
+<img src="/baidu-api/001.png" class title="This is siteid">
+
+<img src="/baidu-api/002.png" class title="This is token">
+
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>命令行快捷键</title>
+    <url>/bash-fast/</url>
+    <content><![CDATA[<p>记录常用快捷键，方便查询。<a id="more"></a></p>
+<h4 id="移动"><a href="#移动" class="headerlink" title="移动"></a>移动</h4><p><code>Ctrl + a</code>：移到命令行首<br><code>Ctrl + e</code>：移到命令行尾<br><code>Ctrl + 左右箭头</code>: 光标移动到上/下一个单词 </p>
+<h4 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h4><p><code>Ctrl + u</code>：从光标处删除至命令行首<br><code>Ctrl + k</code>：从光标处删除至命令行尾<br><code>Ctrl + w</code>：删除光标之前的一个单词<br><code>Ctrl + y</code>: 恢复上次执行时删除的字符 </p>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p><code>!!</code>：执行上一条命令<br><code>Ctrl + z</code>：从vim状态切换到命令行<br><code>fg</code>： 从命令行切还原到vim状态<br><code>Ctrl + r</code>：进入历史命令查找状态<br><code>Ctrl + l</code>：清屏<br><code>Ctrl + d</code>: 退出shell logout </p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>百度网盘</title>
+    <url>/bypy/</url>
+    <content><![CDATA[<p>linux版本的百度网盘<a id="more"></a></p>
+<h4 id="linux百度网盘"><a href="#linux百度网盘" class="headerlink" title="linux百度网盘"></a>linux百度网盘</h4><h5 id="需要以下条件"><a href="#需要以下条件" class="headerlink" title="需要以下条件"></a>需要以下条件</h5><ul>
+<li>需要 python2.7或者3.3</li>
+<li>需要  <code>requests</code>和<code>setuptools</code> </li>
+<li>2018年5月验证，后期请参考官方文档</li>
+</ul>
+<hr>
+<h5 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost python_2.7]# pip2.7 install requests</span><br><span class="line">[root@localhost python_2.7]# wget --no-check-certificate https://pypi.python.org/packages/source/s/setuptools/setuptools-1.4.2.tar.gz</span><br><span class="line">[root@localhost python_2.7]# tar xf setuptools-1.4.2.tar.gz</span><br><span class="line">[root@localhost python_2.7]# ls</span><br><span class="line">setuptools-1.4.2  setuptools-1.4.2.tar.gz</span><br><span class="line">[root@localhost python_2.7]# cd setuptools-1.4.2</span><br><span class="line">[root@localhost setuptools-1.4.2]# python setup.py install</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="尝试"><a href="#尝试" class="headerlink" title="尝试"></a>尝试</h5><img src="/bypy/20180526155515.png" class title="This is an example image">
+
+<p>这里直接输入一个 <code>bypy info</code>会返回一个url的验证信息 ，在浏览器输入  <code>https://openapi.baidu.com/oauth/2.0/authorize?scope=basic+netdisk&amp;redirect_uri=oob&amp;response_type=code&amp;client_id=q8WE4EpCsau1oS0MplgMKNBn</code>浏览器这里会返回<code>ef4a923834ab2eb68ff7aa88a03bceef</code>这个key，输入后会显示当前账号的网盘空间和使用容量。</p>
+<hr>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">bypy list							#查看 我的应用数据  bypy 里面的文件夹</span><br><span class="line">bypy mkdir laddin						#新建一个laddin的文件夹</span><br><span class="line">bypy upload /home/mysql_backup_all_2018-05-20.sql.gz laddin/	#将home下面的数据库备份文件上传到网盘的laddin目录下</span><br></pre></td></tr></table></figure>
+
+
+
+
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>py文件配置</title>
+    <url>/configparser/</url>
+    <content><![CDATA[<p>记录使用，方便后期查询。<a id="more"></a>文件配置模板 configparser 使用方法。</p>
+<h4 id="增加"><a href="#增加" class="headerlink" title="增加"></a>增加</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> configparser <span class="keyword">import</span> ConfigParser</span><br><span class="line">cfg = ConfigParser()</span><br><span class="line">cfg[<span class="string">'TEST_A'</span>] = &#123;<span class="string">'test_a1'</span>: <span class="number">21</span>, <span class="string">'test_b2'</span>: <span class="literal">False</span>, <span class="string">'test_c3'</span>: <span class="number">35.6</span>&#125;</span><br><span class="line">cfg.add_section(<span class="string">'TEST_B'</span>)</span><br><span class="line">cfg.set(<span class="string">'TEST_B'</span>, <span class="string">'ip'</span>, <span class="string">'127.0.0.1'</span>)</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'config.ini'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> df:</span><br><span class="line">    cfg.write(df)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[TEST_A]</span><br><span class="line">test_a1 = <span class="number">21</span></span><br><span class="line">test_b2 = <span class="literal">False</span></span><br><span class="line">test_c3 = <span class="number">35.6</span></span><br><span class="line"></span><br><span class="line">[TEST_B]</span><br><span class="line">ip = <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> configparser <span class="keyword">import</span> ConfigParser</span><br><span class="line">cfg = ConfigParser()</span><br><span class="line">cfg.read(<span class="string">"config.ini"</span>, encoding=<span class="string">"utf-8"</span>)</span><br><span class="line">cfg.remove_option(<span class="string">'TEST_A'</span>, <span class="string">'test_c3'</span>) <span class="comment">#即使没有test_c3 也不会报错</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'config.ini'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> df:</span><br><span class="line">    cfg.write(df)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[TEST_A]</span><br><span class="line">test_a1 = <span class="number">21</span></span><br><span class="line">test_b2 = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">[TEST_B]</span><br><span class="line">ip = <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> configparser <span class="keyword">import</span> ConfigParser</span><br><span class="line">cfg = ConfigParser()</span><br><span class="line">cfg.read(<span class="string">"config.ini"</span>, encoding=<span class="string">"utf-8"</span>)</span><br><span class="line">cfg.set(<span class="string">'TEST_A'</span>, <span class="string">'test_b2'</span>, <span class="string">'old'</span>)</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'config.ini'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> df:</span><br><span class="line">    cfg.write(df)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[TEST_A]</span><br><span class="line">test_a1 = <span class="number">21</span></span><br><span class="line">test_b2 = old</span><br><span class="line"></span><br><span class="line">[TEST_B]</span><br><span class="line">ip = <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#文件</span></span><br><span class="line">[TEST_A]</span><br><span class="line">test_a1 = <span class="number">21</span></span><br><span class="line">test_b2 = <span class="literal">False</span></span><br><span class="line">test_c3 = <span class="number">35.6</span></span><br><span class="line"></span><br><span class="line">[TEST_B]</span><br><span class="line">ip = <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> configparser <span class="keyword">import</span> ConfigParser</span><br><span class="line">cfg = ConfigParser()</span><br><span class="line">cfg.read(<span class="string">"config.ini"</span>, encoding=<span class="string">"utf-8"</span>)</span><br><span class="line">print(cfg.sections())                       <span class="comment">#获取所有sections</span></span><br><span class="line"><span class="comment"># 这里如果没有test_a1会抛异常</span></span><br><span class="line">print(cfg.getint(<span class="string">'TEST_A'</span>, <span class="string">'test_a1'</span>))      <span class="comment">#int类型</span></span><br><span class="line">print(cfg.getboolean(<span class="string">'TEST_A'</span>,<span class="string">'test_b2'</span>))   <span class="comment">#Boolean类型</span></span><br><span class="line">print(cfg.getfloat(<span class="string">'TEST_A'</span>,<span class="string">'test_c3'</span>))     <span class="comment">#float类型</span></span><br><span class="line">print(cfg.get(<span class="string">'TEST_B'</span>,<span class="string">'ip'</span>))               <span class="comment">#str类型</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">[<span class="string">'TEST_A'</span>, <span class="string">'TEST_B'</span>]</span><br><span class="line"><span class="number">21</span></span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="number">35.6</span></span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>docker-command</title>
+    <url>/docker-command/</url>
+    <content><![CDATA[<p>记录常用命令，方便查询。<a id="more"></a></p>
+<h4 id="docker基础命令"><a href="#docker基础命令" class="headerlink" title="docker基础命令"></a>docker基础命令</h4><h5 id="1-生命周期管理"><a href="#1-生命周期管理" class="headerlink" title="1.生命周期管理"></a>1.生命周期管理</h5><p><code>docker run</code>，创建一个容器（一般写docker-compose.yml文件）</p>
+<p><code>docker start|stop|restart nginx</code>，启动|停止|重启 nginx容器</p>
+<p><code>docker kill nginx</code>，杀掉nginx容器</p>
+<p><code>docker rm nginx</code>，删除nginx容器</p>
+<hr>
+<h5 id="2-操作运维"><a href="#2-操作运维" class="headerlink" title="2.操作运维"></a>2.操作运维</h5><p><code>docker ps</code>，查看当前运行的容器，后面添加<code>-a</code>选项可以显示所有的容器</p>
+<p><code>docker inspect nginx</code>，查看nginx容器的元数据</p>
+<p><code>docker top nginx</code>，查看nginx容器中运行的进程信息</p>
+<p><code>docker logs -f -t --tail 100 nginx</code>，查看nginx容器log，<code>-f</code>循环读取，<code>-t</code>显示时间戳，<code>--tail 100</code>显示最新的100条</p>
+<p><code>docker logs --since=&quot;2018-10-17&quot; --tail 10 nginx</code>，显示2018-10-17的最新10条</p>
+<hr>
+<h5 id="3-容器相关"><a href="#3-容器相关" class="headerlink" title="3.容器相关"></a>3.容器相关</h5><p><code>docker info</code>，查看容器信息</p>
+<p><code>docker image ls</code>，查看容器当前的镜像</p>
+<p><code>docker rmi reg.aaabbb.net/nginx:crm-product</code>，删除镜像(reg.aaabbb.net为私有仓库地址)</p>
+<p><code>docker rmi $(docker images -f &quot;dangling=true&quot; -q)</code>，清理none镜像</p>
+<p><code>docker pull</code>，拉取镜像</p>
+<p> <code>sudo docker exec -it nginx /bin/sh</code>，进入nginx容器 </p>
+]]></content>
+      <categories>
+        <category>docker</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>docker-install</title>
+    <url>/docker-install/</url>
+    <content><![CDATA[<p>记录安装过程，方便后期查询。<a id="more"></a></p>
+<h4 id="docker安装脚本"><a href="#docker安装脚本" class="headerlink" title="docker安装脚本"></a>docker安装脚本</h4><ul>
+<li>centos 7.5</li>
+<li>docker 17.03</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 1. remove old version</span></span><br><span class="line">yum remove docker \</span><br><span class="line">                  docker-client \</span><br><span class="line">                  docker-client-latest \</span><br><span class="line">                  docker-common \</span><br><span class="line">                  docker-latest \</span><br><span class="line">                  docker-latest-logrotate \</span><br><span class="line">                  docker-logrotate \</span><br><span class="line">                  docker-selinux \</span><br><span class="line">                  docker-engine-selinux \</span><br><span class="line">                  docker-engine</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 2. install utils and repo</span></span><br><span class="line">yum install -y yum-utils \</span><br><span class="line">  device-mapper-persistent-data \</span><br><span class="line">  lvm2</span><br><span class="line">yum-config-manager \</span><br><span class="line">    --add-repo \</span><br><span class="line">    https://download.docker.com/linux/centos/docker-ce.repo</span><br><span class="line">yum-config-manager --disable docker-ce-edge</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 3. install docker-ce-17.03.2</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> install docker-ce-selinux first</span></span><br><span class="line">yum install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-selinux-17.03.2.ce-1.el7.centos.noarch.rpm -y</span><br><span class="line">yum install docker-ce-17.03.2.ce -y</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 4. install docker-compose</span></span><br><span class="line">curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/bin/docker-compose</span><br><span class="line">chmod 755 /usr/bin/docker-compose</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 5. install Docker Registry (centso7)</span></span><br><span class="line"></span><br><span class="line">vim /lib/systemd/system/docker.service</span><br><span class="line"><span class="meta">#</span><span class="bash"> ExecStart后面添加仓库地址</span></span><br><span class="line">ExecStart=/usr/bin/dockerd --insecure-registry http://私人仓库.com</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>docker</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>git</title>
+    <url>/git/</url>
+    <content><![CDATA[<p>整理使用过程，方便以后学习。<a id="more"></a></p>
+<h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p>这里简单说一下<code>三棵树</code>的概念，</p>
+<ul>
+<li><code>第一棵树</code>是你的工作目录，它持有实际文件</li>
+<li><code>第二棵树</code> 缓存区（Index），它像个缓存区域，临时保存你的改动</li>
+<li><code>第三棵树</code>是 HEAD，指向你最近一次提交后的结果。 </li>
+</ul>
+<hr>
+<h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><h5 id="设置用户名和邮箱"><a href="#设置用户名和邮箱" class="headerlink" title="设置用户名和邮箱"></a>设置用户名和邮箱</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git config --global user.name "laddin"</span><br><span class="line">git config --global user.email laddin@163.com</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="创建新仓库"><a href="#创建新仓库" class="headerlink" title="创建新仓库"></a>创建新仓库</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir git_testcd git_testgit init</span><br></pre></td></tr></table></figure>
+
+<h5 id="克隆仓库"><a href="#克隆仓库" class="headerlink" title="克隆仓库"></a>克隆仓库</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git clone ladd@192.168.16.1:/path</span><br></pre></td></tr></table></figure>
+
+<h5 id="更新本地仓库到最新改动"><a href="#更新本地仓库到最新改动" class="headerlink" title="更新本地仓库到最新改动"></a>更新本地仓库到最新改动</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git pull</span><br></pre></td></tr></table></figure>
+
+<h5 id="本地修改了提交到缓存区"><a href="#本地修改了提交到缓存区" class="headerlink" title="本地修改了提交到缓存区"></a>本地修改了提交到缓存区</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git add .</span><br></pre></td></tr></table></figure>
+
+<h5 id="缓存区提交到HEAD"><a href="#缓存区提交到HEAD" class="headerlink" title="缓存区提交到HEAD"></a>缓存区提交到HEAD</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git commit -m "代码修改信息"</span><br></pre></td></tr></table></figure>
+
+<h5 id="提交到master分支"><a href="#提交到master分支" class="headerlink" title="提交到master分支"></a>提交到master分支</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="查看当前分支"><a href="#查看当前分支" class="headerlink" title="查看当前分支"></a>查看当前分支</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git branch	* master</span><br></pre></td></tr></table></figure>
+
+<h5 id="创建develop分支，并切换过去"><a href="#创建develop分支，并切换过去" class="headerlink" title="创建develop分支，并切换过去"></a>创建develop分支，并切换过去</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git checkout -b developSwitched to branch 'develop'</span><br></pre></td></tr></table></figure>
+
+<h5 id="切换主分支"><a href="#切换主分支" class="headerlink" title="切换主分支"></a>切换主分支</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git checkout master</span><br></pre></td></tr></table></figure>
+
+<h5 id="查看仓库状态"><a href="#查看仓库状态" class="headerlink" title="查看仓库状态"></a>查看仓库状态</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git statusOn branch developnothing to commit, working tree clean</span><br></pre></td></tr></table></figure>
+
+<h5 id="提交到develop分支"><a href="#提交到develop分支" class="headerlink" title="提交到develop分支"></a>提交到develop分支</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git push origin develop</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>golang_001</title>
+    <url>/golang-001/</url>
+    <content><![CDATA[<p>记录学习，方便后期回顾。<a id="more"></a>给侄子弄的算术题…</p>
+<figure class="highlight golang"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"flag"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"github.com/unidoc/unioffice/document"</span></span><br><span class="line">	<span class="string">"github.com/unidoc/unioffice/schema/soo/wml"</span></span><br><span class="line">	<span class="string">"math/rand"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">//随机删除key</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">deletemapkey</span><span class="params">(mapinfo <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span>, mapnum <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> listinfo []<span class="keyword">string</span></span><br><span class="line">	r := rand.New(rand.NewSource(time.Now().UnixNano()))</span><br><span class="line">	<span class="keyword">for</span> k, _ := <span class="keyword">range</span> mapinfo &#123;</span><br><span class="line">		listinfo = <span class="built_in">append</span>(listinfo, k)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; mapnum; i++ &#123;</span><br><span class="line"></span><br><span class="line">		x := r.Intn(<span class="built_in">len</span>(listinfo))</span><br><span class="line">		k := listinfo[x]</span><br><span class="line">		listinfo = <span class="built_in">append</span>(listinfo[:x], listinfo[x+<span class="number">1</span>:]...)</span><br><span class="line">		<span class="built_in">delete</span>(mapinfo, k)</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">生成数据	返回字典</span></span><br><span class="line"><span class="comment">topci_num	生成题目的数量</span></span><br><span class="line"><span class="comment">topic_scope	生成题目的范围</span></span><br><span class="line"><span class="comment">topic_type	生成题目的类型 0-正常加减 1-连加连减	2-凑十法  3-破十法 4-凑十法和破十法</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">operation</span><span class="params">(topic_num, topic_scope, topic_type <span class="keyword">int</span>)</span> <span class="title">map</span>[<span class="title">string</span>]<span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> mapinfo = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span>)</span><br><span class="line">	<span class="comment">//随机数time刷新</span></span><br><span class="line">	r := rand.New(rand.NewSource(time.Now().UnixNano()))</span><br><span class="line"></span><br><span class="line">	<span class="keyword">switch</span> topic_type &#123;</span><br><span class="line">	<span class="comment">//正常加减</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">		<span class="keyword">for</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> <span class="built_in">len</span>(mapinfo) == topic_num &#123;</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			&#125;</span><br><span class="line">			x := r.Intn(topic_scope)</span><br><span class="line">			y := r.Intn(topic_scope)</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> x &gt; y &#123;</span><br><span class="line">				k := fmt.Sprint(x, <span class="string">"-"</span>, y, <span class="string">"="</span>)</span><br><span class="line">				v := x - y</span><br><span class="line">				mapinfo[k] = v</span><br><span class="line"></span><br><span class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> x+y &lt; topic_scope &#123;</span><br><span class="line">				k := fmt.Sprint(x, <span class="string">"+"</span>, y, <span class="string">"="</span>)</span><br><span class="line">				v := x + y</span><br><span class="line">				mapinfo[k] = v</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//连加连减</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">		<span class="keyword">for</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> <span class="built_in">len</span>(mapinfo) == topic_num &#123;</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			&#125;</span><br><span class="line">			x := r.Intn(topic_scope)</span><br><span class="line">			y := r.Intn(topic_scope)</span><br><span class="line">			z := r.Intn(topic_scope)</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> x+y+z &lt; topic_scope &#123;</span><br><span class="line">				k := fmt.Sprint(x, <span class="string">"+"</span>, y, <span class="string">"+"</span>, z, <span class="string">"="</span>)</span><br><span class="line">				v := x + y + z</span><br><span class="line">				mapinfo[k] = v</span><br><span class="line">				<span class="keyword">continue</span></span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> x+y-z &lt; topic_scope &amp;&amp; x+y &gt; z &amp;&amp; x+y &lt; topic_scope &#123;</span><br><span class="line">				k := fmt.Sprint(x, <span class="string">"+"</span>, y, <span class="string">"-"</span>, z, <span class="string">"="</span>)</span><br><span class="line">				v := x + y - z</span><br><span class="line">				mapinfo[k] = v</span><br><span class="line">				<span class="keyword">continue</span></span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> x-y-z &lt; topic_scope &amp;&amp; x-y &gt; z &#123;</span><br><span class="line">				k := fmt.Sprint(x, <span class="string">"-"</span>, y, <span class="string">"-"</span>, z, <span class="string">"="</span>)</span><br><span class="line">				v := x - y - z</span><br><span class="line">				mapinfo[k] = v</span><br><span class="line">				<span class="keyword">continue</span></span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> x-y+z &lt; topic_scope &amp;&amp; x &gt; y &#123;</span><br><span class="line">				k := fmt.Sprint(x, <span class="string">"-"</span>, y, <span class="string">"+"</span>, z, <span class="string">"="</span>)</span><br><span class="line">				v := x - y + z</span><br><span class="line">				mapinfo[k] = v</span><br><span class="line">				<span class="keyword">continue</span></span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//凑十法</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">		<span class="comment">// 由于最多只有36个这里采用直接生成的方法</span></span><br><span class="line">		<span class="keyword">for</span> x := <span class="number">1</span>; x &lt; <span class="number">10</span>; x++ &#123;</span><br><span class="line">			<span class="keyword">for</span> y := <span class="number">1</span>; y &lt; <span class="number">10</span>; y++ &#123;</span><br><span class="line">				<span class="keyword">if</span> x+y &gt; <span class="number">10</span> &#123;</span><br><span class="line">					k := fmt.Sprint(x, <span class="string">"+"</span>, y, <span class="string">"="</span>)</span><br><span class="line">					v := x + y</span><br><span class="line">					mapinfo[k] = v</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> topic_num &lt; <span class="number">36</span> &#123;</span><br><span class="line">			listnum := <span class="number">36</span> - topic_num</span><br><span class="line">			deletemapkey(mapinfo, listnum)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">//破十法</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">		<span class="comment">// 由于最多只有36个这里采用直接生成的方法</span></span><br><span class="line">		<span class="keyword">for</span> x := <span class="number">11</span>; x &lt; <span class="number">20</span>; x++ &#123;</span><br><span class="line">			<span class="keyword">for</span> y := <span class="number">1</span>; y &lt; <span class="number">10</span>; y++ &#123;</span><br><span class="line">				<span class="keyword">if</span> x-y &lt; <span class="number">10</span> &#123;</span><br><span class="line">					k := fmt.Sprint(x, <span class="string">"-"</span>, y, <span class="string">"="</span>)</span><br><span class="line">					v := x - y</span><br><span class="line">					mapinfo[k] = v</span><br><span class="line">				&#125;</span><br><span class="line"></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> topic_num &lt; <span class="number">36</span> &#123;</span><br><span class="line">			listnum := <span class="number">36</span> - topic_num</span><br><span class="line">			deletemapkey(mapinfo, listnum)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//混合模式</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">4</span>:</span><br><span class="line">		<span class="keyword">for</span> x := <span class="number">1</span>; x &lt; <span class="number">10</span>; x++ &#123;</span><br><span class="line">			<span class="keyword">for</span> y := <span class="number">1</span>; y &lt; <span class="number">10</span>; y++ &#123;</span><br><span class="line">				<span class="keyword">if</span> x+y &gt; <span class="number">10</span> &#123;</span><br><span class="line">					k := fmt.Sprint(x, <span class="string">"+"</span>, y, <span class="string">"="</span>)</span><br><span class="line">					v := x + y</span><br><span class="line">					mapinfo[k] = v</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span> x := <span class="number">11</span>; x &lt; <span class="number">20</span>; x++ &#123;</span><br><span class="line">			<span class="keyword">for</span> y := <span class="number">1</span>; y &lt; <span class="number">10</span>; y++ &#123;</span><br><span class="line">				<span class="keyword">if</span> x-y &lt; <span class="number">10</span> &#123;</span><br><span class="line">					k := fmt.Sprint(x, <span class="string">"-"</span>, y, <span class="string">"="</span>)</span><br><span class="line">					v := x - y</span><br><span class="line">					mapinfo[k] = v</span><br><span class="line">				&#125;</span><br><span class="line"></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> topic_num &lt; <span class="number">72</span> &#123;</span><br><span class="line">			listnum := <span class="number">72</span> - topic_num</span><br><span class="line">			deletemapkey(mapinfo, listnum)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//高级模式</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">5</span>:</span><br><span class="line">		p := <span class="number">20</span></span><br><span class="line">		<span class="keyword">for</span> x := <span class="number">1</span>+p; x &lt; <span class="number">10</span>+p; x++ &#123;</span><br><span class="line">			<span class="keyword">for</span> y := <span class="number">1</span>; y &lt; <span class="number">10</span>; y++ &#123;</span><br><span class="line">				<span class="keyword">if</span> x+y &gt; p &#123;</span><br><span class="line">					k := fmt.Sprint(x, <span class="string">"+"</span>, y, <span class="string">"="</span>)</span><br><span class="line">					v := x + y</span><br><span class="line">					mapinfo[k] = v</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span> x := <span class="number">1</span>+p; x &lt; <span class="number">10</span>+p; x++ &#123;</span><br><span class="line">			<span class="keyword">for</span> y := <span class="number">1</span>; y &lt; <span class="number">10</span>; y++ &#123;</span><br><span class="line">				<span class="keyword">if</span> x-y &lt; p &#123;</span><br><span class="line">					k := fmt.Sprint(x, <span class="string">"-"</span>, y, <span class="string">"="</span>)</span><br><span class="line">					v := x - y</span><br><span class="line">					mapinfo[k] = v</span><br><span class="line">				&#125;</span><br><span class="line"></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> topic_num &lt; <span class="number">72</span> &#123;</span><br><span class="line">			listnum := <span class="number">72</span> - topic_num</span><br><span class="line">			deletemapkey(mapinfo, listnum)</span><br><span class="line">		&#125;</span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		fmt.Print(<span class="string">"topic_type is  err"</span>)</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> mapinfo</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 生成文件</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">writeword</span><span class="params">(mapinfo <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span>, wordtype <span class="keyword">bool</span>)</span></span> &#123;</span><br><span class="line">	new_time := time.Now().Format(<span class="string">"2006-01-02"</span>)</span><br><span class="line">	<span class="keyword">var</span> i <span class="keyword">int</span></span><br><span class="line">	<span class="keyword">var</span> runinfo <span class="keyword">string</span></span><br><span class="line">	<span class="keyword">var</span> docxname <span class="keyword">string</span></span><br><span class="line">	doc := document.New()</span><br><span class="line">	<span class="comment">//定义标题属性</span></span><br><span class="line">	para := doc.AddParagraph()</span><br><span class="line">	run := para.AddRun()</span><br><span class="line">	para.SetStyle(<span class="string">"Title"</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> wordtype &#123;</span><br><span class="line">		runinfo = new_time + <span class="string">"数学习题"</span></span><br><span class="line">		docxname = new_time + <span class="string">"习题.docx"</span></span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		runinfo = new_time + <span class="string">"数学习题答案"</span></span><br><span class="line">		docxname = new_time + <span class="string">"答案.docx"</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	run.AddText(runinfo)</span><br><span class="line"></span><br><span class="line">	<span class="comment">//定义表格属性</span></span><br><span class="line">	table := doc.AddTable()</span><br><span class="line">	table.Properties().SetLayout(wml.ST_TblLayoutTypeFixed)</span><br><span class="line">	table.Properties().SetWidthPercent(<span class="number">100</span>)</span><br><span class="line">	table.Properties().SetStyle(<span class="string">"MyTableStyle"</span>)</span><br><span class="line">	look := table.Properties().TableLook()</span><br><span class="line">	look.SetFirstColumn(<span class="literal">true</span>)</span><br><span class="line">	look.SetFirstRow(<span class="literal">true</span>)</span><br><span class="line">	look.SetHorizontalBanding(<span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">//表格数据填充</span></span><br><span class="line">	<span class="keyword">for</span> r := <span class="number">0</span>; r &lt; <span class="number">40</span>; r++ &#123;</span><br><span class="line">		row := table.AddRow()</span><br><span class="line">		<span class="keyword">for</span> c := <span class="number">0</span>; c &lt; <span class="number">3</span>; c++ &#123;</span><br><span class="line">			cell := row.AddCell()</span><br><span class="line">			<span class="keyword">if</span> i &lt; <span class="built_in">len</span>(mapinfo) &amp;&amp; wordtype == <span class="literal">true</span> &#123;</span><br><span class="line">				<span class="keyword">for</span> k, _ := <span class="keyword">range</span> mapinfo &#123;</span><br><span class="line">					cell.AddParagraph().AddRun().AddText(k)</span><br><span class="line">					<span class="built_in">delete</span>(mapinfo, k)</span><br><span class="line">					<span class="keyword">break</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> i &lt; <span class="built_in">len</span>(mapinfo) &amp;&amp; wordtype == <span class="literal">false</span> &#123;</span><br><span class="line">				<span class="keyword">for</span> k, v := <span class="keyword">range</span> mapinfo &#123;</span><br><span class="line">					cell.AddParagraph().AddRun().AddText(fmt.Sprintf(<span class="string">"%s %d"</span>, k, v))</span><br><span class="line">					<span class="built_in">delete</span>(mapinfo, k)</span><br><span class="line">					<span class="keyword">break</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//生成文档</span></span><br><span class="line"></span><br><span class="line">	doc.SaveToFile(docxname)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	topic_num := flag.Int(<span class="string">"topic_num"</span>, <span class="number">50</span>, <span class="string">"输入打印题目的数量"</span>)   <span class="comment">//题目的数量（默认120）</span></span><br><span class="line">	topic_scope := flag.Int(<span class="string">"topic_scope"</span>, <span class="number">20</span>, <span class="string">"输入题目的范围"</span>) <span class="comment">//题目的范围（默认20以内的加减法）</span></span><br><span class="line">	topic_bool := flag.Int(<span class="string">"topic_bool"</span>, <span class="number">5</span>, <span class="string">"输入题目的类型"</span>)   <span class="comment">//题目的类型 0-正常加减 1-连加连减	2-凑十法  3-破十法 4-凑十法和破十法</span></span><br><span class="line">	flag.Parse()</span><br><span class="line"></span><br><span class="line">	yy := operation(*topic_num, *topic_scope, *topic_bool)</span><br><span class="line">	<span class="keyword">for</span> k, v := <span class="keyword">range</span> yy &#123;</span><br><span class="line">		fmt.Print(k, v, <span class="string">"\n"</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	writeword(yy,<span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>go</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>google身份验证器</title>
+    <url>/google-authen/</url>
+    <content><![CDATA[<p>配合google身份验证器使用的代码片段。<a id="more"></a></p>
+<h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p> Google Authenticator有2种模式 </p>
+<ul>
+<li>一种是基于时间，三十秒自动变化一次 </li>
+<li>一种是基于计数器，一个计数器变化一次 </li>
+</ul>
+<p>具体原理算法请自行google， 下面的片段将演示这2种模式。 </p>
+<hr>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> hmac</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> struct</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成秘钥</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">random_base32</span><span class="params">(length=<span class="number">16</span>, random=random.SystemRandom<span class="params">()</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                  chars=list<span class="params">(<span class="string">'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'</span>)</span>)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">''</span>.join(random.choice(chars)<span class="keyword">for</span> _ <span class="keyword">in</span> range(length))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 基于计数器</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_hotp_token</span><span class="params">(secret, intervals_no)</span>:</span></span><br><span class="line">    key = base64.b32decode(secret, <span class="literal">True</span>)</span><br><span class="line">    msg = struct.pack(<span class="string">"&gt;Q"</span>, intervals_no)</span><br><span class="line">    h = hmac.new(key, msg, hashlib.sha1).digest()</span><br><span class="line">    o = ord(h[<span class="number">19</span>]) &amp; <span class="number">15</span></span><br><span class="line">    h = (struct.unpack(<span class="string">"&gt;I"</span>, h[o:o+<span class="number">4</span>])[<span class="number">0</span>] &amp; <span class="number">0x7fffffff</span>) % <span class="number">1000000</span></span><br><span class="line">    <span class="keyword">return</span> h</span><br><span class="line"></span><br><span class="line"><span class="comment"># 基于时间</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_totp_token</span><span class="params">(secret)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> get_hotp_token(secret, intervals_no=int(time.time())//<span class="number">30</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="comment">#print random_base32()</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"账号：2AQPBIGYZ6SE2X4Y"</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"基于时间，30秒一变：%s"</span> %get_totp_token(<span class="string">"2AQPBIGYZ6SE2X4Y"</span>)</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"基于计数器，第一个：%s"</span> %get_hotp_token(<span class="string">"2AQPBIGYZ6SE2X4Y"</span>,intervals_no=<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"基于计数器，第二个：%s"</span> %get_hotp_token(<span class="string">"2AQPBIGYZ6SE2X4Y"</span>,intervals_no=<span class="number">2</span>)</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"基于计数器，第三个：%s"</span> %get_hotp_token(<span class="string">"2AQPBIGYZ6SE2X4Y"</span>,intervals_no=<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<img src="/google-authen/yzq.gif" class title="This is an example image">
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>hello-blog</title>
+    <url>/hello-blog/</url>
+    <content><![CDATA[<p>好记性不如烂笔头，博客还是要写的⚆_⚆，顺便更新一下之前记录瑕疵，换一个主题，换一种心情，Let’s go!</p>
+]]></content>
+      <categories>
+        <category>干了这碗汤</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>kafka</title>
+    <url>/kafka/</url>
+    <content><![CDATA[<p>记录使用，方便查询。<a id="more"></a></p>
+<h4 id="kafka介绍"><a href="#kafka介绍" class="headerlink" title="kafka介绍"></a>kafka介绍</h4><p>实时流的数据管道和实时流的处理，面向于数据流的生产/转换/存储/消费整体的一个流处理平台。<br>具有以下这些特点：</p>
+<ul>
+<li>分布式，多分区 多副本 多订阅者 基于zk调度</li>
+<li>高性能，高吞吐量 低延迟 高并发 时间复杂度O(1)</li>
+<li>持久性与扩展性，数据可持久化 容错性 支持在线水平扩展 消息自动平衡</li>
+</ul>
+<hr>
+<h4 id="模块说明"><a href="#模块说明" class="headerlink" title="模块说明"></a>模块说明</h4><p><code>producer</code>：消息和数据的生产者，向kakfa一个topic发布消息的进程/代码/服务。<br><code>consumer</code>：消息和数据的消费者，订阅topic并且处理其发布的消息的进程/代码/服务。<br><code>consumer Group</code>：同一个topic，会广播给不同的组（group），一个group中，只有一个consumer可以消费该消息。<br><code>broker</code>：kafka集群中的kafka节点。<br><code>topic</code>：kafka消息的类别，对数据进行分区隔离，每条记录中包含一个key，一个value和一个timestamp（时间戳）。<br><code>partition</code>：每个topic包含一个或多个partition，创建topic时可指定parition数量，每个partition对应一个文件夹，该文件夹下存储该partition的数据和索引文件，一个topic数据会被分散储存到多个partition，每一个partition都是有序的（消费者的数量只能小于或者等于partition的数目，要不然就会重复消费）。<br><code>replication</code>：副本，一个partition可能会有多个replica，多个replica之间数据是一样的（系统默认设置的每一个topic的replication的参数是1，就是没&gt;有副本，为了节省资源，可以在创建topic时设置副本参数）。<br><code>replication leader</code>：一个partition的多个副本上，只有一个leader来负责该partition与 producer和consumer交互，而其他的replication则复制leader信息和选举leader。</p>
+<p>如图所示，后面将会用代码实现consumer Group的效果。</p>
+<img src="/kafka/001.png" class title="This is cluster">
+<hr>
+<h4 id="安装介绍"><a href="#安装介绍" class="headerlink" title="安装介绍"></a>安装介绍</h4><ul>
+<li>centos 6.9</li>
+<li>jdk 1.8.0_144</li>
+<li>kafka 2.0.0</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>ip地址</th>
+<th>服务</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>192.168.80.132</td>
+<td>zookeeper</td>
+</tr>
+<tr>
+<td>192.168.80.133</td>
+<td>kafka</td>
+</tr>
+</tbody></table>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget http://mirror.rise.ph/apache/kafka/2.0.0/kafka_2.11-2.0.0.tgz</span><br><span class="line">tar  zxvf kafka_2.11-2.0.0.tgz</span><br><span class="line">mv kafka_2.11-2.0.0 /usr/local/kafka</span><br><span class="line">cd /usr/local/kafka</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 定义broker.id  log.dirs  zookeeper.connect</span></span><br><span class="line">vim config/server.properties </span><br><span class="line"></span><br><span class="line">mkdir  /home/data</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 启动</span></span><br><span class="line">/usr/local/kafka/bin/kafka-server-start.sh /usr/local/kafka/config/server.properties</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="单机实例"><a href="#单机实例" class="headerlink" title="单机实例"></a>单机实例</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建一个名为laddin_test的topic，create 创建  replication-factor副本  partitions分区。</span></span><br><span class="line">[root@localhost ~]# ./kafka-topics.sh --create --zookeeper 192.168.80.132:2181 --replication-factor 1 --partitions 1 --topic laddin</span><br><span class="line">Created topic "laddin".</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 用list来查看topic</span></span><br><span class="line">[root@localhost bin]# ./kafka-topics.sh --list --zookeeper 192.168.80.132:2181</span><br><span class="line">laddin</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 发送消息</span></span><br><span class="line">[root@localhost bin]# ./kafka-console-producer.sh --broker-list localhost:9092 --topic laddin</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">laddin xxx</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash"><span class="built_in">test</span> ppp</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 接收消息 （from-beginning从头开始消费）</span></span><br><span class="line">[root@localhost bin]# ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic laddin --from-beginning</span><br><span class="line">laddin xxx</span><br><span class="line">test ppp</span><br></pre></td></tr></table></figure>
+
+<h4 id="集群实例"><a href="#集群实例" class="headerlink" title="集群实例"></a>集群实例</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建一个名为laddin1234的topic，partitions设置为2</span></span><br><span class="line">[root@localhost bin]# ./kafka-topics.sh --create --zookeeper 192.168.80.132:2181 --replication-factor 1 --partitions 2 --topic laddin1234</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 发送消息</span></span><br><span class="line">[root@localhost bin]# ./kafka-console-producer.sh --broker-list localhost:9092 --topic laddin1234</span><br><span class="line"><span class="meta">&gt;</span><span class="bash">1</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">2</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">3</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">4</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">5</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">6</span></span><br><span class="line"><span class="meta">&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 开2个xshell窗口</span></span><br><span class="line">[root@localhost bin]# ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --group testladdin  --topic laddin123 </span><br><span class="line">2</span><br><span class="line">4</span><br><span class="line">6</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@localhost bin]# ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --group testladdin  --topic laddin123 </span><br><span class="line">1</span><br><span class="line">3</span><br><span class="line">5</span><br></pre></td></tr></table></figure>
+
+<img src="/kafka/002.png" class title="This is example">
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看consumer Group 列表</span></span><br><span class="line">[root@localhost bin]# ./kafka-consumer-groups.sh  --bootstrap-server localhost:9092 --list</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看具体信息</span></span><br><span class="line">[root@localhost bin]# ./kafka-consumer-groups.sh  --bootstrap-server localhost:9092 --describe --group testladdin</span><br></pre></td></tr></table></figure>
+
+<h5 id="py-demo"><a href="#py-demo" class="headerlink" title="py_demo"></a>py_demo</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#生产者</span></span><br><span class="line"><span class="keyword">from</span> pykafka <span class="keyword">import</span> KafkaClient</span><br><span class="line"></span><br><span class="line">client = KafkaClient(hosts=<span class="string">"192.168.80.133:9092"</span>)</span><br><span class="line"></span><br><span class="line">topic = client.topics[<span class="string">'laddin123'</span>]</span><br><span class="line"><span class="comment"># 发送消息</span></span><br><span class="line">producer = topic.get_producer()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">50</span>):</span><br><span class="line">    test_message = <span class="string">"message&#123;&#125;"</span>.format(i)</span><br><span class="line">    print(test_message)</span><br><span class="line">    producer.produce(bytes(test_message, encoding=<span class="string">'utf-8'</span>))</span><br><span class="line">producer.stop()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#消费者</span></span><br><span class="line"><span class="keyword">from</span> pykafka <span class="keyword">import</span> KafkaClient</span><br><span class="line"></span><br><span class="line">client = KafkaClient(hosts=<span class="string">"192.168.80.133:9092"</span>)</span><br><span class="line">topic = client.topics[<span class="string">'laddin123'</span>]</span><br><span class="line"><span class="comment"># 这里的consumer_group是定义那一个组的</span></span><br><span class="line">consumer = topic.get_balanced_consumer(consumer_group=<span class="string">'testladdin'</span>,</span><br><span class="line">                                       auto_commit_enable=<span class="literal">True</span>,</span><br><span class="line">                                       zookeeper_connect=<span class="string">'192.168.80.132:2181'</span></span><br><span class="line">                                       )</span><br><span class="line"><span class="keyword">for</span> message <span class="keyword">in</span> consumer:</span><br><span class="line">    print(<span class="string">"#"</span> * <span class="number">100</span>)</span><br><span class="line">    print(<span class="string">"compression_type"</span>, message.compression_type)</span><br><span class="line">    print(<span class="string">"offset"</span>, message.offset)</span><br><span class="line">    print(<span class="string">"partition_id"</span>, message.partition_id)</span><br><span class="line">    print(<span class="string">"partition_key"</span>, message.partition_key)</span><br><span class="line">    print(<span class="string">"produce_attempt"</span>, message.produce_attempt)</span><br><span class="line">    print(<span class="string">"value"</span>, message.value)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>ELK</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>nginx-proxy</title>
+    <url>/nginx-proxy/</url>
+    <content><![CDATA[<p>Nginx代理，方便后期查询。<a id="more"></a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">proxy_cache_path /home/proxy_cache/123456 levels=1:2 keys_zone=caches_123456:200m inactive=30m max_size=2g use_temp_path=off;</span><br><span class="line"><span class="meta">#</span><span class="bash"> levels=1:2，表示创建两层目录缓存</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> keys_zone=caches_123456:200m 定义缓存区域名称及大小</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> inactive=30m 在指定时间内没人访问则被删除</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> max_size=2g  最大缓存空间</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> use_temp_path=off</span></span><br><span class="line">upstream web_123456&#123;</span><br><span class="line">        server 127.0.0.1:8093;</span><br><span class="line">&#125;</span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name  123456.com www.123456.com;</span><br><span class="line">    index index.html index.htm index.php forum.php index.asp index.jsp index.aspx;</span><br><span class="line">    access_log  /home/wwwlogs/123456.log;</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://web_123456;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 定义后端访问地址</span></span><br><span class="line">		</span><br><span class="line">	proxy_set_header Accept-Encoding "";</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 清除编码</span></span><br><span class="line">		</span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 定义主机头</span></span><br><span class="line">		</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 向后端传递访客ip </span></span><br><span class="line">		</span><br><span class="line">        proxy_cache caches_123456;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 缓存区名称，与前面定义的相同</span></span><br><span class="line">		</span><br><span class="line">        proxy_cache_key  $host$uri$is_args$query_string;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 缓存key的规则</span></span><br><span class="line">		</span><br><span class="line">        proxy_cache_valid  200 304 60m;</span><br><span class="line">        proxy_cache_valid  301 10m;</span><br><span class="line">        proxy_cache_valid  500 502 503 504 0s;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 状态缓存时效</span></span><br><span class="line">		</span><br><span class="line">        proxy_cache_valid any 1s;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 没有定义状态缓存1s</span></span><br><span class="line">		</span><br><span class="line">        proxy_cache_min_uses 1;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 访问1次就缓存</span></span><br><span class="line">		</span><br><span class="line">        expires 12h;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 失效时间</span></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>openpyxl</title>
+    <url>/openpyxl/</url>
+    <content><![CDATA[<p> 整理使用过程，方便以后学习。 <a id="more"></a></p>
+<h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p> <code>openpyxl</code>可以读写Excel表格，专门处理<code>Excel2007</code>及以上版本产生的xlsx文件，不是自带库，需要pip安装，如果涉及到图片插入还需要安装 Image库 。演示代码如下。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> openpyxl</span><br><span class="line"><span class="comment">#创建工作薄</span></span><br><span class="line">wb = openpyxl.Workbook()</span><br><span class="line"><span class="comment">#调用工作表</span></span><br><span class="line">ws = wb.active</span><br><span class="line"><span class="comment">#修改标签名称</span></span><br><span class="line">ws.title = <span class="string">'TEST'</span></span><br><span class="line"><span class="comment">#修改标签背景色</span></span><br><span class="line">ws.sheet_properties.tabColor = <span class="string">'0101DF'</span></span><br><span class="line"><span class="comment">#第一行添加以下列</span></span><br><span class="line">ws.append([<span class="string">'苹果'</span>,<span class="string">'橘子'</span>,<span class="string">'香蕉'</span>,<span class="string">'葡萄'</span>,<span class="string">'栗子'</span>,<span class="string">'西瓜'</span>,<span class="string">'榴莲'</span>])</span><br><span class="line"><span class="comment">#设置C的列宽</span></span><br><span class="line">ws.column_dimensions[<span class="string">'C'</span>].width = <span class="number">20</span></span><br><span class="line"><span class="comment">#设置2的行高</span></span><br><span class="line">ws.row_dimensions[<span class="number">2</span>].height = <span class="number">20</span></span><br><span class="line"><span class="comment">#设置标题颜色，居中，边框</span></span><br><span class="line">list_lie = [<span class="string">'A1'</span>,<span class="string">'B1'</span>,<span class="string">'C1'</span>,<span class="string">'D1'</span>,<span class="string">'E1'</span>,<span class="string">'F1'</span>,<span class="string">'G1'</span>]</span><br><span class="line">left, right, top, bottom = [openpyxl.styles.Side(style=<span class="string">'medium'</span>,color=<span class="string">'555555'</span>)]*<span class="number">4</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> list_lie:</span><br><span class="line">    <span class="comment">#颜色</span></span><br><span class="line">    ws[i].fill = openpyxl.styles.PatternFill(start_color=<span class="string">'bbbbbb'</span>, fill_type=<span class="string">'solid'</span>)</span><br><span class="line">    <span class="comment">#居中</span></span><br><span class="line">    ws[i].alignment = openpyxl.styles.Alignment(horizontal=<span class="string">'center'</span>, vertical=<span class="string">'center'</span>)</span><br><span class="line">    <span class="comment">#边框</span></span><br><span class="line">    ws[i].border = openpyxl.styles.Border(left=left, right=right, top=top, bottom=bottom)</span><br><span class="line"><span class="comment">#单元格赋值</span></span><br><span class="line">ws[<span class="string">'A2'</span>] = <span class="string">'小企鹅'</span></span><br><span class="line"><span class="comment">#合并单元格</span></span><br><span class="line">ws.merge_cells(<span class="string">'A3:C3'</span>)</span><br><span class="line">ws[<span class="string">'A3'</span>] = <span class="string">'大黄鸭'</span></span><br><span class="line"><span class="comment">#设置字体大小，斜体</span></span><br><span class="line">ws[<span class="string">'A4'</span>].font = openpyxl.styles.Font(size=<span class="number">24</span>,italic=<span class="literal">True</span>)</span><br><span class="line">ws[<span class="string">'A4'</span>] = <span class="string">'jjyy'</span></span><br><span class="line"><span class="comment">#插入图片,需要Image库</span></span><br><span class="line">img = openpyxl.drawing.image.Image(<span class="string">r'C:\Users\laddin\Desktop\500432.jpg'</span>)</span><br><span class="line">ws.add_image(img,<span class="string">'A4'</span>)</span><br><span class="line"><span class="comment">#保存文件，并命名为xxooxx</span></span><br><span class="line">wb.save(<span class="string">'xxooxx.xlsx'</span>)</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>paramike</title>
+    <url>/paramike/</url>
+    <content><![CDATA[<p>整理使用过程，方便以后学习。 <a id="more"></a>python最常见的ssh模块。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> paramiko</span><br><span class="line"><span class="comment">#执行命令</span></span><br><span class="line">ssh =paramiko.SSHClient()</span><br><span class="line"><span class="comment">#第一次登陆</span></span><br><span class="line">ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())</span><br><span class="line"><span class="comment">#秘钥登陆</span></span><br><span class="line">ssh.connect(hostname=<span class="string">'IP'</span>, port=<span class="number">22</span>, username=<span class="string">'username'</span>, key_filename=<span class="string">'/home/laddin/.ssh/id_rsa'</span> )</span><br><span class="line"><span class="comment">#密码登陆</span></span><br><span class="line">ssh.connect(hostname=<span class="string">'IP'</span>, port=<span class="number">22</span>, username=<span class="string">'username'</span>, password=<span class="string">'userpasswd'</span> )</span><br><span class="line"><span class="comment">#stdin, stdout, stderr分别是 标准输入 标准输出 标准错误输出</span></span><br><span class="line">stdin, stdout, stderr =ssh.exec_command(<span class="string">'ls /home/laddin'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> stdout.readlines()</span><br><span class="line"><span class="keyword">print</span> stderr.readlines()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#上传下载文件</span></span><br><span class="line">t = paramiko.Transport(<span class="string">'hostname'</span>,<span class="string">'port'</span>)</span><br><span class="line">t.connect(username=<span class="string">"username"</span>,password=<span class="string">"password"</span>)</span><br><span class="line">sftp = paramiko.SFTPClient.from_transport(t)</span><br><span class="line"><span class="comment">#上传文件</span></span><br><span class="line">sftp.put(<span class="string">'本地文件路径'</span>,<span class="string">'服务器路径'</span>)</span><br><span class="line"><span class="comment">#下载文件</span></span><br><span class="line">sftp.get(<span class="string">'服务器路径'</span>,<span class="string">'本地文件路径'</span>)</span><br><span class="line"><span class="comment">#关闭连接</span></span><br><span class="line">sftp.close()</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>巡检脚本</title>
+    <url>/polling/</url>
+    <content><![CDATA[<p> 整理使用过程，方便以后学习。 <a id="more"></a></p>
+<h4 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h4><p>最近部门要求每个星期做日常巡检汇总报告，刚开始是用的一个小脚本每天5点统计信息发送到服务器，然后统计整理生成表格，虽然初步解决但是不完善，不能随时获取当前服务器信息，后面改为用 paramiko 去获取服务器信息，来处理（这个方法也不合适，最终方案是用ansible来处理，这样比较安全）。</p>
+<hr>
+<p>简单来说，就是用<code>paramiko</code>获取服务器信息然后用<code>openpyxl</code>转换成word文件，paramiko是基于ssh的不用在服务器安装其他软件或者脚本，只需要服务器账号密码即可。脚本读取account.txt文件中的服务器信息，account.txt以空格分开，分别是ip，端口，账号，密码，脚本获得账号信息后会查找以各个ip命名的文件，分别读取不同的检测shell，远程执行，获得数据，生成word文档。如下所示。</p>
+<img src="/polling/20170321213352.png" class title="This is account config">
+
+<img src="/polling/20170321213411.png" class title="This is carry out a task">
+
+<p> 当然每个服务器的检查项目都不是一样的，这里的shell需要自己添加，这里只是举一个栗子。 </p>
+<hr>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><ul>
+<li>脚本需要安装paramiko与openpyxl模块，生成的word文档的地址需要自行修改 </li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> paramiko</span><br><span class="line"><span class="keyword">import</span> openpyxl</span><br><span class="line"></span><br><span class="line">wb = openpyxl.Workbook()</span><br><span class="line">ws = wb.active</span><br><span class="line">ws.append([<span class="string">'业务'</span>,<span class="string">'ip'</span>,<span class="string">'项目'</span>,<span class="string">'命令'</span>,<span class="string">'阈值'</span>,<span class="string">'结果'</span>,<span class="string">'备注'</span>])</span><br><span class="line"><span class="comment">#设置列宽</span></span><br><span class="line">ws.column_dimensions[<span class="string">'A'</span>].width = <span class="number">20</span></span><br><span class="line">ws.column_dimensions[<span class="string">'B'</span>].width = <span class="number">18</span></span><br><span class="line">ws.column_dimensions[<span class="string">'C'</span>].width = <span class="number">20</span></span><br><span class="line">ws.column_dimensions[<span class="string">'D'</span>].width = <span class="number">70</span></span><br><span class="line">ws.column_dimensions[<span class="string">'G'</span>].width = <span class="number">20</span></span><br><span class="line"><span class="comment">#设置标题颜色，居中，边框</span></span><br><span class="line">list_lie = [<span class="string">'A1'</span>,<span class="string">'B1'</span>,<span class="string">'C1'</span>,<span class="string">'D1'</span>,<span class="string">'E1'</span>,<span class="string">'F1'</span>,<span class="string">'G1'</span>]</span><br><span class="line">left, right, top, bottom = [openpyxl.styles.Side(style=<span class="string">'medium'</span>,color=<span class="string">'555555'</span>)]*<span class="number">4</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> list_lie:</span><br><span class="line">    ws[i].fill = openpyxl.styles.PatternFill(start_color=<span class="string">'bbbbbb'</span>, fill_type=<span class="string">'solid'</span>)</span><br><span class="line">    ws[i].alignment = openpyxl.styles.Alignment(horizontal=<span class="string">'center'</span>, vertical=<span class="string">'center'</span>)</span><br><span class="line">    ws[i].border = openpyxl.styles.Border(left=left, right=right, top=top, bottom=bottom)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">work</span><span class="params">(work_num,work_1,work_2,work_3,work_4,work_5,work_6,work_7)</span>:</span></span><br><span class="line">    <span class="string">"""将数据转换成表格"""</span></span><br><span class="line">    ws[<span class="string">'A%s'</span> % work_num] = work_1</span><br><span class="line">    ws[<span class="string">'B%s'</span> % work_num] = work_2</span><br><span class="line">    ws[<span class="string">'C%s'</span> % work_num] = work_3</span><br><span class="line">    ws[<span class="string">'D%s'</span> % work_num] = work_4</span><br><span class="line">    <span class="comment">#ws['E%s' % work_num] = work_5</span></span><br><span class="line">    ws[<span class="string">'G%s'</span> % work_num] = work_7</span><br><span class="line">    <span class="comment">#阈值判断</span></span><br><span class="line">    opration = work_5[<span class="number">0</span>:<span class="number">1</span>]</span><br><span class="line">    opration_a = int(work_5[<span class="number">1</span>:].split(<span class="string">'%'</span>)[<span class="number">0</span>])</span><br><span class="line">    opration_b = int(work_6.split(<span class="string">'%'</span>)[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">    opration_error = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">if</span> opration == <span class="string">'&gt;'</span>:</span><br><span class="line">        ws[<span class="string">'E%s'</span> % work_num] = work_5</span><br><span class="line">        <span class="keyword">if</span> opration_b &gt; opration_a:</span><br><span class="line">            opration_error = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">elif</span> opration == <span class="string">'&lt;'</span>:</span><br><span class="line">        ws[<span class="string">'E%s'</span> % work_num] = work_5</span><br><span class="line">        <span class="keyword">if</span> opration_b &lt; opration_a:</span><br><span class="line">            opration_error = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">elif</span> opration == <span class="string">'='</span>:</span><br><span class="line">        <span class="comment">#ws['E%s' % work_num] = work_5[1:]</span></span><br><span class="line">        ws[<span class="string">'E%s'</span> % work_num] = <span class="string">"等于%s"</span> % work_5[<span class="number">1</span>:]</span><br><span class="line">        <span class="keyword">if</span> opration_a == opration_b:</span><br><span class="line">            opration_error = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> opration_error:</span><br><span class="line">        ws[<span class="string">'F%s'</span> % work_num] = work_6</span><br><span class="line">        ws[<span class="string">'F%s'</span> % work_num].fill = openpyxl.styles.PatternFill(start_color=<span class="string">'49da3f'</span>, fill_type=<span class="string">'solid'</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        ws[<span class="string">'F%s'</span> % work_num] = work_6</span><br><span class="line">        ws[<span class="string">'F%s'</span> % work_num].fill = openpyxl.styles.PatternFill(start_color=<span class="string">'ee346c'</span>, fill_type=<span class="string">'solid'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#所有数据添加边框</span></span><br><span class="line">    <span class="keyword">for</span> x <span class="keyword">in</span> list(<span class="string">'ABCDEFG'</span>):</span><br><span class="line">        ws[x + str(work_num)].border = openpyxl.styles.Border(left=left, right=right, top=top, bottom=bottom)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">host_cmd</span><span class="params">(host,port,username,password)</span>:</span></span><br><span class="line">    <span class="string">"""传账号信息，返回结果"""</span></span><br><span class="line">    ssh = paramiko.SSHClient()</span><br><span class="line">    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())</span><br><span class="line">    ssh.connect(host, port, username, password)</span><br><span class="line">    <span class="keyword">with</span> open(host+<span class="string">'.txt'</span>) <span class="keyword">as</span> cmding:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> cmding:</span><br><span class="line">            i = i.strip().split(<span class="string">'#'</span>)</span><br><span class="line">            stdin, stdout, stderr = ssh.exec_command(i[<span class="number">2</span>])</span><br><span class="line">            stdout_info = stdout.read().strip()</span><br><span class="line">            <span class="keyword">yield</span> i[<span class="number">0</span>],i[<span class="number">1</span>],i[<span class="number">2</span>],i[<span class="number">3</span>],stdout_info,i[<span class="number">4</span>]</span><br><span class="line">    ssh.close()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    work_num = <span class="number">2</span> <span class="comment">#word的行标签</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"开始执行！"</span></span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">'account.txt'</span>) <span class="keyword">as</span> df:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> df:</span><br><span class="line">            i = i.strip().split(<span class="string">' '</span>)</span><br><span class="line">            s_ip = i[<span class="number">0</span>]</span><br><span class="line">            s_port = int(i[<span class="number">1</span>])</span><br><span class="line">            s_name = i[<span class="number">2</span>]</span><br><span class="line">            s_passwd = i[<span class="number">3</span>]</span><br><span class="line">            cmd_info = host_cmd(s_ip,s_port,s_name,s_passwd)</span><br><span class="line">            <span class="keyword">print</span> <span class="string">"获取%s的信息"</span> % s_ip</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> x <span class="keyword">in</span> cmd_info:</span><br><span class="line">                work(work_num,x[<span class="number">0</span>],s_ip,x[<span class="number">1</span>],x[<span class="number">2</span>],x[<span class="number">3</span>],x[<span class="number">4</span>],x[<span class="number">5</span>])</span><br><span class="line">                work_num += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    wb.save(<span class="string">r'C:\Users\Jesse\Desktop\checking.xlsx'</span>)</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"执行完成！"</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<p> 执行完成后会再桌面生成一个checking.xlsx的文档，截图如下 。</p>
+<img src="/polling/20170321213442.png" class title="This is Result">
+
+
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>代理ip</title>
+    <url>/proxyip/</url>
+    <content><![CDATA[<p> 整理使用过程，方便以后学习。 <a id="more"></a>（现在抓ip的网站已经关闭，by20200405）， 有时候爬虫需要用到代理ip，将之前的脚本重新整理了一下。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># !/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding(<span class="string">'utf-8'</span>)</span><br><span class="line">requests.packages.urllib3.disable_warnings()</span><br><span class="line"></span><br><span class="line">HEADER = &#123;<span class="string">'Connection'</span>: <span class="string">'keep-alive'</span>,</span><br><span class="line">          <span class="string">'Cache-Control'</span>: <span class="string">'max-age=0'</span>,</span><br><span class="line">          <span class="string">'Upgrade-Insecure-Requests'</span>: <span class="string">'1'</span>,</span><br><span class="line">          <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko)'</span>,</span><br><span class="line">          <span class="string">'Accept'</span>: <span class="string">'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'</span>,</span><br><span class="line">          <span class="string">'Accept-Encoding'</span>: <span class="string">'gzip, deflate, sdch'</span>,</span><br><span class="line">          <span class="string">'Accept-Language'</span>: <span class="string">'zh-CN,zh;q=0.8'</span>,</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">robustCrawl</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decorate</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">return</span> func(*args, **kwargs)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="keyword">print</span> <span class="string">u"sorry, 抓取出错。错误原因:"</span></span><br><span class="line">            <span class="keyword">print</span> e</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> decorate</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getHtmlTree</span><span class="params">(url, **kwargs)</span>:</span></span><br><span class="line">    <span class="keyword">import</span> requests</span><br><span class="line">    <span class="keyword">from</span> lxml <span class="keyword">import</span> etree</span><br><span class="line">    header = &#123;<span class="string">'Connection'</span>: <span class="string">'keep-alive'</span>,</span><br><span class="line">              <span class="string">'Cache-Control'</span>: <span class="string">'max-age=0'</span>,</span><br><span class="line">              <span class="string">'Upgrade-Insecure-Requests'</span>: <span class="string">'1'</span>,</span><br><span class="line">              <span class="string">'User-Agent'</span>: <span class="string">'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko)'</span>,</span><br><span class="line">              <span class="string">'Accept'</span>: <span class="string">'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'</span>,</span><br><span class="line">              <span class="string">'Accept-Encoding'</span>: <span class="string">'gzip, deflate, sdch'</span>,</span><br><span class="line">              <span class="string">'Accept-Language'</span>: <span class="string">'zh-CN,zh;q=0.8'</span>,</span><br><span class="line">              &#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        html = requests.get(url=url, headers=header, timeout=<span class="number">30</span>).content</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">return</span> etree.HTML(html)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GetFreeProxy</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line"><span class="meta">    @robustCrawl</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">freeProxyFirst</span><span class="params">(page=<span class="number">10</span>)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        抓取快代理IP http://www.kuaidaili.com/</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        url_list = (<span class="string">'http://www.kuaidaili.com/proxylist/&#123;page&#125;/'</span>.format(page=page) <span class="keyword">for</span> page <span class="keyword">in</span> range(<span class="number">1</span>, page + <span class="number">1</span>))</span><br><span class="line">        <span class="keyword">for</span> url <span class="keyword">in</span> url_list:</span><br><span class="line">            tree = getHtmlTree(url)</span><br><span class="line">            proxy_list = tree.xpath(<span class="string">'.//div[@id="index_free_list"]//tbody/tr'</span>)</span><br><span class="line">            <span class="keyword">for</span> proxy <span class="keyword">in</span> proxy_list:</span><br><span class="line">                <span class="keyword">yield</span> <span class="string">':'</span>.join(proxy.xpath(<span class="string">'./td/text()'</span>)[<span class="number">0</span>:<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line"><span class="meta">    @robustCrawl</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">freeProxySecond</span><span class="params">(proxy_number=<span class="number">100</span>)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        抓取代理66 http://www.66ip.cn/</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        url = <span class="string">"http://m.66ip.cn/mo.php?sxb=&amp;tqsl=&#123;&#125;&amp;port=&amp;export=&amp;ktip=&amp;sxa=&amp;submit=%CC%E1++%C8%A1&amp;textarea="</span>.format(</span><br><span class="line">            proxy_number)</span><br><span class="line">        html = requests.get(url, headers=HEADER).content</span><br><span class="line">        <span class="keyword">for</span> proxy <span class="keyword">in</span> re.findall(<span class="string">r'\d&#123;1,3&#125;\.\d&#123;1,3&#125;\.\d&#123;1,3&#125;\.\d&#123;1,3&#125;:\d&#123;1,5&#125;'</span>, html):</span><br><span class="line">            <span class="keyword">yield</span> proxy</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line"><span class="meta">    @robustCrawl</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">freeProxyThird</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        抓取西刺代理 http://api.xicidaili.com/free2016.txt</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        url_list = [<span class="string">'http://www.xicidaili.com/nn'</span>,  <span class="comment"># 高匿</span></span><br><span class="line">                    <span class="string">'http://www.xicidaili.com/nt'</span>,  <span class="comment"># 透明</span></span><br><span class="line">                    ]</span><br><span class="line">        <span class="keyword">for</span> each_url <span class="keyword">in</span> url_list:</span><br><span class="line">            tree = getHtmlTree(each_url)</span><br><span class="line">            proxy_list = tree.xpath(<span class="string">'.//table[@id="ip_list"]//tr'</span>)</span><br><span class="line">            <span class="keyword">for</span> proxy <span class="keyword">in</span> proxy_list:</span><br><span class="line">                <span class="keyword">yield</span> <span class="string">':'</span>.join(proxy.xpath(<span class="string">'./td/text()'</span>)[<span class="number">0</span>:<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line"><span class="meta">    @robustCrawl</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">freeProxyFourth</span><span class="params">(page=<span class="number">10</span>)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        抓取酷伯伯代理 http://www.coobobo.com/free-http-proxy</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        url_list = (<span class="string">"http://www.coobobo.com/free-http-proxy/&#123;page&#125;/"</span>.format(page=page) <span class="keyword">for</span> page <span class="keyword">in</span> range(<span class="number">1</span>, page+<span class="number">1</span>))</span><br><span class="line">        <span class="keyword">for</span> url <span class="keyword">in</span> url_list:</span><br><span class="line">            tree = getHtmlTree(url)</span><br><span class="line">            proxy_list = tree.xpath(<span class="string">'.//div[@class="col-md-12"]//tbody/tr'</span>)</span><br><span class="line">            <span class="keyword">for</span> proxy <span class="keyword">in</span> proxy_list:</span><br><span class="line">                prot =  proxy.xpath(<span class="string">'./td/text()'</span>)[<span class="number">1</span>:<span class="number">2</span>][<span class="number">0</span>]</span><br><span class="line">                ip = proxy.xpath(<span class="string">'./td/script/text()'</span>)[<span class="number">0</span>]</span><br><span class="line">                ip = <span class="string">"."</span>.join(re.findall(<span class="string">'\d+'</span>,ip))</span><br><span class="line">                <span class="keyword">yield</span> <span class="string">"&#123;ip&#125;:&#123;prot&#125;"</span>.format(ip=ip, prot=prot)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line"><span class="meta">    @robustCrawl</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">freeProxyFifth</span><span class="params">(page=<span class="number">10</span>)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        抓取开心代理 http://www.kxdaili.com/dailiip/1/1.html#ip</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        url_list = (<span class="string">"http://www.kxdaili.com/dailiip/1/&#123;page&#125;.html#ip"</span>.format(page=page) <span class="keyword">for</span> page <span class="keyword">in</span> range(<span class="number">1</span>, page+<span class="number">1</span>))</span><br><span class="line">        <span class="keyword">for</span> url <span class="keyword">in</span> url_list:</span><br><span class="line">            tree = getHtmlTree(url)</span><br><span class="line">            proxy_list = tree.xpath(<span class="string">'.//table[@class="ui table segment"]//tbody/tr'</span>)</span><br><span class="line">            <span class="keyword">for</span> proxy <span class="keyword">in</span> proxy_list:</span><br><span class="line">                <span class="keyword">yield</span> <span class="string">":"</span>.join(proxy.xpath(<span class="string">'./td/text()'</span>)[<span class="number">0</span>:<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line"><span class="meta">    @robustCrawl</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">freeProxySixth</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        抓取ip181  http://www.ip181.com/</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        url = <span class="string">"http://www.ip181.com/"</span></span><br><span class="line">        tree = getHtmlTree(url)</span><br><span class="line">        proxy_list = tree.xpath(<span class="string">'.//div[@class="col-md-12"]//tbody/tr'</span>)</span><br><span class="line">        <span class="keyword">for</span> proxy <span class="keyword">in</span> proxy_list[<span class="number">1</span>:]:</span><br><span class="line">            <span class="keyword">yield</span> <span class="string">":"</span>.join(proxy.xpath(<span class="string">'./td/text()'</span>)[:<span class="number">2</span>])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    gg = GetFreeProxy()</span><br><span class="line">    <span class="comment">#for x in gg.freeProxyFirst():</span></span><br><span class="line">    <span class="comment">#    print x</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#for y in gg.freeProxySecond():</span></span><br><span class="line">    <span class="comment">#   print y</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#for z in gg.freeProxyThird(1):</span></span><br><span class="line">    <span class="comment">#    print z</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#for o in gg.freeProxyFourth():</span></span><br><span class="line">    <span class="comment">#    print o</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#for p in gg.freeProxyFifth(1):</span></span><br><span class="line">    <span class="comment">#    print p</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> q <span class="keyword">in</span> gg.freeProxySixth():</span><br><span class="line">        <span class="keyword">print</span> q</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>pure-ftp部署</title>
+    <url>/pureftp/</url>
+    <content><![CDATA[<p>记录安装过程，方便以后学习。<a id="more"></a></p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 这里yum安装，前提是已经安装过epel</span></span><br><span class="line">[root@localhost ~]# yum install -y epel-release</span><br><span class="line">[root@localhost ~]# yum install -y pure-ftpd</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 备份配置</span></span><br><span class="line">[root@localhost ~]#cp /etc/pure-ftpd/pure-ftpd.conf&#123;,_bak&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">配置参考</span></span><br><span class="line">[root@localhost ~]#cat /etc/pure-ftpd/pure-ftpd.conf</span><br><span class="line">ChrootEveryone yes                   </span><br><span class="line">BrokenClientsCompatibility yes       </span><br><span class="line">Daemonize yes                        </span><br><span class="line">MaxClientsNumber 50                  </span><br><span class="line">MaxClientsPerIP 50                   </span><br><span class="line">VerboseLog yes                       </span><br><span class="line">DisplayDotFiles no                   </span><br><span class="line">AnonymousOnly no                     </span><br><span class="line">NoAnonymous yes                      </span><br><span class="line">SyslogFacility none                  </span><br><span class="line">DontResolve yes                      </span><br><span class="line">MaxIdleTime 15                       </span><br><span class="line">LimitRecursion 2000 8                </span><br><span class="line">AnonymousCanCreateDirs no            </span><br><span class="line">MaxLoad 4                            </span><br><span class="line">AntiWarez yes                        </span><br><span class="line">Umask 113:002                        </span><br><span class="line">MinUID 100                           </span><br><span class="line">AllowUserFXP no                      </span><br><span class="line">AllowAnonymousFXP no                 </span><br><span class="line">ProhibitDotFilesWrite no             </span><br><span class="line">ProhibitDotFilesRead no              </span><br><span class="line">AutoRename no                        </span><br><span class="line">AnonymousCantUpload yes              </span><br><span class="line">AltLog /var/log/pureftpd.log         </span><br><span class="line">PureDB /etc/pure-ftpd/pureftpd.pdb   </span><br><span class="line">MaxDiskUsage 99                      </span><br><span class="line">CreateHomeDir yes                    </span><br><span class="line">CustomerProof yes</span><br></pre></td></tr></table></figure>
+
+<hr>
+<table>
+<thead>
+<tr>
+<th align="left">选项</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">ChrootEveryone yes</td>
+<td align="left">将每个用户限制在自己的home目录下</td>
+</tr>
+<tr>
+<td align="left">BrokenClientsCompatibility yes</td>
+<td align="left">兼容ie等比较非正规化的ftp客户端</td>
+</tr>
+<tr>
+<td align="left">Daemonize yes</td>
+<td align="left">守护进程模式（后台模式）</td>
+</tr>
+<tr>
+<td align="left">MaxClientsNumber 50</td>
+<td align="left">最大的客户端数量</td>
+</tr>
+<tr>
+<td align="left">MaxClientsPerIP 50</td>
+<td align="left">同一个IP允许的连接数</td>
+</tr>
+<tr>
+<td align="left">VerboseLog yes</td>
+<td align="left">记录所有客户端命令</td>
+</tr>
+<tr>
+<td align="left">DisplayDotFiles no</td>
+<td align="left">不显示隐藏文件</td>
+</tr>
+<tr>
+<td align="left">AnonymousOnly no</td>
+<td align="left">不允许验证用户，只作为匿名ftp服务器</td>
+</tr>
+<tr>
+<td align="left">NoAnonymous yes</td>
+<td align="left">不允许匿名用户连接</td>
+</tr>
+<tr>
+<td align="left">SyslogFacility none</td>
+<td align="left">将何种类型的日志同步写入到syslog中，none为禁用</td>
+</tr>
+<tr>
+<td align="left">DontResolve yes</td>
+<td align="left">在日志文件中不解析主机名</td>
+</tr>
+<tr>
+<td align="left">MaxIdleTime 15</td>
+<td align="left">客户端允许的最大的空闲时间为15分钟</td>
+</tr>
+<tr>
+<td align="left">LimitRecursion 2000 8</td>
+<td align="left">ls命令的递归限制 第一个是文件显示的最大数目，第二个是最大的子目录深度</td>
+</tr>
+<tr>
+<td align="left">AnonymousCanCreateDirs no</td>
+<td align="left">是否允许匿名用户创建目录</td>
+</tr>
+<tr>
+<td align="left">MaxLoad 4</td>
+<td align="left">如果系统被 loaded 超过下面的值，匿名用户会被禁止下载</td>
+</tr>
+<tr>
+<td align="left">PassivePortRange 45000 50000</td>
+<td align="left">在被动连接模式下为其分配的端口范围</td>
+</tr>
+<tr>
+<td align="left">AnonymousRatio 1 10</td>
+<td align="left">匿名用户上传/下载比率</td>
+</tr>
+<tr>
+<td align="left">UserRatio 1 10</td>
+<td align="left">所有用户上传/下载比率</td>
+</tr>
+<tr>
+<td align="left">AntiWarez yes</td>
+<td align="left">禁止下载所有者为‘ftp’的文件</td>
+</tr>
+<tr>
+<td align="left">AnonymousBandwidth 200</td>
+<td align="left">匿名用户最大带宽限制，单位 KB/s</td>
+</tr>
+<tr>
+<td align="left">UserBandwidth 8</td>
+<td align="left">所有用户的最大带宽限制（包括匿名）单位 KB/s</td>
+</tr>
+<tr>
+<td align="left">Umask 113:002</td>
+<td align="left">新建文件默认掩码. &lt;文件掩码&gt;:&lt;目录掩码&gt;</td>
+</tr>
+<tr>
+<td align="left">MinUID 100</td>
+<td align="left">认证用户允许登陆的最小组ID（UID）</td>
+</tr>
+<tr>
+<td align="left">AllowUserFXP no</td>
+<td align="left">仅允许认证用户进行FXP传输</td>
+</tr>
+<tr>
+<td align="left">AllowAnonymousFXP no</td>
+<td align="left">对匿名用户和非匿名用户允许进行匿名FXP传输</td>
+</tr>
+<tr>
+<td align="left">ProhibitDotFilesWrite no</td>
+<td align="left">用户不能删除/写入隐藏文件，即便是文件的拥有者也不允许</td>
+</tr>
+<tr>
+<td align="left">ProhibitDotFilesRead no</td>
+<td align="left">禁止读取隐藏文件(如 .history, .ssh…)</td>
+</tr>
+<tr>
+<td align="left">AutoRename no</td>
+<td align="left">允许覆盖文件</td>
+</tr>
+<tr>
+<td align="left">AnonymousCantUpload yes</td>
+<td align="left">不允许匿名用户上传文件 (no = 允许上传)</td>
+</tr>
+<tr>
+<td align="left">AltLog /var/log/pureftpd.log</td>
+<td align="left">这个日志文件可以被www流量分析工具来处理</td>
+</tr>
+<tr>
+<td align="left">PureDB /etc/pure-ftpd/pureftpd.pdb</td>
+<td align="left">PureDB用户数据库</td>
+</tr>
+<tr>
+<td align="left">MaxDiskUsage 99</td>
+<td align="left">磁盘空间来保护日志文件。当所在磁盘分区使用超过百分之99时，将不在接受新的上传</td>
+</tr>
+<tr>
+<td align="left">CreateHomeDir yes</td>
+<td align="left">用户主目录不存在的话，自动创建目录</td>
+</tr>
+<tr>
+<td align="left">CustomerProof yes</td>
+<td align="left">阻止普通用户因误操作而执行的错误命令如’chmod 0 public_html’</td>
+</tr>
+</tbody></table>
+<hr>
+<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p>下面我们开始对账号的配置，然后输入虚拟用户的密码(输入2次) </p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]#pure-pw useradd test1 -u peng -g peng -d /data/www/ -m</span><br></pre></td></tr></table></figure>
+
+<p> <code>pure-pw useradd</code> 是创建虚拟用户名，也就是test1咯<br><code>-u peng -g peng</code> 这里是寄生到那个系统的用户名，以你实际情况为准<br><code>-d</code> 就是你的FTP目录<br><code>-m</code> 把用户密码加入PDB数据库中，不需要重启FTP </p>
+<hr>
+<p>下面给一些常用的参数，大家可以按照需求组合使用。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">-t 下载带宽限制</span><br><span class="line">-T 上传带宽限制</span><br><span class="line">-n 最大文件数目</span><br><span class="line">-N 磁盘配额(单位M)</span><br><span class="line">-q 上传速度限制</span><br><span class="line">-Q 下载速度限制</span><br><span class="line">-r 允许某些ip/网段的客户端访问</span><br><span class="line">-R 拒绝某些ip/网段的客户端访问</span><br><span class="line">-i 允许本地某些ip/网段访问(allow local host)</span><br><span class="line">-I 拒绝本地某些ip/网段访问(deny local host)</span><br><span class="line">-y 同时最大连接数目</span><br><span class="line">-z 允许连接服务器的时间段，格式hhmm-hhmm，如 -z 0412-1618代表用户只能在凌 晨4点12分至下午4点18分连接服务器</span><br><span class="line">-f passwd_file</span><br><span class="line">-F puredb_file</span><br><span class="line">-m 不必重启Pure-FTPd以及重新生成puredb_file文件</span><br><span class="line">如果进行帐户操作时，没有带-m 参数，那就应该手动更新一下pdb数据：</span><br><span class="line">/usr/local/stow/pure-ftpd-1.0.21/bin/pure-pw mkdb pureftpd.pdb</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>这里介绍一些pure-pw的其他用法</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pure-pw useradd 添加用户</span><br><span class="line">pure-pw userdel 删除用户</span><br><span class="line">pure-pw usermod 修改用户</span><br><span class="line">pure-pw show 查看用户详细信息</span><br><span class="line">pure-pw list 查看所有用户设置</span><br><span class="line">pure-pw mkdb 生成数据文件</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>pyenv版本控制</title>
+    <url>/pyenv/</url>
+    <content><![CDATA[<p> 整理使用过程，方便以后学习。 <a id="more"></a></p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><ul>
+<li>需要git， readline可以解决pyhton命令行界面的backpack无法使用的问题。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">yum -y install git</span><br><span class="line"><span class="comment">#如果是mini环境需要安装以下</span></span><br><span class="line">yum groupinstall <span class="string">"Development Tools"</span></span><br><span class="line">yum -y install zlib*</span><br><span class="line">yum install bzip2-devel bzip2-libs -y</span><br><span class="line">yum install -y openssl-devel</span><br><span class="line">yum install sqlite-devel -y</span><br><span class="line">yum -y install readline-devel</span><br><span class="line"></span><br><span class="line">git clone https://github.com/yyuu/pyenv.git ~/.pyenv</span><br><span class="line">echo <span class="string">'export PYENV_ROOT="$HOME/.pyenv"'</span> &gt;&gt; ~/.bashrc</span><br><span class="line">echo <span class="string">'export PATH="$PYENV_ROOT/bin:$PATH"'</span> &gt;&gt; ~/.bashrc</span><br><span class="line">echo <span class="string">'eval "$(pyenv init -)"'</span> &gt;&gt; ~/.bashrc</span><br><span class="line"><span class="keyword">exec</span> $SHELL</span><br><span class="line"></span><br><span class="line"><span class="comment">#安装virtualenv模块</span></span><br><span class="line">git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看以安装的版本</span></span><br><span class="line">pyenv versions</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看可安装的版本</span></span><br><span class="line">pyenv install -list</span><br><span class="line"></span><br><span class="line"><span class="comment">#安装指定的版本</span></span><br><span class="line">pyenv install <span class="number">3.5</span><span class="number">.3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#3.5.3命名为env3.5</span></span><br><span class="line">pyenv virtualenv <span class="number">3.5</span><span class="number">.3</span> env3<span class="number">.5</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#创建测试目录</span></span><br><span class="line">mkdir /home/test_python</span><br><span class="line">cd /home/test_python</span><br><span class="line"></span><br><span class="line"><span class="comment">#切换版本到env3.5</span></span><br><span class="line">pyenv local env3<span class="number">.5</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#刷新</span></span><br><span class="line">pyenv rehash</span><br><span class="line"></span><br><span class="line"><span class="comment">#测试</span></span><br><span class="line"></span><br><span class="line">[root@zabbix ~ <span class="number">13</span>:<span class="number">51</span>:<span class="number">35</span>&amp;&amp;<span class="number">19</span>]$cd /home/test_python</span><br><span class="line">[root@zabbix /home/test_python <span class="number">13</span>:<span class="number">52</span>:<span class="number">38</span>&amp;&amp;<span class="number">21</span>]$python -V</span><br><span class="line">Python <span class="number">3.5</span><span class="number">.3</span></span><br><span class="line">[root@zabbix /home/test_python <span class="number">13</span>:<span class="number">52</span>:<span class="number">47</span>&amp;&amp;<span class="number">22</span>]$cd ..</span><br><span class="line">[root@zabbix /home <span class="number">13</span>:<span class="number">52</span>:<span class="number">53</span>&amp;&amp;<span class="number">23</span>]$pwd</span><br><span class="line">/home</span><br><span class="line">[root@zabbix /home <span class="number">13</span>:<span class="number">52</span>:<span class="number">57</span>&amp;&amp;<span class="number">24</span>]$python -V</span><br><span class="line">Python <span class="number">2.7</span><span class="number">.13</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#卸载</span></span><br><span class="line">pyenv uninstall <span class="number">2.7</span><span class="number">.13</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#切换回系统原版本</span></span><br><span class="line">pyenv local system</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>redis-sentinel</title>
+    <url>/redis-sentinel/</url>
+    <content><![CDATA[<p>记录使用过程，方便后期查询。<a id="more"></a></p>
+<h4 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h4><p>采用5哨兵，3redis的模式。</p>
+<table>
+<thead>
+<tr>
+<th>IP地址</th>
+<th>软件</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>192.168.1.78</td>
+<td>哨兵</td>
+<td></td>
+</tr>
+<tr>
+<td>192.168.1.79</td>
+<td>哨兵</td>
+<td></td>
+</tr>
+<tr>
+<td>192.168.1.80</td>
+<td>哨兵，redis</td>
+<td>主</td>
+</tr>
+<tr>
+<td>192.168.1.81</td>
+<td>哨兵，redis</td>
+<td>副</td>
+</tr>
+<tr>
+<td>192.168.1.82</td>
+<td>哨兵，redis</td>
+<td>副</td>
+</tr>
+</tbody></table>
+<h5 id="redis主配置"><a href="#redis主配置" class="headerlink" title="redis主配置"></a>redis主配置</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">bind 0.0.0.0</span><br><span class="line">protected-mode yes</span><br><span class="line">port 6379</span><br><span class="line">tcp-backlog 511</span><br><span class="line">timeout 0</span><br><span class="line">tcp-keepalive 300</span><br><span class="line">daemonize yes</span><br><span class="line">supervised no</span><br><span class="line">pidfile "/var/run/redis_6379.pid"</span><br><span class="line">loglevel notice</span><br><span class="line">logfile "/var/log/redis/redis_6379.log"</span><br><span class="line">databases 16</span><br><span class="line">always-show-logo yes</span><br><span class="line">save 900 1</span><br><span class="line">save 300 10</span><br><span class="line">save 60 10000</span><br><span class="line">stop-writes-on-bgsave-error yes</span><br><span class="line">rdbcompression yes</span><br><span class="line">rdbchecksum yes</span><br><span class="line">dbfilename "dump_6379.rdb"</span><br><span class="line">dir "/opt/redis"</span><br><span class="line">masterauth "redistestpw"</span><br><span class="line">slave-serve-stale-data yes</span><br><span class="line">slave-read-only yes</span><br><span class="line">repl-diskless-sync no</span><br><span class="line">repl-diskless-sync-delay 5</span><br><span class="line">repl-disable-tcp-nodelay no</span><br><span class="line">slave-priority 100</span><br><span class="line">requirepass "redistestpw"</span><br><span class="line">lazyfree-lazy-eviction no</span><br><span class="line">lazyfree-lazy-expire no</span><br><span class="line">lazyfree-lazy-server-del no</span><br><span class="line">slave-lazy-flush no</span><br><span class="line">no-appendfsync-on-rewrite no</span><br><span class="line">auto-aof-rewrite-percentage 100</span><br><span class="line">auto-aof-rewrite-min-size 64mb</span><br><span class="line">aof-load-truncated yes</span><br><span class="line">aof-use-rdb-preamble no</span><br><span class="line">lua-time-limit 5000</span><br><span class="line">slowlog-log-slower-than 10000</span><br><span class="line">slowlog-max-len 128</span><br><span class="line">latency-monitor-threshold 0</span><br><span class="line">notify-keyspace-events ""</span><br><span class="line">hash-max-ziplist-entries 512</span><br><span class="line">hash-max-ziplist-value 64</span><br><span class="line">list-max-ziplist-size -2</span><br><span class="line">list-compress-depth 0</span><br><span class="line">set-max-intset-entries 512</span><br><span class="line">zset-max-ziplist-entries 128</span><br><span class="line">zset-max-ziplist-value 64</span><br><span class="line">hll-sparse-max-bytes 3000</span><br><span class="line">activerehashing yes</span><br><span class="line">client-output-buffer-limit normal 0 0 0</span><br><span class="line">client-output-buffer-limit slave 256mb 64mb 60</span><br><span class="line">client-output-buffer-limit pubsub 32mb 8mb 60</span><br><span class="line">hz 10</span><br></pre></td></tr></table></figure>
+
+<h5 id="redis副配置"><a href="#redis副配置" class="headerlink" title="redis副配置"></a>redis副配置</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">bind 0.0.0.0</span><br><span class="line">protected-mode yes</span><br><span class="line">port 6379</span><br><span class="line">tcp-backlog 511</span><br><span class="line">timeout 0</span><br><span class="line">tcp-keepalive 300</span><br><span class="line">daemonize yes</span><br><span class="line">supervised no</span><br><span class="line">pidfile "/var/run/redis_6379.pid"</span><br><span class="line">loglevel notice</span><br><span class="line">logfile "/var/log/redis/redis_6379.log"</span><br><span class="line">databases 16</span><br><span class="line">always-show-logo yes</span><br><span class="line">save 900 1</span><br><span class="line">save 300 10</span><br><span class="line">save 60 10000</span><br><span class="line">stop-writes-on-bgsave-error yes</span><br><span class="line">rdbcompression yes</span><br><span class="line">rdbchecksum yes</span><br><span class="line">dbfilename "dump_6379.rdb"</span><br><span class="line">dir "/opt/redis"</span><br><span class="line">masterauth "redistestpw"</span><br><span class="line">slave-serve-stale-data yes</span><br><span class="line">slave-read-only yes</span><br><span class="line">repl-diskless-sync no</span><br><span class="line">repl-diskless-sync-delay 5</span><br><span class="line">repl-disable-tcp-nodelay no</span><br><span class="line">slave-priority 100</span><br><span class="line">requirepass "redistestpw"</span><br><span class="line">lazyfree-lazy-eviction no</span><br><span class="line">lazyfree-lazy-expire no</span><br><span class="line">lazyfree-lazy-server-del no</span><br><span class="line">slave-lazy-flush no</span><br><span class="line">no-appendfsync-on-rewrite no</span><br><span class="line">auto-aof-rewrite-percentage 100</span><br><span class="line">auto-aof-rewrite-min-size 64mb</span><br><span class="line">aof-load-truncated yes</span><br><span class="line">aof-use-rdb-preamble no</span><br><span class="line">lua-time-limit 5000</span><br><span class="line">slowlog-log-slower-than 10000</span><br><span class="line">slowlog-max-len 128</span><br><span class="line">latency-monitor-threshold 0</span><br><span class="line">notify-keyspace-events ""</span><br><span class="line">hash-max-ziplist-entries 512</span><br><span class="line">hash-max-ziplist-value 64</span><br><span class="line">list-max-ziplist-size -2</span><br><span class="line">list-compress-depth 0</span><br><span class="line">set-max-intset-entries 512</span><br><span class="line">zset-max-ziplist-entries 128</span><br><span class="line">zset-max-ziplist-value 64</span><br><span class="line">hll-sparse-max-bytes 3000</span><br><span class="line">activerehashing yes</span><br><span class="line">client-output-buffer-limit normal 0 0 0</span><br><span class="line">client-output-buffer-limit slave 256mb 64mb 60</span><br><span class="line">client-output-buffer-limit pubsub 32mb 8mb 60</span><br><span class="line">hz 10</span><br><span class="line">aof-rewrite-incremental-fsync yes</span><br><span class="line">slaveof 192.168.1.80 6379</span><br></pre></td></tr></table></figure>
+
+<h5 id="哨兵配置"><a href="#哨兵配置" class="headerlink" title="哨兵配置"></a>哨兵配置</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">bind 0.0.0.0</span><br><span class="line">protected-mode no</span><br><span class="line">daemonize yes</span><br><span class="line">port 26379</span><br><span class="line">loglevel notice</span><br><span class="line">logfile "/var/log/redis/sentinel.log"</span><br><span class="line">sentinel monitor mymaster 192.168.1.80 6379 2</span><br><span class="line">sentinel down-after-milliseconds mymaster 5000</span><br><span class="line">sentinel failover-timeout mymaster 8000</span><br><span class="line">sentinel auth-pass mymaster redistestpw</span><br><span class="line">sentinel parallel-syncs mymaster 1</span><br></pre></td></tr></table></figure>
+
+<h5 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h5><p> 配置好了重启即可，防火墙注意配置端口的访问，最后在主写入测试，在从查看是否存在key即可。 </p>
+]]></content>
+      <categories>
+        <category>redis</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>武汉加油！</title>
+    <url>/refueling/</url>
+    <content><![CDATA[<p>Life is so quiet，it’s just that someone is carrying it for you。<a id="more"></a>感谢一线医务人员，武汉加油！中国加油！</p>
+]]></content>
+      <categories>
+        <category>干了这碗汤</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>rsync</title>
+    <url>/rsync/</url>
+    <content><![CDATA[<p> 整理使用过程，方便以后学习。 <a id="more"></a></p>
+<h4 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h4><ul>
+<li>centos 6.8 x64</li>
+<li>推送端IP：192.168.0.10</li>
+<li>接收端IP：192.168.0.20</li>
+</ul>
+<hr>
+<h4 id="接收端"><a href="#接收端" class="headerlink" title="接收端"></a>接收端</h4><p> 下面先在192.168.0.20上进行操作，添加配置文件和密码文件，需要注意的是密码文件权限必须为<code>600</code>，密码文件格式是<code>账号</code>:<code>密码</code>，这里的账号可以不是password里面的账号。 </p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@test2 ~]# vim /etc/rsync.passwd</span><br><span class="line">[root@test2 ~]# chmod 600 /etc/rsync.passwd</span><br><span class="line">[root@test2 ~]# cat /etc/rsync.passwd </span><br><span class="line">leoo:leo1314leo</span><br><span class="line"></span><br><span class="line">[root@test2 ~]# cat /etc/rsyncd.conf</span><br><span class="line">uid = root</span><br><span class="line">gid = root</span><br><span class="line">use chroot = no</span><br><span class="line">max connections = 50</span><br><span class="line">timeout = 600</span><br><span class="line">strict modes = yes</span><br><span class="line">port = 873</span><br><span class="line">pid file = /var/run/rsyncd.pid</span><br><span class="line">lock file = /var/run/rsyncd.lock</span><br><span class="line">log file = /var/run/rsyncd.log</span><br><span class="line"></span><br><span class="line">[demo_web]				</span><br><span class="line">path =/home</span><br><span class="line">read only = no</span><br><span class="line">list = yes</span><br><span class="line">auth users = leoo</span><br><span class="line">secrets file = /etc/rsyncd.secrets</span><br></pre></td></tr></table></figure>
+
+<p> 这里只是一个简单的配置示例，配置文件中还能写很多的规则，这里就不一一介绍了，有其他需求时google走起，下面启动服务，顺便查看本机是否开放873端口和检查防火墙策略。 </p>
+<hr>
+<h4 id="推送端"><a href="#推送端" class="headerlink" title="推送端"></a>推送端</h4><p> 192.168.0.10安装好rsync就可以了，直接av选项走起。这里要注意的是密码文件，必须为<code>600</code>权限，直接写入192.168.0.20配置文件的密码即可，演示如下。 </p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@test1 ~]# touch rsync_test.txt</span><br><span class="line">[root@test1 ~]# cat /etc/rsync.password </span><br><span class="line">leo1314leo</span><br><span class="line"></span><br><span class="line">[root@test1 ~]# rsync -av --progress --delete --password-file=rsync.pass rsync_test.txt  leoo@192.168.0.20::demo_web</span><br><span class="line">sending incremental file list</span><br><span class="line">rsync_test.txt</span><br><span class="line">           0 100%    0.00kB/s    0:00:00 (xfer#1， to-check=0/1)</span><br><span class="line"></span><br><span class="line">sent 75 bytes  received 27 bytes  68.00 bytes/sec</span><br><span class="line">total size is 0  speedup is 0.00</span><br></pre></td></tr></table></figure>
+
+<p>在接收端 <code>192.168.0.20</code> 上查看是否有推送到<code>demo_web</code>的目录下。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@test2 ~]# ll /home</span><br><span class="line">总用量 0</span><br><span class="line">-rw-r--r-- 1 test test 0 2月  20 00:51 rsync_test.txt</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="Win操作"><a href="#Win操作" class="headerlink" title="Win操作"></a>Win操作</h4><p> 还有一些情况是需要在win上进行传送的，下载rsync程序<a href="https://github.com/laddin/pro_file/raw/98e693bab9d17e1f672e868d1fbfc8d660c01256/cwRsync-v5.5.0.zip" target="_blank" rel="noopener">下载地址</a>，直接解压，我是放到F盘的，然后创建一个etc目录，将密码<code>leo1314leo</code>写到etc目录下面的密码文件，在cdm中就可以直接运行rsync命令了（ win和linux环境不一样，<code>/cygdrive/f/laddin/CNAME</code>这个代表的是F盘下面的laddin这个目录的CNAME这个文件。 ）。 </p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">C:\Users\laddin&gt;F:\cwRsync_5.5.0_x86_Free\bin\rsync.exe  -avzcrP --delete  --password-file=/cygdrive/f/cwRsync_5.5.0_x86_Free/etc/rsync.pass  /cygdrive/f/laddin/CNAME leoo@192.168.254.11::demo_web</span><br><span class="line">sending incremental file list</span><br><span class="line">CNAME</span><br><span class="line">              9 100%    0.00kB/s    0:00:00 (xfr#1， to-chk=0/1)</span><br><span class="line"></span><br><span class="line">sent 126 bytes  received 34 bytes  106.67 bytes/sec</span><br><span class="line">total size is 9  speedup is 0.06</span><br><span class="line"></span><br><span class="line">C:\Users\laddin&gt;</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>故障排查思路</title>
+    <url>/thinking/</url>
+    <content><![CDATA[<h4 id="故障排查"><a href="#故障排查" class="headerlink" title="故障排查"></a>故障排查</h4><p> 网站出现突发故障， 如果领导同事在旁边围观，心里素质不强，会出现手足无措，不知如何下手的感觉，这里介绍一些我工作上的故障排查思路 。<a id="more"></a></p>
+<hr>
+<h4 id="方法如下"><a href="#方法如下" class="headerlink" title="方法如下"></a>方法如下</h4><ul>
+<li>先了解问题<ul>
+<li>是多用户反馈还是单独用户异常</li>
+<li>是否是机房，CDN厂商的故障</li>
+<li>尽量了解问题发生的前因后果，方便下一步排查</li>
+</ul>
+</li>
+<li>定位问题<ul>
+<li>定位问题是否属于代码问题，检查前一次的代码更新时间</li>
+<li>查看监控，查询内部运维平台是否有类似故障</li>
+<li>查看服务器log，程序log，看是否有异常记录</li>
+<li>如果没有异常log，模拟用户操作，复现问题</li>
+</ul>
+</li>
+<li>问题解决<ul>
+<li>根据那方面的问题，找相关人员进行修复</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>遇事不要谎，思路要清晰，不用的xshell直接闭掉，免得操作错误，处理之前问一下有其他人员在同时处理吗，最后一个小提示善用搜索引擎。 </p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Too many open files</title>
+    <url>/ulimit/</url>
+    <content><![CDATA[<p>记录学习，方便后期回顾。<a id="more"></a><br>centos7 Tomcat 拋 Too many open files 异常，和centos6解决方案不一样，这里记录一下。</p>
+<hr>
+<h4 id="服务环境"><a href="#服务环境" class="headerlink" title="服务环境"></a>服务环境</h4><ul>
+<li>CentOS 7.5 </li>
+<li>JDK 1.7.0_79 </li>
+<li>Tomcat 7.0.96 </li>
+</ul>
+<hr>
+<h4 id="ulimit"><a href="#ulimit" class="headerlink" title="ulimit"></a>ulimit</h4><p>ulimit 分为硬件限制和软件限制，硬件限制是实际的限制，软件限制只是warning限制，Tomcat是直接调用硬件限制产数的（文件：<code>/etc/security/limits.conf</code>，默认值：<code>4096</code>，这个值的最大阈值是由<code>/proc/sys/fs/nr_open</code>文件来决定的，如果你设置的值超nr_open，ssh就会出现无法登陆，修改limits.conf 后退出当前ssh，ulimit的硬件限制就可以生效）。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ulimit -Ha 硬件限制</span><br><span class="line">ulimit -Sa 软件限制</span><br></pre></td></tr></table></figure>
+
+<p>limits.conf 这个配置文件只是配置单个程序启用的最大文件句柄数，而整个服务器同时最大打开的文件数的配置是<code>/proc/sys/fs/file-max</code>（要调整这个参数可以在<code>/etc/sysctl.conf</code>里面配置 <code>fs.file-max = 6553560</code> 然后 <code>sysctl -p</code>刷新， 最大值是取决于内存的）</p>
+<p> 与limits.conf 有关的还有一个 <code>/etc/security/limits.d/20-nproc.conf</code> 这个文件是限制<code>进程数</code>的，系统会先读limits.conf然后在读20-nproc.conf，20-nproc.conf会覆盖前面的配置,但是实际测试是以2个文件中那个最小的值为准（进程数的默认值是通过内存计算出来的，公式是<code>/proc/meminfo |grep MemTotal /128/2</code>，内存 的物理页面会内存一些关键数据，所以实际的比计算出来的要小点点。），如下 </p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">limits.conf 数值大 20-nproc.conf数值小 会以20-nproc.conf为准   </span><br><span class="line">limits.conf 数值小 20-nproc.conf数值大 会以limits.conf为准</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="systemctl"><a href="#systemctl" class="headerlink" title="systemctl"></a>systemctl</h4><p>在CentOS7的系统中，使用Systemd替代了之前的SysV，因此<code>/etc/security/limits.conf</code>文件的配置作用域缩小了一些，limits.conf这里的配置只适用于通过<a href="https://www.cnblogs.com/yinzhengjie/p/8395279.html" target="_blank" rel="noopener">PAM</a>认证登录用户的资源限制，它对systemd的service的资源限制是不生效的。<br>全局的配置在<code>/etc/systemd/system.conf</code>和 <code>/etc/systemd/user.conf</code>中，system.conf是系统级实例使用的，user.conf是用户级别使用的（非常少），这里我们直接修改system.conf将<code>DefaultLimitNOFILE</code>修改为10000，然后<code>systemctl daemon-reexec</code>刷新，在用systemctl启动Tomcat，查看<code>/proc/{tomcat_pid}/limits</code> ，这里Max open files 显示为10000。</p>
+<hr>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>如果你用systemctl启动的服务，用之前centos6的方法修改ulimit是不生效的，这里推荐直接修改<code>/etc/systemd/system.conf</code>配置。</p>
+<p> limits.conf这个是设置单个程序启动使用的最大文件句柄数,而整个服务器同时最大打开的文件数是由这个 <code>/proc/sys/fs/file-max</code> 文件来决定的,要调整file-max可以在 <code>/etc/sysctl.conf</code> 里面配置 <code>fs.file-max = 6553560</code> 然后 <code>sysctl -p</code>刷新，这里的最大值取决于内存。 </p>
+<p> 与limits.conf 有关的还有一个 <code>/etc/security/limits.d/20-nproc.conf</code> 这个文件是限制<code>进程数</code>的，系统会先读limits.conf然后在读20-nproc.conf，20-nproc.conf会覆盖前面的配置,但是实际测试是以2个文件中那个最小的值为准，如下 </p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">limits.conf 数值大 20-nproc.conf数值小 会以20-nproc.conf为准   </span><br><span class="line">limits.conf 数值小 20-nproc.conf数值大 会以limits.conf为准</span><br></pre></td></tr></table></figure>
+
+<p> 而进程数的默认值是由内存计算出来的,<code>ulimit -u</code>的值是由<code>/proc/meminfo |grep MemTotal /128/2</code> ,内存的物理页面会内存一些关键数据，所以实际的比计算出来的要小点点。 </p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>vim快捷键</title>
+    <url>/vim-fast/</url>
+    <content><![CDATA[<p>记录常用快捷键，方便查询。<a id="more"></a></p>
+<h4 id="移动字符"><a href="#移动字符" class="headerlink" title="移动字符"></a>移动字符</h4><p><code>gg</code>: 移动到第一行<br><code>G</code> :移动到最后一行<br><code>5gg</code>: 移动到第5行<br><code>^</code> :移动到行首第一个非空白字符<br><code>0</code> :移动到行首<br><code>$</code> :移动到行尾<br><code>w</code> :移动到下一个单词开头<br><code>b</code> :移动到单词开头<br><code>e</code> :移动到单词结尾<br><code>fx</code>: 移动到光标位置后第一个x开头的单词<br><code>Fx</code>: 移动到光标位置前第一个x开头的单词<br><code>50%</code>: 移动到文章的中间位置 </p>
+<h4 id="修改字符"><a href="#修改字符" class="headerlink" title="修改字符"></a>修改字符</h4><p><code>:%s/com/xxx/g</code>: 将全局的com改为xxx<br><code>rx</code> :将光标处的字符改为x<br><code>.</code>: 复制上一步操作<br><code>u</code>: 撤回上一步操作<br><code>ctrl + r</code>: 撤销一个撤回 </p>
+<h4 id="删除字符"><a href="#删除字符" class="headerlink" title="删除字符"></a>删除字符</h4><p><code>dd</code> : 删除当前行<br><code>dtx</code> : 删除光标处到下一个x之间的字符<br><code>x</code> : 删除光标处的字符<br><code>d^</code> : 删除光标处到行首的字符串<br><code>d$</code> : 删除光标处到行尾的字符串 </p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>zookeeper-install</title>
+    <url>/zk-install/</url>
+    <content><![CDATA[<p>记录安装过程，方便后期查询。<a id="more"></a></p>
+<h4 id="zookeep安装脚本"><a href="#zookeep安装脚本" class="headerlink" title="zookeep安装脚本"></a>zookeep安装脚本</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> desc: zookeeper安装脚本</span></span><br><span class="line">set -e</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 下载zookeeper最新稳定版</span></span><br><span class="line">ZOOBASE=/home/server</span><br><span class="line">ZOOVERS=3.4.12</span><br><span class="line">ZOODATA=$ZOOBASE/zookeeper-$&#123;ZOOVERS&#125;/data</span><br><span class="line"></span><br><span class="line">mkdir -p $ZOOBASE</span><br><span class="line">cd $ZOOBASE</span><br><span class="line">wget http://www-eu.apache.org/dist/zookeeper/stable/zookeeper-$&#123;ZOOVERS&#125;.tar.gz</span><br><span class="line">tar zxvf zookeeper-$&#123;ZOOVERS&#125;.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建数据目录</span></span><br><span class="line">mkdir $ZOODATA</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 配置<span class="built_in">log</span>，特别注意jdk版本和jvm堆内存参数，堆内存分配尽量为内存的80%，不可超过系统内存大小导致频繁swap</span></span><br><span class="line">sed -i '27a ZOO_LOG_DIR=$&#123;ZOOBINDIR&#125;/../logs' $&#123;ZOOBASE&#125;/zookeeper-$&#123;ZOOVERS&#125;/bin/zkEnv.sh</span><br><span class="line">sed -i '28a ZOO_LOG4J_PROP="INFO,CONSOLE"' $&#123;ZOOBASE&#125;/zookeeper-$&#123;ZOOVERS&#125;/bin/zkEnv.sh</span><br><span class="line">mkdir $&#123;ZOOBASE&#125;/zookeeper-$&#123;ZOOVERS&#125;/logs</span><br><span class="line"></span><br><span class="line">cat &gt; $&#123;ZOOBASE&#125;/zookeeper-$&#123;ZOOVERS&#125;/conf/java.env &lt;&lt; EOF</span><br><span class="line">export JAVA_HOME=/usr/java/jdk1.8.0_144</span><br><span class="line">export JVMFLAGS="-Xms512m -Xmx1024m $JVMFLAGS"</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="根据节点调整"><a href="#根据节点调整" class="headerlink" title="根据节点调整"></a>根据节点调整</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd zookeeper-$&#123;ZOOVERS&#125;</span><br><span class="line"></span><br><span class="line">cat &gt; conf/zoo.cfg &lt;&lt; EOF</span><br><span class="line">tickTime=2000</span><br><span class="line">dataDir=/home/server/data</span><br><span class="line">clientPort=2181</span><br><span class="line">initLimit=5</span><br><span class="line">syncLimit=2</span><br><span class="line">maxClientCnxns=1000</span><br><span class="line">minSessionTimeout=30000</span><br><span class="line">maxSessionTimeout=60000</span><br><span class="line">server.1=127.0.0.17:2888:3888</span><br><span class="line">server.2=127.0.0.18:2888:3888</span><br><span class="line">server.3=127.0.0.19:2888:3888</span><br><span class="line">server.4=127.0.0.20:2888:3888</span><br><span class="line">server.5=127.0.0.21:2888:3888</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">创建myid文件来让zookeeper识别server身份,集群每个机器不一致</span></span><br><span class="line">echo "1" &gt; $ZOODATA/data/myid</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="重启脚本"><a href="#重启脚本" class="headerlink" title="重启脚本"></a>重启脚本</h4><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cat &gt; /etc/init.d/zookeeper &lt;&lt; EOF</span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">chkconfig:2345 20 90</span></span><br><span class="line"><span class="meta">#</span><span class="bash">description:zookeeper</span></span><br><span class="line"><span class="meta">#</span><span class="bash">processname:zookeeper</span></span><br><span class="line"></span><br><span class="line">case \$1 in</span><br><span class="line">    start)   /home/server/zookeeper-3.4.12/bin/zkServer.sh start ;;</span><br><span class="line">    stop)    /home/server/zookeeper-3.4.12/bin/zkServer.sh stop ;;</span><br><span class="line">    status)  /home/server/zookeeper-3.4.12/bin/zkServer.sh status ;;</span><br><span class="line">    restart) /home/server/zookeeper-3.4.12/bin/zkServer.sh restart ;;</span><br><span class="line">    *)       echo "require start|stop|status|restart" ;;</span><br><span class="line">esac</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">chmod 755 /etc/init.d/zookeeper</span><br><span class="line">chkconfig zookeeper on</span><br><span class="line">service zookeeper restart</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="配置说明"><a href="#配置说明" class="headerlink" title="配置说明"></a>配置说明</h4><ul>
+<li>tickTime:心跳的时间间隔</li>
+<li>dataDir:数据目录</li>
+<li>clientPort:客户端连接zk的端口</li>
+<li>initLimit:初始化连接时最长能忍受多少个心跳时间间隔数</li>
+<li>syncLimit: Leader 与 Follower 之间发送消息不能超过多少个tickTime</li>
+<li>maxClientCnxns:限制连接到 ZooKeeper 的客户端的数量</li>
+<li>minSessionTimeout:最小会话时间</li>
+<li>maxSessionTimeout:最长会话时间 </li>
+</ul>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+</search>
