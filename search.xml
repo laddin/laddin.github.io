@@ -550,18 +550,6 @@
       </categories>
   </entry>
   <entry>
-    <title>命令行快捷键</title>
-    <url>/bash-fast/</url>
-    <content><![CDATA[<p>记录常用快捷键，方便查询。<a id="more"></a></p>
-<h4 id="移动"><a href="#移动" class="headerlink" title="移动"></a>移动</h4><p><code>Ctrl + a</code>：移到命令行首<br><code>Ctrl + e</code>：移到命令行尾<br><code>Ctrl + 左右箭头</code>: 光标移动到上/下一个单词 </p>
-<h4 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h4><p><code>Ctrl + u</code>：从光标处删除至命令行首<br><code>Ctrl + k</code>：从光标处删除至命令行尾<br><code>Ctrl + w</code>：删除光标之前的一个单词<br><code>Ctrl + y</code>: 恢复上次执行时删除的字符 </p>
-<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p><code>!!</code>：执行上一条命令<br><code>Ctrl + z</code>：从vim状态切换到命令行<br><code>fg</code>： 从命令行切还原到vim状态<br><code>Ctrl + r</code>：进入历史命令查找状态<br><code>Ctrl + l</code>：清屏<br><code>Ctrl + d</code>: 退出shell logout </p>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-  </entry>
-  <entry>
     <title>百度网盘</title>
     <url>/bypy/</url>
     <content><![CDATA[<p>linux版本的百度网盘<a id="more"></a></p>
@@ -616,32 +604,6 @@
 ]]></content>
       <categories>
         <category>python</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>docker-command</title>
-    <url>/docker-command/</url>
-    <content><![CDATA[<p>记录常用命令，方便查询。<a id="more"></a></p>
-<h4 id="docker基础命令"><a href="#docker基础命令" class="headerlink" title="docker基础命令"></a>docker基础命令</h4><h5 id="1-生命周期管理"><a href="#1-生命周期管理" class="headerlink" title="1.生命周期管理"></a>1.生命周期管理</h5><p><code>docker run</code>，创建一个容器（一般写docker-compose.yml文件）</p>
-<p><code>docker start|stop|restart nginx</code>，启动|停止|重启 nginx容器</p>
-<p><code>docker kill nginx</code>，杀掉nginx容器</p>
-<p><code>docker rm nginx</code>，删除nginx容器</p>
-<hr>
-<h5 id="2-操作运维"><a href="#2-操作运维" class="headerlink" title="2.操作运维"></a>2.操作运维</h5><p><code>docker ps</code>，查看当前运行的容器，后面添加<code>-a</code>选项可以显示所有的容器</p>
-<p><code>docker inspect nginx</code>，查看nginx容器的元数据</p>
-<p><code>docker top nginx</code>，查看nginx容器中运行的进程信息</p>
-<p><code>docker logs -f -t --tail 100 nginx</code>，查看nginx容器log，<code>-f</code>循环读取，<code>-t</code>显示时间戳，<code>--tail 100</code>显示最新的100条</p>
-<p><code>docker logs --since=&quot;2018-10-17&quot; --tail 10 nginx</code>，显示2018-10-17的最新10条</p>
-<hr>
-<h5 id="3-容器相关"><a href="#3-容器相关" class="headerlink" title="3.容器相关"></a>3.容器相关</h5><p><code>docker info</code>，查看容器信息</p>
-<p><code>docker image ls</code>，查看容器当前的镜像</p>
-<p><code>docker rmi reg.aaabbb.net/nginx:crm-product</code>，删除镜像(reg.aaabbb.net为私有仓库地址)</p>
-<p><code>docker rmi $(docker images -f &quot;dangling=true&quot; -q)</code>，清理none镜像</p>
-<p><code>docker pull</code>，拉取镜像</p>
-<p> <code>sudo docker exec -it nginx /bin/sh</code>，进入nginx容器 </p>
-]]></content>
-      <categories>
-        <category>docker</category>
       </categories>
   </entry>
   <entry>
@@ -708,7 +670,7 @@
   <entry>
     <title>golang_001</title>
     <url>/golang-001/</url>
-    <content><![CDATA[<p>记录学习，方便后期回顾。<a id="more"></a>给侄子弄的算术题…</p>
+    <content><![CDATA[<p>自动生成小学算数题<a id="more"></a>给侄子弄的算术题…</p>
 <figure class="highlight golang"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"flag"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"github.com/unidoc/unioffice/document"</span></span><br><span class="line">	<span class="string">"github.com/unidoc/unioffice/schema/soo/wml"</span></span><br><span class="line">	<span class="string">"math/rand"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">//随机删除key</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">deletemapkey</span><span class="params">(mapinfo <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span>, mapnum <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> listinfo []<span class="keyword">string</span></span><br><span class="line">	r := rand.New(rand.NewSource(time.Now().UnixNano()))</span><br><span class="line">	<span class="keyword">for</span> k, _ := <span class="keyword">range</span> mapinfo &#123;</span><br><span class="line">		listinfo = <span class="built_in">append</span>(listinfo, k)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; mapnum; i++ &#123;</span><br><span class="line"></span><br><span class="line">		x := r.Intn(<span class="built_in">len</span>(listinfo))</span><br><span class="line">		k := listinfo[x]</span><br><span class="line">		listinfo = <span class="built_in">append</span>(listinfo[:x], listinfo[x+<span class="number">1</span>:]...)</span><br><span class="line">		<span class="built_in">delete</span>(mapinfo, k)</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">生成数据	返回字典</span></span><br><span class="line"><span class="comment">topci_num	生成题目的数量</span></span><br><span class="line"><span class="comment">topic_scope	生成题目的范围</span></span><br><span class="line"><span class="comment">topic_type	生成题目的类型 0-正常加减 1-连加连减	2-凑十法  3-破十法 4-凑十法和破十法</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">operation</span><span class="params">(topic_num, topic_scope, topic_type <span class="keyword">int</span>)</span> <span class="title">map</span>[<span class="title">string</span>]<span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> mapinfo = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span>)</span><br><span class="line">	<span class="comment">//随机数time刷新</span></span><br><span class="line">	r := rand.New(rand.NewSource(time.Now().UnixNano()))</span><br><span class="line"></span><br><span class="line">	<span class="keyword">switch</span> topic_type &#123;</span><br><span class="line">	<span class="comment">//正常加减</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">		<span class="keyword">for</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> <span class="built_in">len</span>(mapinfo) == topic_num &#123;</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			&#125;</span><br><span class="line">			x := r.Intn(topic_scope)</span><br><span class="line">			y := r.Intn(topic_scope)</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> x &gt; y &#123;</span><br><span class="line">				k := fmt.Sprint(x, <span class="string">"-"</span>, y, <span class="string">"="</span>)</span><br><span class="line">				v := x - y</span><br><span class="line">				mapinfo[k] = v</span><br><span class="line"></span><br><span class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> x+y &lt; topic_scope &#123;</span><br><span class="line">				k := fmt.Sprint(x, <span class="string">"+"</span>, y, <span class="string">"="</span>)</span><br><span class="line">				v := x + y</span><br><span class="line">				mapinfo[k] = v</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//连加连减</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">		<span class="keyword">for</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> <span class="built_in">len</span>(mapinfo) == topic_num &#123;</span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			&#125;</span><br><span class="line">			x := r.Intn(topic_scope)</span><br><span class="line">			y := r.Intn(topic_scope)</span><br><span class="line">			z := r.Intn(topic_scope)</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> x+y+z &lt; topic_scope &#123;</span><br><span class="line">				k := fmt.Sprint(x, <span class="string">"+"</span>, y, <span class="string">"+"</span>, z, <span class="string">"="</span>)</span><br><span class="line">				v := x + y + z</span><br><span class="line">				mapinfo[k] = v</span><br><span class="line">				<span class="keyword">continue</span></span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> x+y-z &lt; topic_scope &amp;&amp; x+y &gt; z &amp;&amp; x+y &lt; topic_scope &#123;</span><br><span class="line">				k := fmt.Sprint(x, <span class="string">"+"</span>, y, <span class="string">"-"</span>, z, <span class="string">"="</span>)</span><br><span class="line">				v := x + y - z</span><br><span class="line">				mapinfo[k] = v</span><br><span class="line">				<span class="keyword">continue</span></span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> x-y-z &lt; topic_scope &amp;&amp; x-y &gt; z &#123;</span><br><span class="line">				k := fmt.Sprint(x, <span class="string">"-"</span>, y, <span class="string">"-"</span>, z, <span class="string">"="</span>)</span><br><span class="line">				v := x - y - z</span><br><span class="line">				mapinfo[k] = v</span><br><span class="line">				<span class="keyword">continue</span></span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> x-y+z &lt; topic_scope &amp;&amp; x &gt; y &#123;</span><br><span class="line">				k := fmt.Sprint(x, <span class="string">"-"</span>, y, <span class="string">"+"</span>, z, <span class="string">"="</span>)</span><br><span class="line">				v := x - y + z</span><br><span class="line">				mapinfo[k] = v</span><br><span class="line">				<span class="keyword">continue</span></span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//凑十法</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">		<span class="comment">// 由于最多只有36个这里采用直接生成的方法</span></span><br><span class="line">		<span class="keyword">for</span> x := <span class="number">1</span>; x &lt; <span class="number">10</span>; x++ &#123;</span><br><span class="line">			<span class="keyword">for</span> y := <span class="number">1</span>; y &lt; <span class="number">10</span>; y++ &#123;</span><br><span class="line">				<span class="keyword">if</span> x+y &gt; <span class="number">10</span> &#123;</span><br><span class="line">					k := fmt.Sprint(x, <span class="string">"+"</span>, y, <span class="string">"="</span>)</span><br><span class="line">					v := x + y</span><br><span class="line">					mapinfo[k] = v</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> topic_num &lt; <span class="number">36</span> &#123;</span><br><span class="line">			listnum := <span class="number">36</span> - topic_num</span><br><span class="line">			deletemapkey(mapinfo, listnum)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">//破十法</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">		<span class="comment">// 由于最多只有36个这里采用直接生成的方法</span></span><br><span class="line">		<span class="keyword">for</span> x := <span class="number">11</span>; x &lt; <span class="number">20</span>; x++ &#123;</span><br><span class="line">			<span class="keyword">for</span> y := <span class="number">1</span>; y &lt; <span class="number">10</span>; y++ &#123;</span><br><span class="line">				<span class="keyword">if</span> x-y &lt; <span class="number">10</span> &#123;</span><br><span class="line">					k := fmt.Sprint(x, <span class="string">"-"</span>, y, <span class="string">"="</span>)</span><br><span class="line">					v := x - y</span><br><span class="line">					mapinfo[k] = v</span><br><span class="line">				&#125;</span><br><span class="line"></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> topic_num &lt; <span class="number">36</span> &#123;</span><br><span class="line">			listnum := <span class="number">36</span> - topic_num</span><br><span class="line">			deletemapkey(mapinfo, listnum)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//混合模式</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">4</span>:</span><br><span class="line">		<span class="keyword">for</span> x := <span class="number">1</span>; x &lt; <span class="number">10</span>; x++ &#123;</span><br><span class="line">			<span class="keyword">for</span> y := <span class="number">1</span>; y &lt; <span class="number">10</span>; y++ &#123;</span><br><span class="line">				<span class="keyword">if</span> x+y &gt; <span class="number">10</span> &#123;</span><br><span class="line">					k := fmt.Sprint(x, <span class="string">"+"</span>, y, <span class="string">"="</span>)</span><br><span class="line">					v := x + y</span><br><span class="line">					mapinfo[k] = v</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span> x := <span class="number">11</span>; x &lt; <span class="number">20</span>; x++ &#123;</span><br><span class="line">			<span class="keyword">for</span> y := <span class="number">1</span>; y &lt; <span class="number">10</span>; y++ &#123;</span><br><span class="line">				<span class="keyword">if</span> x-y &lt; <span class="number">10</span> &#123;</span><br><span class="line">					k := fmt.Sprint(x, <span class="string">"-"</span>, y, <span class="string">"="</span>)</span><br><span class="line">					v := x - y</span><br><span class="line">					mapinfo[k] = v</span><br><span class="line">				&#125;</span><br><span class="line"></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> topic_num &lt; <span class="number">72</span> &#123;</span><br><span class="line">			listnum := <span class="number">72</span> - topic_num</span><br><span class="line">			deletemapkey(mapinfo, listnum)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//高级模式</span></span><br><span class="line">	<span class="keyword">case</span> <span class="number">5</span>:</span><br><span class="line">		p := <span class="number">20</span></span><br><span class="line">		<span class="keyword">for</span> x := <span class="number">1</span>+p; x &lt; <span class="number">10</span>+p; x++ &#123;</span><br><span class="line">			<span class="keyword">for</span> y := <span class="number">1</span>; y &lt; <span class="number">10</span>; y++ &#123;</span><br><span class="line">				<span class="keyword">if</span> x+y &gt; p &#123;</span><br><span class="line">					k := fmt.Sprint(x, <span class="string">"+"</span>, y, <span class="string">"="</span>)</span><br><span class="line">					v := x + y</span><br><span class="line">					mapinfo[k] = v</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">for</span> x := <span class="number">1</span>+p; x &lt; <span class="number">10</span>+p; x++ &#123;</span><br><span class="line">			<span class="keyword">for</span> y := <span class="number">1</span>; y &lt; <span class="number">10</span>; y++ &#123;</span><br><span class="line">				<span class="keyword">if</span> x-y &lt; p &#123;</span><br><span class="line">					k := fmt.Sprint(x, <span class="string">"-"</span>, y, <span class="string">"="</span>)</span><br><span class="line">					v := x - y</span><br><span class="line">					mapinfo[k] = v</span><br><span class="line">				&#125;</span><br><span class="line"></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> topic_num &lt; <span class="number">72</span> &#123;</span><br><span class="line">			listnum := <span class="number">72</span> - topic_num</span><br><span class="line">			deletemapkey(mapinfo, listnum)</span><br><span class="line">		&#125;</span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		fmt.Print(<span class="string">"topic_type is  err"</span>)</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> mapinfo</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 生成文件</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">writeword</span><span class="params">(mapinfo <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span>, wordtype <span class="keyword">bool</span>)</span></span> &#123;</span><br><span class="line">	new_time := time.Now().Format(<span class="string">"2006-01-02"</span>)</span><br><span class="line">	<span class="keyword">var</span> i <span class="keyword">int</span></span><br><span class="line">	<span class="keyword">var</span> runinfo <span class="keyword">string</span></span><br><span class="line">	<span class="keyword">var</span> docxname <span class="keyword">string</span></span><br><span class="line">	doc := document.New()</span><br><span class="line">	<span class="comment">//定义标题属性</span></span><br><span class="line">	para := doc.AddParagraph()</span><br><span class="line">	run := para.AddRun()</span><br><span class="line">	para.SetStyle(<span class="string">"Title"</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> wordtype &#123;</span><br><span class="line">		runinfo = new_time + <span class="string">"数学习题"</span></span><br><span class="line">		docxname = new_time + <span class="string">"习题.docx"</span></span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		runinfo = new_time + <span class="string">"数学习题答案"</span></span><br><span class="line">		docxname = new_time + <span class="string">"答案.docx"</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	run.AddText(runinfo)</span><br><span class="line"></span><br><span class="line">	<span class="comment">//定义表格属性</span></span><br><span class="line">	table := doc.AddTable()</span><br><span class="line">	table.Properties().SetLayout(wml.ST_TblLayoutTypeFixed)</span><br><span class="line">	table.Properties().SetWidthPercent(<span class="number">100</span>)</span><br><span class="line">	table.Properties().SetStyle(<span class="string">"MyTableStyle"</span>)</span><br><span class="line">	look := table.Properties().TableLook()</span><br><span class="line">	look.SetFirstColumn(<span class="literal">true</span>)</span><br><span class="line">	look.SetFirstRow(<span class="literal">true</span>)</span><br><span class="line">	look.SetHorizontalBanding(<span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">//表格数据填充</span></span><br><span class="line">	<span class="keyword">for</span> r := <span class="number">0</span>; r &lt; <span class="number">40</span>; r++ &#123;</span><br><span class="line">		row := table.AddRow()</span><br><span class="line">		<span class="keyword">for</span> c := <span class="number">0</span>; c &lt; <span class="number">3</span>; c++ &#123;</span><br><span class="line">			cell := row.AddCell()</span><br><span class="line">			<span class="keyword">if</span> i &lt; <span class="built_in">len</span>(mapinfo) &amp;&amp; wordtype == <span class="literal">true</span> &#123;</span><br><span class="line">				<span class="keyword">for</span> k, _ := <span class="keyword">range</span> mapinfo &#123;</span><br><span class="line">					cell.AddParagraph().AddRun().AddText(k)</span><br><span class="line">					<span class="built_in">delete</span>(mapinfo, k)</span><br><span class="line">					<span class="keyword">break</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> i &lt; <span class="built_in">len</span>(mapinfo) &amp;&amp; wordtype == <span class="literal">false</span> &#123;</span><br><span class="line">				<span class="keyword">for</span> k, v := <span class="keyword">range</span> mapinfo &#123;</span><br><span class="line">					cell.AddParagraph().AddRun().AddText(fmt.Sprintf(<span class="string">"%s %d"</span>, k, v))</span><br><span class="line">					<span class="built_in">delete</span>(mapinfo, k)</span><br><span class="line">					<span class="keyword">break</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//生成文档</span></span><br><span class="line"></span><br><span class="line">	doc.SaveToFile(docxname)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	topic_num := flag.Int(<span class="string">"topic_num"</span>, <span class="number">50</span>, <span class="string">"输入打印题目的数量"</span>)   <span class="comment">//题目的数量（默认120）</span></span><br><span class="line">	topic_scope := flag.Int(<span class="string">"topic_scope"</span>, <span class="number">20</span>, <span class="string">"输入题目的范围"</span>) <span class="comment">//题目的范围（默认20以内的加减法）</span></span><br><span class="line">	topic_bool := flag.Int(<span class="string">"topic_bool"</span>, <span class="number">5</span>, <span class="string">"输入题目的类型"</span>)   <span class="comment">//题目的类型 0-正常加减 1-连加连减	2-凑十法  3-破十法 4-凑十法和破十法</span></span><br><span class="line">	flag.Parse()</span><br><span class="line"></span><br><span class="line">	yy := operation(*topic_num, *topic_scope, *topic_bool)</span><br><span class="line">	<span class="keyword">for</span> k, v := <span class="keyword">range</span> yy &#123;</span><br><span class="line">		fmt.Print(k, v, <span class="string">"\n"</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	writeword(yy,<span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
@@ -739,7 +701,7 @@
     <content><![CDATA[<p>好记性不如烂笔头，博客还是要写的⚆_⚆，顺便更新一下之前记录瑕疵，换一个主题，换一种心情，Let’s go!</p>
 ]]></content>
       <categories>
-        <category>干了这碗汤</category>
+        <category>杂七杂八</category>
       </categories>
   </entry>
   <entry>
@@ -1189,15 +1151,6 @@
       </categories>
   </entry>
   <entry>
-    <title>武汉加油！</title>
-    <url>/refueling/</url>
-    <content><![CDATA[<p>Life is so quiet，it’s just that someone is carrying it for you。<a id="more"></a>感谢一线医务人员，武汉加油！中国加油！</p>
-]]></content>
-      <categories>
-        <category>干了这碗汤</category>
-      </categories>
-  </entry>
-  <entry>
     <title>rsync</title>
     <url>/rsync/</url>
     <content><![CDATA[<p> 整理使用过程，方便以后学习。 <a id="more"></a></p>
@@ -1264,19 +1217,19 @@
 </ul>
 </li>
 <li>定位问题<ul>
-<li>定位问题是否属于代码问题，检查前一次的代码更新时间</li>
+<li>定位问题是否属于代码问题还是别的问题，检查前一次的代码更新时间</li>
 <li>查看监控，查询内部运维平台是否有类似故障</li>
 <li>查看服务器log，程序log，看是否有异常记录</li>
 <li>如果没有异常log，模拟用户操作，复现问题</li>
 </ul>
 </li>
 <li>问题解决<ul>
-<li>根据那方面的问题，找相关人员进行修复</li>
+<li>根据那方面的问题，找相关人员进行修复或者自行处理</li>
 </ul>
 </li>
 </ul>
 <hr>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>遇事不要谎，思路要清晰，不用的xshell直接闭掉，免得操作错误，处理之前问一下有其他人员在同时处理吗，最后一个小提示善用搜索引擎。 </p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>遇事不要谎，思路要清晰，不用的xshell直接闭掉，免得操作错误，处理之前问一下有其他人员在同时处理吗，最后善用Google搜索引擎。 </p>
 ]]></content>
       <categories>
         <category>linux</category>
@@ -1303,7 +1256,7 @@
   <entry>
     <title>Too many open files</title>
     <url>/ulimit/</url>
-    <content><![CDATA[<p>记录学习，方便后期回顾。<a id="more"></a><br>centos7 Tomcat 拋 Too many open files 异常，和centos6解决方案不一样，这里记录一下。</p>
+    <content><![CDATA[<p>centos7 处理方案<a id="more"></a><br>centos7 Tomcat 拋 Too many open files 异常，和centos6解决方案不一样，这里记录一下。</p>
 <hr>
 <h4 id="服务环境"><a href="#服务环境" class="headerlink" title="服务环境"></a>服务环境</h4><ul>
 <li>CentOS 7.5 </li>
@@ -1327,18 +1280,6 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">limits.conf 数值大 20-nproc.conf数值小 会以20-nproc.conf为准   </span><br><span class="line">limits.conf 数值小 20-nproc.conf数值大 会以limits.conf为准</span><br></pre></td></tr></table></figure>
 
 <p> 而进程数的默认值是由内存计算出来的,<code>ulimit -u</code>的值是由<code>/proc/meminfo |grep MemTotal /128/2</code> ,内存的物理页面会内存一些关键数据，所以实际的比计算出来的要小点点。 </p>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>vim快捷键</title>
-    <url>/vim-fast/</url>
-    <content><![CDATA[<p>记录常用快捷键，方便查询。<a id="more"></a></p>
-<h4 id="移动字符"><a href="#移动字符" class="headerlink" title="移动字符"></a>移动字符</h4><p><code>gg</code>: 移动到第一行<br><code>G</code> :移动到最后一行<br><code>5gg</code>: 移动到第5行<br><code>^</code> :移动到行首第一个非空白字符<br><code>0</code> :移动到行首<br><code>$</code> :移动到行尾<br><code>w</code> :移动到下一个单词开头<br><code>b</code> :移动到单词开头<br><code>e</code> :移动到单词结尾<br><code>fx</code>: 移动到光标位置后第一个x开头的单词<br><code>Fx</code>: 移动到光标位置前第一个x开头的单词<br><code>50%</code>: 移动到文章的中间位置 </p>
-<h4 id="修改字符"><a href="#修改字符" class="headerlink" title="修改字符"></a>修改字符</h4><p><code>:%s/com/xxx/g</code>: 将全局的com改为xxx<br><code>rx</code> :将光标处的字符改为x<br><code>.</code>: 复制上一步操作<br><code>u</code>: 撤回上一步操作<br><code>ctrl + r</code>: 撤销一个撤回 </p>
-<h4 id="删除字符"><a href="#删除字符" class="headerlink" title="删除字符"></a>删除字符</h4><p><code>dd</code> : 删除当前行<br><code>dtx</code> : 删除光标处到下一个x之间的字符<br><code>x</code> : 删除光标处的字符<br><code>d^</code> : 删除光标处到行首的字符串<br><code>d$</code> : 删除光标处到行尾的字符串 </p>
 ]]></content>
       <categories>
         <category>linux</category>
@@ -1521,6 +1462,15 @@
 ]]></content>
       <categories>
         <category>docker</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>增加一个速查表</title>
+    <url>/addwiki/</url>
+    <content><![CDATA[<p>删除了一些命令记录，转移到速查表里面去了<a id="more"></a>，最近半年的资料会在近期更新，之前的一些运维文档也会搬运过来，速查表点右边WIKI。</p>
+]]></content>
+      <categories>
+        <category>杂七杂八</category>
       </categories>
   </entry>
 </search>
