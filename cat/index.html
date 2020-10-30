@@ -94,14 +94,14 @@
 
 
 
-<meta name="description" content="整理使用过程，方便以后学习。">
+<meta name="description" content="偶然发现cat还有合并文件的功能">
 <meta property="og:type" content="article">
-<meta property="og:title" content="git">
-<meta property="og:url" content="http://laddin.me/git/index.html">
+<meta property="og:title" content="cat的妙用">
+<meta property="og:url" content="http://laddin.me/cat/index.html">
 <meta property="og:site_name" content="Laddin&#39;Blog">
-<meta property="og:description" content="整理使用过程，方便以后学习。">
-<meta property="article:published_time" content="2017-05-21T10:13:56.000Z">
-<meta property="article:modified_time" content="2020-04-05T19:23:32.000Z">
+<meta property="og:description" content="偶然发现cat还有合并文件的功能">
+<meta property="article:published_time" content="2020-10-30T01:53:49.000Z">
+<meta property="article:modified_time" content="2020-10-30T02:41:30.045Z">
 <meta property="article:author" content="多多">
 <meta name="twitter:card" content="summary">
 
@@ -132,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://laddin.me/git/"/>
+  <link rel="canonical" href="http://laddin.me/cat/"/>
 
 
 
 
 
-  <title>git | Laddin'Blog</title>
+  <title>cat的妙用 | Laddin'Blog</title>
   
 
 
@@ -295,7 +295,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://laddin.me/git/">
+    <link itemprop="mainEntityOfPage" href="http://laddin.me/cat/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="多多">
@@ -312,7 +312,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">git</h1>
+          <h1 class="post-title" itemprop="name headline">cat的妙用</h1>
         
 
         <div class="post-meta">
@@ -324,8 +324,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-21T18:13:56+08:00">
-                2017-05-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-10-30T09:53:49+08:00">
+                2020-10-30
               </time>
             
 
@@ -384,43 +384,9 @@
       
 
       
-        <p>整理使用过程，方便以后学习。<a id="more"></a></p>
-<h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p>这里简单说一下<code>三棵树</code>的概念，</p>
-<ul>
-<li><code>第一棵树</code>是你的工作目录，它持有实际文件</li>
-<li><code>第二棵树</code> 缓存区（Index），它像个缓存区域，临时保存你的改动</li>
-<li><code>第三棵树</code>是 HEAD，指向你最近一次提交后的结果。 </li>
-</ul>
-<hr>
-<h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><h5 id="设置用户名和邮箱"><a href="#设置用户名和邮箱" class="headerlink" title="设置用户名和邮箱"></a>设置用户名和邮箱</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name "laddin"</span><br><span class="line">git config --global user.email laddin@163.com</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h5 id="创建新仓库"><a href="#创建新仓库" class="headerlink" title="创建新仓库"></a>创建新仓库</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir git_test </span><br><span class="line">cd git_test </span><br><span class="line">git init</span><br></pre></td></tr></table></figure>
-
-<h5 id="克隆仓库"><a href="#克隆仓库" class="headerlink" title="克隆仓库"></a>克隆仓库</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone ladd@192.168.16.1:/path</span><br></pre></td></tr></table></figure>
-
-<h5 id="更新本地仓库到最新改动"><a href="#更新本地仓库到最新改动" class="headerlink" title="更新本地仓库到最新改动"></a>更新本地仓库到最新改动</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull</span><br></pre></td></tr></table></figure>
-
-<h5 id="本地修改了提交到缓存区"><a href="#本地修改了提交到缓存区" class="headerlink" title="本地修改了提交到缓存区"></a>本地修改了提交到缓存区</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br></pre></td></tr></table></figure>
-
-<h5 id="缓存区提交到HEAD"><a href="#缓存区提交到HEAD" class="headerlink" title="缓存区提交到HEAD"></a>缓存区提交到HEAD</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -m "代码修改信息"</span><br></pre></td></tr></table></figure>
-
-<h5 id="如果提交到新仓库使用这个"><a href="#如果提交到新仓库使用这个" class="headerlink" title="如果提交到新仓库使用这个"></a>如果提交到新仓库使用这个</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin git@github.com:xxx/xxx.git</span><br></pre></td></tr></table></figure>
-
-
-
-<h5 id="提交到master分支"><a href="#提交到master分支" class="headerlink" title="提交到master分支"></a>提交到master分支</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h5 id="查看当前分支"><a href="#查看当前分支" class="headerlink" title="查看当前分支"></a>查看当前分支</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch	* master</span><br></pre></td></tr></table></figure>
-
-<h5 id="创建develop分支，并切换过去"><a href="#创建develop分支，并切换过去" class="headerlink" title="创建develop分支，并切换过去"></a>创建develop分支，并切换过去</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b developSwitched to branch 'develop'</span><br></pre></td></tr></table></figure>
-
-<h5 id="切换主分支"><a href="#切换主分支" class="headerlink" title="切换主分支"></a>切换主分支</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout master</span><br></pre></td></tr></table></figure>
-
-<h5 id="查看仓库状态"><a href="#查看仓库状态" class="headerlink" title="查看仓库状态"></a>查看仓库状态</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git statusOn branch developnothing to commit, working tree clean</span><br></pre></td></tr></table></figure>
-
-<h5 id="提交到develop分支"><a href="#提交到develop分支" class="headerlink" title="提交到develop分支"></a>提交到develop分支</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin develop</span><br></pre></td></tr></table></figure>
+        <p>偶然发现cat还有合并文件的功能<a id="more"></a>，今天帮朋友处理1寸的相片，有个特殊要求，相片大小必须为1M以上，裁剪后发现相片越来越小了，在百度找资料发现可以用cat来配合使用，代码如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fallocate -l 874k test</span><br><span class="line">cat  20201015095427.jpg test &gt; 1015.jpg</span><br></pre></td></tr></table></figure>
+<p>1寸相片这里大概是130K，生成一个874K的文件，然后用cat合并起来，这样可以不失真还达到大小要求。</p>
 
       
     </div>
@@ -445,8 +411,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/proxyip/" rel="next" title="代理ip">
-                <i class="fa fa-chevron-left"></i> 代理ip
+              <a href="/addwiki/" rel="next" title="增加一个速查表">
+                <i class="fa fa-chevron-left"></i> 增加一个速查表
               </a>
             
           </div>
@@ -455,8 +421,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/nginx-proxy/" rel="prev" title="nginx-proxy">
-                nginx-proxy <i class="fa fa-chevron-right"></i>
+              <a href="/navicat/" rel="prev" title="expected key exchange group packet from server">
+                expected key exchange group packet from server <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -509,17 +475,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -534,7 +491,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-count">36</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -545,7 +502,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -596,22 +553,6 @@
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常用命令"><span class="nav-number">2.</span> <span class="nav-text">常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#设置用户名和邮箱"><span class="nav-number">2.1.</span> <span class="nav-text">设置用户名和邮箱</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建新仓库"><span class="nav-number">2.2.</span> <span class="nav-text">创建新仓库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#克隆仓库"><span class="nav-number">2.3.</span> <span class="nav-text">克隆仓库</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#更新本地仓库到最新改动"><span class="nav-number">2.4.</span> <span class="nav-text">更新本地仓库到最新改动</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#本地修改了提交到缓存区"><span class="nav-number">2.5.</span> <span class="nav-text">本地修改了提交到缓存区</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#缓存区提交到HEAD"><span class="nav-number">2.6.</span> <span class="nav-text">缓存区提交到HEAD</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#如果提交到新仓库使用这个"><span class="nav-number">2.7.</span> <span class="nav-text">如果提交到新仓库使用这个</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#提交到master分支"><span class="nav-number">2.8.</span> <span class="nav-text">提交到master分支</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查看当前分支"><span class="nav-number">2.9.</span> <span class="nav-text">查看当前分支</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建develop分支，并切换过去"><span class="nav-number">2.10.</span> <span class="nav-text">创建develop分支，并切换过去</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#切换主分支"><span class="nav-number">2.11.</span> <span class="nav-text">切换主分支</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查看仓库状态"><span class="nav-number">2.12.</span> <span class="nav-text">查看仓库状态</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#提交到develop分支"><span class="nav-number">2.13.</span> <span class="nav-text">提交到develop分支</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

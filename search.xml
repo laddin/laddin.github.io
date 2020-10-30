@@ -586,6 +586,17 @@
       </categories>
   </entry>
   <entry>
+    <title>cat的妙用</title>
+    <url>/cat/</url>
+    <content><![CDATA[<p>偶然发现cat还有合并文件的功能<a id="more"></a>，今天帮朋友处理1寸的相片，有个特殊要求，相片大小必须为1M以上，裁剪后发现相片越来越小了，在百度找资料发现可以用cat来配合使用，代码如下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">fallocate -l 874k test</span><br><span class="line">cat  20201015095427.jpg test &gt; 1015.jpg</span><br></pre></td></tr></table></figure>
+<p>1寸相片这里大概是130K，生成一个874K的文件，然后用cat合并起来，这样可以不失真还达到大小要求。</p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
     <title>py文件配置</title>
     <url>/configparser/</url>
     <content><![CDATA[<p>记录使用，方便后期查询。<a id="more"></a>文件配置模板 configparser 使用方法。</p>
@@ -783,45 +794,11 @@
       </categories>
   </entry>
   <entry>
-    <title>git</title>
-    <url>/git/</url>
-    <content><![CDATA[<p>整理使用过程，方便以后学习。<a id="more"></a></p>
-<h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p>这里简单说一下<code>三棵树</code>的概念，</p>
-<ul>
-<li><code>第一棵树</code>是你的工作目录，它持有实际文件</li>
-<li><code>第二棵树</code> 缓存区（Index），它像个缓存区域，临时保存你的改动</li>
-<li><code>第三棵树</code>是 HEAD，指向你最近一次提交后的结果。 </li>
-</ul>
-<hr>
-<h4 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h4><h5 id="设置用户名和邮箱"><a href="#设置用户名和邮箱" class="headerlink" title="设置用户名和邮箱"></a>设置用户名和邮箱</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git config --global user.name "laddin"</span><br><span class="line">git config --global user.email laddin@163.com</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h5 id="创建新仓库"><a href="#创建新仓库" class="headerlink" title="创建新仓库"></a>创建新仓库</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir git_test </span><br><span class="line">cd git_test </span><br><span class="line">git init</span><br></pre></td></tr></table></figure>
-
-<h5 id="克隆仓库"><a href="#克隆仓库" class="headerlink" title="克隆仓库"></a>克隆仓库</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git clone ladd@192.168.16.1:/path</span><br></pre></td></tr></table></figure>
-
-<h5 id="更新本地仓库到最新改动"><a href="#更新本地仓库到最新改动" class="headerlink" title="更新本地仓库到最新改动"></a>更新本地仓库到最新改动</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git pull</span><br></pre></td></tr></table></figure>
-
-<h5 id="本地修改了提交到缓存区"><a href="#本地修改了提交到缓存区" class="headerlink" title="本地修改了提交到缓存区"></a>本地修改了提交到缓存区</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git add .</span><br></pre></td></tr></table></figure>
-
-<h5 id="缓存区提交到HEAD"><a href="#缓存区提交到HEAD" class="headerlink" title="缓存区提交到HEAD"></a>缓存区提交到HEAD</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git commit -m "代码修改信息"</span><br></pre></td></tr></table></figure>
-
-<h5 id="如果提交到新仓库使用这个"><a href="#如果提交到新仓库使用这个" class="headerlink" title="如果提交到新仓库使用这个"></a>如果提交到新仓库使用这个</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git remote add origin git@github.com:xxx/xxx.git</span><br></pre></td></tr></table></figure>
-
-
-
-<h5 id="提交到master分支"><a href="#提交到master分支" class="headerlink" title="提交到master分支"></a>提交到master分支</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h5 id="查看当前分支"><a href="#查看当前分支" class="headerlink" title="查看当前分支"></a>查看当前分支</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git branch	* master</span><br></pre></td></tr></table></figure>
-
-<h5 id="创建develop分支，并切换过去"><a href="#创建develop分支，并切换过去" class="headerlink" title="创建develop分支，并切换过去"></a>创建develop分支，并切换过去</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git checkout -b developSwitched to branch 'develop'</span><br></pre></td></tr></table></figure>
-
-<h5 id="切换主分支"><a href="#切换主分支" class="headerlink" title="切换主分支"></a>切换主分支</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git checkout master</span><br></pre></td></tr></table></figure>
-
-<h5 id="查看仓库状态"><a href="#查看仓库状态" class="headerlink" title="查看仓库状态"></a>查看仓库状态</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git statusOn branch developnothing to commit, working tree clean</span><br></pre></td></tr></table></figure>
-
-<h5 id="提交到develop分支"><a href="#提交到develop分支" class="headerlink" title="提交到develop分支"></a>提交到develop分支</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git push origin develop</span><br></pre></td></tr></table></figure>
+    <title>ls提示输入输出错误</title>
+    <url>/err1030/</url>
+    <content><![CDATA[<p>ls 提示:无法打开目录.: 输入/输出错误<a id="more"></a>，可能是磁盘老化导致坏道，异常操作导致文件node错乱等。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@localhost ~]# ls  /dev/mapper/centos-home</span><br><span class="line">ls: 无法打开目录.: 输入/输出错误</span><br><span class="line">[root@localhost ~]# mount  /dev/mapper/centos-home /home</span><br><span class="line">mount: 将 /dev/mapper/centos-home 挂载到 /home 失败: 结构需要清理</span><br><span class="line">[root@localhost ~]# df -TH</span><br><span class="line">文件系统                类型      容量  已用  可用 已用% 挂载点</span><br><span class="line">devtmpfs                devtmpfs   34G     0   34G    0% /dev</span><br><span class="line">tmpfs                   tmpfs      34G     0   34G    0% /dev/shm</span><br><span class="line">tmpfs                   tmpfs      34G  9.4M   34G    1% /run</span><br><span class="line">tmpfs                   tmpfs      34G     0   34G    0% /sys/fs/cgroup</span><br><span class="line">/dev/mapper/centos-root xfs        54G  1.5G   53G    3% /</span><br><span class="line">/dev/sda1               xfs       1.1G  157M  908M   15% /boot</span><br><span class="line">/dev/mapper/centos-home xfs       1.1T  108G  903G   11% /home</span><br><span class="line">tmpfs                   tmpfs     6.8G     0  6.8G    0% /run/user/0</span><br><span class="line">[root@localhost ~]# umount  /dev/mapper/centos-home</span><br><span class="line">[root@localhost ~]# xfs_repair /dev/mapper/centos-home</span><br><span class="line">[root@localhost ~]# reboot</span><br></pre></td></tr></table></figure>
+<p>取消挂载，用xfs_repair修复（这里是xfs类型的），重启机器，然后在挂载，修复成功。<br>ps：过了几天又出现这个问题，更换硬盘彻底解决</p>
 ]]></content>
       <categories>
         <category>linux</category>
@@ -976,6 +953,17 @@
       </categories>
   </entry>
   <entry>
+    <title>expected key exchange group packet from server</title>
+    <url>/navicat/</url>
+    <content><![CDATA[<p>Navicat用ssh跳转出现expected key exchange group packet from server<a id="more"></a></p>
+<p>这里先检查mysql权限，要是没有问题可能是ssh那边屏蔽不安全算法导致的（影响OpenSSH6.7以上版本）</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim /etc/ssh/sshd_config</span><br><span class="line">--------------------------</span><br><span class="line">KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group14-sha1</span><br><span class="line"></span><br><span class="line">systemctl restart sshd</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
     <title>nf_conntrack优化解决tcp包被drop</title>
     <url>/nf-conntrack/</url>
     <content><![CDATA[<p>nf_conntrack: table full, dropping packet.<a id="more"></a></p>
@@ -1056,6 +1044,17 @@
 ]]></content>
       <categories>
         <category>python</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>nginx重试机制</title>
+    <url>/proxy-next-upstream/</url>
+    <content><![CDATA[<p>nginx通过proxy_next_upstream实现容灾<a id="more"></a>，2台服务器，一台是旧数据，一台是新数据，如果旧数据没有就请求新数据那台服务器，代码如下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">upstream apiServer&#123;</span><br><span class="line">        server 192.168.122.100:8084;</span><br><span class="line">        server 192.168.122.110:8084 backup;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">location  /api/&#123;</span><br><span class="line">            proxy_next_upstream error timeout invalid_header http_500 http_503 http_404 non_idempotent;</span><br><span class="line">            proxy_pass http://apiServer;</span><br><span class="line">            proxy_set_header Host $host;</span><br><span class="line">            proxy_set_header X-Forwarded-For $remote_addr;</span><br><span class="line">            add_header Access-Control-Allow-Origin *;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>linux</category>
       </categories>
   </entry>
   <entry>
@@ -1307,7 +1306,7 @@
 <h5 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h5><p> 配置好了重启即可，防火墙注意配置端口的访问，最后在主写入测试，在从查看是否存在key即可。 </p>
 ]]></content>
       <categories>
-        <category>redis</category>
+        <category>linux</category>
       </categories>
   </entry>
   <entry>
@@ -1336,6 +1335,26 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">C:\Users\laddin&gt;F:\cwRsync_5.5.0_x86_Free\bin\rsync.exe  -avzcrP --delete  --password-file=/cygdrive/f/cwRsync_5.5.0_x86_Free/etc/rsync.pass  /cygdrive/f/laddin/CNAME leoo@192.168.254.11::demo_web</span><br><span class="line">sending incremental file list</span><br><span class="line">CNAME</span><br><span class="line">              9 100%    0.00kB/s    0:00:00 (xfr#1， to-chk=0/1)</span><br><span class="line"></span><br><span class="line">sent 126 bytes  received 34 bytes  106.67 bytes/sec</span><br><span class="line">total size is 9  speedup is 0.06</span><br><span class="line"></span><br><span class="line">C:\Users\laddin&gt;</span><br></pre></td></tr></table></figure>
 
 
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>svn迁移到gitlab保留Commits</title>
+    <url>/svn-git/</url>
+    <content><![CDATA[<p>记录一下保存commit的方法<a id="more"></a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum install -y git-svn</span><br><span class="line"></span><br><span class="line">git  svn  clone  SVN仓库</span><br><span class="line"><span class="meta">#</span><span class="bash">输入svn账号密码</span></span><br><span class="line"></span><br><span class="line">cd SVN仓库</span><br><span class="line"></span><br><span class="line">git remote add origin gitlab仓库</span><br><span class="line"><span class="meta">#</span><span class="bash">输入gitlab账号密码</span></span><br><span class="line"></span><br><span class="line">git pull origin master </span><br><span class="line">git push -u origin master</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>swap扩展</title>
+    <url>/swap/</url>
+    <content><![CDATA[<p>swap在线扩容<a id="more"></a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看新硬盘是否被发现</span></span><br><span class="line">[root@192-168-1-131 ~]# fdisk -l</span><br><span class="line"></span><br><span class="line">Disk /dev/sda: 214.7 GB, 214748364800 bytes, 419430400 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disk label type: dos</span><br><span class="line">Disk identifier: 0x000a82b6</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/sda1   *        2048     2099199     1048576   83  Linux</span><br><span class="line">/dev/sda2         2099200   419430399   208665600   8e  Linux LVM</span><br><span class="line"></span><br><span class="line">Disk /dev/mapper/centos-root: 53.7 GB, 53687091200 bytes, 104857600 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disk /dev/mapper/centos-swap: 16.9 GB, 16911433728 bytes, 33030144 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disk /dev/mapper/centos-home: 143.1 GB, 143067709440 bytes, 279429120 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disk /dev/sdb: 75.2 GB, 75161927680 bytes, 146800640 sectors</span><br><span class="line">Units = sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">这里注意类型为82</span></span><br><span class="line">[root@192-168-1-131 ~]# fdisk /dev/sdb </span><br><span class="line">Welcome to fdisk (util-linux 2.23.2).</span><br><span class="line"></span><br><span class="line">Changes will remain in memory only, until you decide to write them.</span><br><span class="line">Be careful before using the write command.</span><br><span class="line"></span><br><span class="line">Device does not contain a recognized partition table</span><br><span class="line">Building a new DOS disklabel with disk identifier 0xfef90f89.</span><br><span class="line"></span><br><span class="line">Command (m for help): n</span><br><span class="line">Partition type:</span><br><span class="line">   p   primary (0 primary, 0 extended, 4 free)</span><br><span class="line">   e   extended</span><br><span class="line">Select (default p): p</span><br><span class="line">Partition number (1-4, default 1): </span><br><span class="line">First sector (2048-146800639, default 2048): </span><br><span class="line">Using default value 2048</span><br><span class="line">Last sector, +sectors or +size&#123;K,M,G&#125; (2048-146800639, default 146800639):</span><br><span class="line">Using default value 146800639</span><br><span class="line">Partition 1 of type Linux and of size 70 GiB is set</span><br><span class="line"></span><br><span class="line">Command (m for help): t</span><br><span class="line">Selected partition 1</span><br><span class="line">Hex code (type L to list all codes): 82</span><br><span class="line">Changed type of partition 'Linux' to 'Linux swap / Solaris'</span><br><span class="line"></span><br><span class="line">Command (m for help): w</span><br><span class="line">The partition table has been altered!</span><br><span class="line"></span><br><span class="line">Calling ioctl() to re-read partition table.</span><br><span class="line">Syncing disks.</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">制作swap</span></span><br><span class="line">[root@192-168-1-131 ~]# mkswap /dev/sdb1</span><br><span class="line">Setting up swapspace version 1, size = 1048572 KiB</span><br><span class="line">no label, UUID=bb893344-6d9d-4c03-b818-5ddcc4a55502</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">挂载</span></span><br><span class="line">[root@192-168-1-131 ~]# vim  /etc/fstab </span><br><span class="line">-----------------------------------------</span><br><span class="line">UUID=bb893344-6d9d-4c03-b818-5ddcc4a55502 swap	swap	defaults	0 0</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">激活</span></span><br><span class="line">[root@192-168-1-131 ~]# swapon </span><br><span class="line">NAME      TYPE       SIZE   USED PRIO</span><br><span class="line">/dev/dm-1 partition 15.8G 395.7M   -2</span><br><span class="line">[root@192-168-1-131 ~]# swapon -a</span><br><span class="line">[root@192-168-1-131 ~]# swapon </span><br><span class="line">NAME      TYPE       SIZE   USED PRIO</span><br><span class="line">/dev/dm-1 partition 15.8G 395.7M   -2</span><br><span class="line">/dev/sdb1 partition   70G     0B   -3</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">查看</span></span><br><span class="line">[root@192-168-1-131 ~]# free -m</span><br><span class="line">              total        used        free      shared  buff/cache   available</span><br><span class="line">Mem:          32010       20467       11353           1         189       11218</span><br><span class="line">Swap:         87806        3721       84085</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>linux</category>
