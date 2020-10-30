@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>增加一个速查表</title>
+    <url>/addwiki/</url>
+    <content><![CDATA[<p>删除了一些命令记录，转移到速查表里面去了<a id="more"></a>，最近半年的资料会在近期更新，之前的一些运维文档也会搬运过来，速查表点右边WIKI。</p>
+]]></content>
+      <categories>
+        <category>杂七杂八</category>
+      </categories>
+  </entry>
+  <entry>
     <title>ansible安装</title>
     <url>/ansible-01/</url>
     <content><![CDATA[<p>ansible安装记录。<a id="more"></a></p>
@@ -607,6 +616,23 @@
       </categories>
   </entry>
   <entry>
+    <title>docker-compose</title>
+    <url>/docker-compose/</url>
+    <content><![CDATA[<p>docker-compose是docker的一种编排服务，可以让用户在集群中部署分布式应用。<a id="more"></a></p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -L https:&#x2F;&#x2F;github.com&#x2F;docker&#x2F;compose&#x2F;releases&#x2F;download&#x2F;1.22.0&#x2F;docker-compose-$(uname -s)-$(uname -m) -o &#x2F;usr&#x2F;bin&#x2F;docker-compose</span><br><span class="line">chmod 755 &#x2F;usr&#x2F;bin&#x2F;docker-compose</span><br></pre></td></tr></table></figure>
+
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p><code>docker-compose -f docker-compose-file.yml  up -d</code></p>
+<p><code>-f</code>:使用指定的compose模板文件<br><code>-d</code>：后台启动</p>
+<h4 id="compose-file-常用配置"><a href="#compose-file-常用配置" class="headerlink" title="compose-file 常用配置"></a>compose-file 常用配置</h4><p>以线上配置为例:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">version: &#39;2&#39;</span><br><span class="line">services:</span><br><span class="line">  nginx:</span><br><span class="line">    container_name: nginx</span><br><span class="line">    image: nginx:stable-alpine</span><br><span class="line">    restart: always</span><br><span class="line">    environment:</span><br><span class="line">      TZ: &quot;Asia&#x2F;Shanghai&quot;</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;80:80&quot;</span><br><span class="line">      - &quot;443:443&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - &#39;..&#x2F;nginx&#x2F;nginx.conf:&#x2F;etc&#x2F;nginx&#x2F;nginx.conf&#39;</span><br><span class="line">      - &#39;..&#x2F;nginx&#x2F;conf.d:&#x2F;etc&#x2F;nginx&#x2F;conf.d&#39;</span><br><span class="line">      - &#39;&#x2F;home&#x2F;data&#x2F;logs&#x2F;nginx&#x2F;:&#x2F;var&#x2F;log&#x2F;nginx&#x2F;&#39;</span><br></pre></td></tr></table></figure>
+
+<p><code>version</code>:语法使用版本2<br><code>services</code>:创建一个应用<br><code>nginx</code>:自定义名称，这里标注为服务名<br><code>container_name</code>:容器的名称<br><code>image</code>:使用的镜像<br><code>restart</code>:重启策略为始终重启<br><code>environment</code>:环境变量，这里设置了时区<br><code>ports</code>:端口映射<br><code>volumes</code>:挂载点</p>
+]]></content>
+      <categories>
+        <category>docker</category>
+      </categories>
+  </entry>
+  <entry>
     <title>docker-install</title>
     <url>/docker-install/</url>
     <content><![CDATA[<p>记录安装过程，方便后期查询。<a id="more"></a></p>
@@ -617,6 +643,140 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 1. remove old version</span></span><br><span class="line">yum remove docker \</span><br><span class="line">                  docker-client \</span><br><span class="line">                  docker-client-latest \</span><br><span class="line">                  docker-common \</span><br><span class="line">                  docker-latest \</span><br><span class="line">                  docker-latest-logrotate \</span><br><span class="line">                  docker-logrotate \</span><br><span class="line">                  docker-selinux \</span><br><span class="line">                  docker-engine-selinux \</span><br><span class="line">                  docker-engine</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 2. install utils and repo</span></span><br><span class="line">yum install -y yum-utils \</span><br><span class="line">  device-mapper-persistent-data \</span><br><span class="line">  lvm2</span><br><span class="line">yum-config-manager \</span><br><span class="line">    --add-repo \</span><br><span class="line">    https://download.docker.com/linux/centos/docker-ce.repo</span><br><span class="line">yum-config-manager --disable docker-ce-edge</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 3. install docker-ce-17.03.2</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> install docker-ce-selinux first</span></span><br><span class="line">yum install https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-selinux-17.03.2.ce-1.el7.centos.noarch.rpm -y</span><br><span class="line">yum install docker-ce-17.03.2.ce -y</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 4. install docker-compose</span></span><br><span class="line">curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/bin/docker-compose</span><br><span class="line">chmod 755 /usr/bin/docker-compose</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 5. install Docker Registry (centso7)</span></span><br><span class="line"></span><br><span class="line">vim /lib/systemd/system/docker.service</span><br><span class="line"><span class="meta">#</span><span class="bash"> ExecStart后面添加仓库地址</span></span><br><span class="line">ExecStart=/usr/bin/dockerd --insecure-registry http://私人仓库.com</span><br></pre></td></tr></table></figure>
 
 
+]]></content>
+      <categories>
+        <category>docker</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>docker-network</title>
+    <url>/docker-network/</url>
+    <content><![CDATA[<p>记录docker网络。<a id="more"></a></p>
+<h4 id="网络模式"><a href="#网络模式" class="headerlink" title="网络模式"></a>网络模式</h4><p>Docker中的网络主要解决容器与容器、容器与外部网络、外部网络与容器之间的相互通信的问题，默认情况下，Docker使用网桥（bridge）+NAT的通信模式。docker网络大致可以分为以下5种。</p>
+<img src="/docker-network/2-1.png" class>
+
+<h5 id="Bridge模式"><a href="#Bridge模式" class="headerlink" title="Bridge模式"></a>Bridge模式</h5><p>Bridge桥接模式的实现步骤主要如下：</p>
+<ul>
+<li><p>Docker Daemon利用veth pair技术，在宿主机上创建两个虚拟网络接口设备，假设为veth0和veth1。而veth pair技术的特性可以保证无论哪一个veth接收到网络报文，都会将报文传输给另一方。</p>
+</li>
+<li><p>Docker Daemon将veth0附加到Docker Daemon创建的docker0网桥上。保证宿主机的网络报文可以发往veth0。</p>
+</li>
+<li><p>Docker Daemon将veth1添加到Docker Container所属的namespace下，并被改名为eth0。如此一来，保证宿主机的网络报文若发往veth0，则立即会被eth0接收，实现宿主机到Docker Container网络的联通性；同时，也保证Docker Container单独使用eth0，实现容器网络环境的隔离性。</p>
+</li>
+</ul>
+<hr>
+<h5 id="Host模式"><a href="#Host模式" class="headerlink" title="Host模式"></a>Host模式</h5><p>该模式将禁用Docker容器的网络隔离。因为容器共享了宿主机的网络命名空间，直接暴露在公共网络中。</p>
+<p>优势：</p>
+<ul>
+<li>可以直接使用宿主机的IP地址与外界进行通信，若宿主机的eth0是一个公有IP，那么容器也拥有这个公有IP。</li>
+<li>同时容器内服务的端口也可以使用宿主机的端口，无需额外进行NAT转换。</li>
+</ul>
+<p>缺陷：</p>
+<ul>
+<li>最明显的是Docker Container网络环境隔离性的弱化，即容器不再拥有隔离、独立的网络栈。</li>
+<li>使用host模式的Docker Container虽然可以让容器内部的服务和传统情况无差别、无改造的使用，但是由于网络隔离性的弱化，该容器会与宿主机共享竞争网络栈的使用；</li>
+<li>容器内部将不再拥有所有的端口资源，原因是部分端口资源已经被宿主机本身的服务占用，还有部分端口已经用以bridge网络模式容器的端口映射。</li>
+</ul>
+<hr>
+<h5 id="Container模式"><a href="#Container模式" class="headerlink" title="Container模式"></a>Container模式</h5><p>Docker Container的container网络模式在实现过程中，不涉及网桥，同样也不需要创建虚拟网卡veth pair。<br>  完成container网络模式的创建只需要两个步骤：</p>
+<ul>
+<li>查找container（即需要被共享网络环境的容器）的网络namespace；</li>
+<li>将新创建的Docker Container（也是需要共享其他网络的容器）的namespace，使用container的namespace</li>
+</ul>
+<p>优势：</p>
+<ul>
+<li>在这种模式下的Docker Container可以通过localhost来访问namespace下的其他容器，传输效率较高。</li>
+<li>虽然多个容器共享网络环境，但是多个容器形成的整体依然与宿主机以及其他容器形成网络隔离。</li>
+<li>这种模式还节约了一定数量的网络资源。</li>
+</ul>
+<p>缺陷：</p>
+<ul>
+<li>没有改善容器与宿主机以外世界通信的情况。</li>
+</ul>
+<hr>
+<h5 id="None模式"><a href="#None模式" class="headerlink" title="None模式"></a>None模式</h5><p>获取独立的network namespace，但不为容器进行任何网络配置，之后用户可以自己进行配置，容器内部只能使用loopback网络设备，不会再有其他的网络资源。none网络就是什么都没有的网络。挂在这个网络下的容器除了lo，没有其他任何网卡。容器run时，可以通过添加–network=none参数来指定该容器使用none网络。</p>
+<p>用途</p>
+<ul>
+<li>none网络应用与隔离场景，一些对安全性要求高并且不需要联网的应用可以使用none网络。</li>
+<li>比如某个容器的唯一用途是生成随机密码，就可以放到none网络中避免密码被窃取。</li>
+</ul>
+<hr>
+<h5 id="User-defined模式"><a href="#User-defined模式" class="headerlink" title="User-defined模式"></a>User-defined模式</h5><p>有时候可能用户需要指定自己的网络，以此来适应某些配置，如ip地址规划等等。自定义网桥，默认与bridge网络一样。docker提供三种user-defined网络驱动：bridge，overlay和macvlan。overlay和macvlan用于创建跨主机的网络</p>
+<p>创建bridge自定义网络</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker network create -d bridge --subnet 172.10.0.0/24 --gateway 172.10.0.1 my_net</span><br><span class="line">docker network inspect my_net</span><br><span class="line">docker run -it --network my_net --ip 172.10.0.3 busybox</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="网络访问原理"><a href="#网络访问原理" class="headerlink" title="网络访问原理"></a>网络访问原理</h4><p>Docker主要通过netfilter/iptables实现网络通信。iptables由netfilter和iptables组成，netfilter组件是Linux内核集成的信息包过滤系统，它维护一个信息包过滤表，这个表用于控制信息包过滤处理的规则集。而iptables只是一个在用户空间的工具，用于增删改查这个过滤表的规则。</p>
+<img src="/docker-network/3-1.png" class>
+
+<hr>
+<h5 id="容器访问外部"><a href="#容器访问外部" class="headerlink" title="容器访问外部"></a>容器访问外部</h5><p>容器默认是能访问外部网络的。通过NAT，docker实现了容器对外网（此处外网不一定是互联网）的访问。容器将数据报发送给容器网关，即docker0虚拟网桥，然后虚拟网桥再转发到实际的网卡并由实际网卡转发到物理网关，然后向目标进行层层转发直到抵达目标地址。</p>
+<hr>
+<h5 id="外部访问容器"><a href="#外部访问容器" class="headerlink" title="外部访问容器"></a>外部访问容器</h5><p>通过端口映射的方式实现外部网络访问容器，即通过-p参数实现将容器的端口映射到外部端口。容器通过将服务的实际端口在宿主机上进行端口映射，外部客户端通过连接宿主机的映射端口来访问容器内的服务。</p>
+<img src="/docker-network/3-2.png" class>
+
+<hr>
+<h5 id="容器之间互通"><a href="#容器之间互通" class="headerlink" title="容器之间互通"></a>容器之间互通</h5><p>如果是ip通信，保证2个容器在同一个网络环境即可，如果不在同一个网络环境，需要在其中一个容器添加另外一个容器的网络，命令如下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker network connect my_net httpd</span><br></pre></td></tr></table></figure>
+
+<p>connect命令能够为httpd容器再添加一个my_net网络（假设httpd原来只有默认的bridge网络）。这样前面创建的busybox容器就能与此次connect的httpd容器进行通信。</p>
+<hr>
+<h5 id="Docker-DNS-Server"><a href="#Docker-DNS-Server" class="headerlink" title="Docker DNS Server"></a>Docker DNS Server</h5><p>通过 IP 访问容器虽然满足了通信的需求，但还是不够灵活。因为我们在部署应用之前可能无法确定IP，部署之后再指定要访问的IP会比较麻烦。对于这个问题，可以通过docker自带的DNS服解决。从Docker 1.10 版本开始，docker daemon 实现了一个内嵌的DNS server，使容器可以直接通过“容器名”通信。方法很简单，只要在启动时用–name为容器命名就可以了。下面的命令启动两个容器bbox1和bbox2：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -it --network=my_net --name=bbox1 busybox</span><br><span class="line">docker run -it --network=my_net --name=bbox2 busybox</span><br></pre></td></tr></table></figure>
+
+<p>然后，bbox2就可以直接ping到bbox1了，但是使用docker DNS有个限制，只能在user-defined网络中使用。默认的bridge网络是无法使用的。</p>
+<hr>
+<h4 id="Docker-网络管理"><a href="#Docker-网络管理" class="headerlink" title="Docker 网络管理"></a>Docker 网络管理</h4><h5 id="网络空间虚拟化"><a href="#网络空间虚拟化" class="headerlink" title="网络空间虚拟化"></a>网络空间虚拟化</h5><p>Docker网络虚拟化是基于Linux下的网络命名空间（net namespace）实现的。使用ip netns命令，可以创建自己的虚拟网络环境。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ip netns add net0</span><br><span class="line">ip netns list</span><br><span class="line"><span class="meta">#</span><span class="bash">ip netns <span class="built_in">exec</span> 为net0网络空间中的网络设备eth0设置IP地址</span></span><br><span class="line">ip netns exec net0 ip addr add 172.17.42.99/16 dev eth0</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="网络设备虚拟化"><a href="#网络设备虚拟化" class="headerlink" title="网络设备虚拟化"></a>网络设备虚拟化</h5><p>网络接口和网络设备不一定是物理设备，也可以是虚拟设备，比如系统中的lo回环接口就是一个虚拟的网络接口。当我们在主机上启动Docker服务时，Docker引擎会在系统上创建一个名为docker0的虚拟以太网桥，并且为之随机分配一个未使用的私有IP地址和子网掩码。这个网桥将连接在它上面的所有容器组织成一个虚拟子网，并提供数据包转发功能。可以认为这个虚拟网桥是连接容器、容器和主机之间的路由中枢。Docker容器的网络互联依赖Linux底层的veth机制。每当启动一个容器时，Docker引擎会在主机上创建一个虚拟的以太网卡接口,并且会将这个接口一端放在主机网络空间并连接到docker0网桥，另一端放入Docker容器的网络空间中。容器退出时，虚拟网卡也会被销毁，下次启动容器时将创建一个新的虚拟网络接口并和docker0重新连接。</p>
+<hr>
+<h5 id="4种网络模式"><a href="#4种网络模式" class="headerlink" title="4种网络模式"></a>4种网络模式</h5><ul>
+<li><p>–net=bridge，容器默认的网络模式（连接到docker0网桥上）。可以通过DOCKER_OPTS=’-b=docker1’参数来指定默认网桥，docker1必须是合法的网桥。</p>
+</li>
+<li><p>–net=host，必会拥有自己的网络空间，与主机共享网络。</p>
+</li>
+<li><p>–net=container:NAME_or_ID，指定已经创建好的容器网络环境。两个容器将共享IP地址及端口等网络资源，可通过本地回环进行访问。</p>
+</li>
+<li><p>–net=none，不会配置网络环境，没有任何网络访问能力。可以手动配置一个网络环境。</p>
+</li>
+</ul>
+<hr>
+<h5 id="主机名配置"><a href="#主机名配置" class="headerlink" title="主机名配置"></a>主机名配置</h5><ul>
+<li>-h，修改容器/etc/hostname文件，同时也会修改/etc/hosts主机的ip对应的主机名</li>
+</ul>
+<hr>
+<h5 id="NDS配置"><a href="#NDS配置" class="headerlink" title="NDS配置"></a>NDS配置</h5><ul>
+<li>–dns=IP，修改容器/etc/resolv.conf文件</li>
+</ul>
+<hr>
+<h5 id="容器互联配置"><a href="#容器互联配置" class="headerlink" title="容器互联配置"></a>容器互联配置</h5><ul>
+<li><p>–icc=&lt;true|false&gt;,true使用ACCEPT策略进行配置。false使用DROP策略进行配置。该参数可通过DOCKER_OPTS=”–icc=(true|false)”来默认添加。</p>
+</li>
+<li><p>-P|–publish-all=&lt;true|false&gt;,Dockerfile文件中EXPOSE命令所指定的端口随机映射到主机49153~65535的端口范围。</p>
+</li>
+<li><p>-p SPEC|–publish=SPEC,指定可访问的端口。</p>
+</li>
+<li><p>–ip-forward=&lt;true|false&gt;,Docker服务每次启动时，都会修改/proc/sys/net/ipv4/ip_forward为1。如果是false，则不修改。大多数是true，以确保与外部网络以及其他容器正常通信。</p>
+</li>
+</ul>
+<hr>
+<h5 id="iptables"><a href="#iptables" class="headerlink" title="iptables"></a>iptables</h5><p>映射端口，直接操作防火墙对docker是无效的，根据官方文档应该对docker-user进行处理，官方文档对iptables的相关内容大致为：</p>
+<ul>
+<li>docker会把iptables规则写到DOCKER链里面 </li>
+<li>如果需要增加自己的规则，请写到DOCKER-USER链中操作</li>
+<li>默认docker是会自动管理iptables规则，我们可以选择关闭它，然后手动管理 （建议不要）</li>
+</ul>
+<p>初级方案：</p>
+<p> 手动创建容器网络，给容器指定网段，到时候开通规则直接网段间允许所有。</p>
+<p>升级方案：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 在表nat中创建新的链DOCKER-FILTER</span></span><br><span class="line">iptables -t nat -N DOCKER-FILTER</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 禁止所有nat表中的访问，然后将所有LOCAL流量导到DOCKER-FILTER中</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 当我们在一个内置的链中使用了RETURN，那么，默认的策略会应用到这个包上，PREROUTING默认的策略是ACCEPT，不过不用担心，因为只要它不去DOCKER链，依然是无法访问程序的</span></span><br><span class="line">iptables -t nat -I PREROUTING -m addrtype --dst-type LOCAL -j RETURN </span><br><span class="line">iptables -t nat -I PREROUTING -m addrtype --dst-type LOCAL -j DOCKER-FILTER</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 添加规则</span></span><br><span class="line">iptables -t nat -A DOCKER-FILTER -p tcp -m tcp --dport 80 -m state --state NEW,ESTABLISHED -j DOCKER</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>nat表中的允许的流量变成了PREROUTING -&gt; DOCKER-FILTER -&gt; DOCKER</li>
+<li>nat表中禁止的流量变成了PREROUTING -&gt; DOCKER-FILTER -&gt; 禁止。 </li>
+</ul>
 ]]></content>
       <categories>
         <category>docker</category>
@@ -1311,166 +1471,6 @@
 ]]></content>
       <categories>
         <category>linux</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>docker-compose</title>
-    <url>/docker-compose/</url>
-    <content><![CDATA[<p>docker-compose是docker的一种编排服务，可以让用户在集群中部署分布式应用。<a id="more"></a></p>
-<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">curl -L https:&#x2F;&#x2F;github.com&#x2F;docker&#x2F;compose&#x2F;releases&#x2F;download&#x2F;1.22.0&#x2F;docker-compose-$(uname -s)-$(uname -m) -o &#x2F;usr&#x2F;bin&#x2F;docker-compose</span><br><span class="line">chmod 755 &#x2F;usr&#x2F;bin&#x2F;docker-compose</span><br></pre></td></tr></table></figure>
-
-<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p><code>docker-compose -f docker-compose-file.yml  up -d</code></p>
-<p><code>-f</code>:使用指定的compose模板文件<br><code>-d</code>：后台启动</p>
-<h4 id="compose-file-常用配置"><a href="#compose-file-常用配置" class="headerlink" title="compose-file 常用配置"></a>compose-file 常用配置</h4><p>以线上配置为例:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">version: &#39;2&#39;</span><br><span class="line">services:</span><br><span class="line">  nginx:</span><br><span class="line">    container_name: nginx</span><br><span class="line">    image: nginx:stable-alpine</span><br><span class="line">    restart: always</span><br><span class="line">    environment:</span><br><span class="line">      TZ: &quot;Asia&#x2F;Shanghai&quot;</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;80:80&quot;</span><br><span class="line">      - &quot;443:443&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - &#39;..&#x2F;nginx&#x2F;nginx.conf:&#x2F;etc&#x2F;nginx&#x2F;nginx.conf&#39;</span><br><span class="line">      - &#39;..&#x2F;nginx&#x2F;conf.d:&#x2F;etc&#x2F;nginx&#x2F;conf.d&#39;</span><br><span class="line">      - &#39;&#x2F;home&#x2F;data&#x2F;logs&#x2F;nginx&#x2F;:&#x2F;var&#x2F;log&#x2F;nginx&#x2F;&#39;</span><br></pre></td></tr></table></figure>
-
-<p><code>version</code>:语法使用版本2<br><code>services</code>:创建一个应用<br><code>nginx</code>:自定义名称，这里标注为服务名<br><code>container_name</code>:容器的名称<br><code>image</code>:使用的镜像<br><code>restart</code>:重启策略为始终重启<br><code>environment</code>:环境变量，这里设置了时区<br><code>ports</code>:端口映射<br><code>volumes</code>:挂载点</p>
-]]></content>
-      <categories>
-        <category>docker</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>docker-network</title>
-    <url>/docker-network/</url>
-    <content><![CDATA[<p>记录docker网络。<a id="more"></a></p>
-<h4 id="网络模式"><a href="#网络模式" class="headerlink" title="网络模式"></a>网络模式</h4><p>Docker中的网络主要解决容器与容器、容器与外部网络、外部网络与容器之间的相互通信的问题，默认情况下，Docker使用网桥（bridge）+NAT的通信模式。docker网络大致可以分为以下5种。</p>
-<img src="/docker-network/2-1.png" class>
-
-<h5 id="Bridge模式"><a href="#Bridge模式" class="headerlink" title="Bridge模式"></a>Bridge模式</h5><p>Bridge桥接模式的实现步骤主要如下：</p>
-<ul>
-<li><p>Docker Daemon利用veth pair技术，在宿主机上创建两个虚拟网络接口设备，假设为veth0和veth1。而veth pair技术的特性可以保证无论哪一个veth接收到网络报文，都会将报文传输给另一方。</p>
-</li>
-<li><p>Docker Daemon将veth0附加到Docker Daemon创建的docker0网桥上。保证宿主机的网络报文可以发往veth0。</p>
-</li>
-<li><p>Docker Daemon将veth1添加到Docker Container所属的namespace下，并被改名为eth0。如此一来，保证宿主机的网络报文若发往veth0，则立即会被eth0接收，实现宿主机到Docker Container网络的联通性；同时，也保证Docker Container单独使用eth0，实现容器网络环境的隔离性。</p>
-</li>
-</ul>
-<hr>
-<h5 id="Host模式"><a href="#Host模式" class="headerlink" title="Host模式"></a>Host模式</h5><p>该模式将禁用Docker容器的网络隔离。因为容器共享了宿主机的网络命名空间，直接暴露在公共网络中。</p>
-<p>优势：</p>
-<ul>
-<li>可以直接使用宿主机的IP地址与外界进行通信，若宿主机的eth0是一个公有IP，那么容器也拥有这个公有IP。</li>
-<li>同时容器内服务的端口也可以使用宿主机的端口，无需额外进行NAT转换。</li>
-</ul>
-<p>缺陷：</p>
-<ul>
-<li>最明显的是Docker Container网络环境隔离性的弱化，即容器不再拥有隔离、独立的网络栈。</li>
-<li>使用host模式的Docker Container虽然可以让容器内部的服务和传统情况无差别、无改造的使用，但是由于网络隔离性的弱化，该容器会与宿主机共享竞争网络栈的使用；</li>
-<li>容器内部将不再拥有所有的端口资源，原因是部分端口资源已经被宿主机本身的服务占用，还有部分端口已经用以bridge网络模式容器的端口映射。</li>
-</ul>
-<hr>
-<h5 id="Container模式"><a href="#Container模式" class="headerlink" title="Container模式"></a>Container模式</h5><p>Docker Container的container网络模式在实现过程中，不涉及网桥，同样也不需要创建虚拟网卡veth pair。<br>  完成container网络模式的创建只需要两个步骤：</p>
-<ul>
-<li>查找container（即需要被共享网络环境的容器）的网络namespace；</li>
-<li>将新创建的Docker Container（也是需要共享其他网络的容器）的namespace，使用container的namespace</li>
-</ul>
-<p>优势：</p>
-<ul>
-<li>在这种模式下的Docker Container可以通过localhost来访问namespace下的其他容器，传输效率较高。</li>
-<li>虽然多个容器共享网络环境，但是多个容器形成的整体依然与宿主机以及其他容器形成网络隔离。</li>
-<li>这种模式还节约了一定数量的网络资源。</li>
-</ul>
-<p>缺陷：</p>
-<ul>
-<li>没有改善容器与宿主机以外世界通信的情况。</li>
-</ul>
-<hr>
-<h5 id="None模式"><a href="#None模式" class="headerlink" title="None模式"></a>None模式</h5><p>获取独立的network namespace，但不为容器进行任何网络配置，之后用户可以自己进行配置，容器内部只能使用loopback网络设备，不会再有其他的网络资源。none网络就是什么都没有的网络。挂在这个网络下的容器除了lo，没有其他任何网卡。容器run时，可以通过添加–network=none参数来指定该容器使用none网络。</p>
-<p>用途</p>
-<ul>
-<li>none网络应用与隔离场景，一些对安全性要求高并且不需要联网的应用可以使用none网络。</li>
-<li>比如某个容器的唯一用途是生成随机密码，就可以放到none网络中避免密码被窃取。</li>
-</ul>
-<hr>
-<h5 id="User-defined模式"><a href="#User-defined模式" class="headerlink" title="User-defined模式"></a>User-defined模式</h5><p>有时候可能用户需要指定自己的网络，以此来适应某些配置，如ip地址规划等等。自定义网桥，默认与bridge网络一样。docker提供三种user-defined网络驱动：bridge，overlay和macvlan。overlay和macvlan用于创建跨主机的网络</p>
-<p>创建bridge自定义网络</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker network create -d bridge --subnet 172.10.0.0/24 --gateway 172.10.0.1 my_net</span><br><span class="line">docker network inspect my_net</span><br><span class="line">docker run -it --network my_net --ip 172.10.0.3 busybox</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h4 id="网络访问原理"><a href="#网络访问原理" class="headerlink" title="网络访问原理"></a>网络访问原理</h4><p>Docker主要通过netfilter/iptables实现网络通信。iptables由netfilter和iptables组成，netfilter组件是Linux内核集成的信息包过滤系统，它维护一个信息包过滤表，这个表用于控制信息包过滤处理的规则集。而iptables只是一个在用户空间的工具，用于增删改查这个过滤表的规则。</p>
-<img src="/docker-network/3-1.png" class>
-
-<hr>
-<h5 id="容器访问外部"><a href="#容器访问外部" class="headerlink" title="容器访问外部"></a>容器访问外部</h5><p>容器默认是能访问外部网络的。通过NAT，docker实现了容器对外网（此处外网不一定是互联网）的访问。容器将数据报发送给容器网关，即docker0虚拟网桥，然后虚拟网桥再转发到实际的网卡并由实际网卡转发到物理网关，然后向目标进行层层转发直到抵达目标地址。</p>
-<hr>
-<h5 id="外部访问容器"><a href="#外部访问容器" class="headerlink" title="外部访问容器"></a>外部访问容器</h5><p>通过端口映射的方式实现外部网络访问容器，即通过-p参数实现将容器的端口映射到外部端口。容器通过将服务的实际端口在宿主机上进行端口映射，外部客户端通过连接宿主机的映射端口来访问容器内的服务。</p>
-<img src="/docker-network/3-2.png" class>
-
-<hr>
-<h5 id="容器之间互通"><a href="#容器之间互通" class="headerlink" title="容器之间互通"></a>容器之间互通</h5><p>如果是ip通信，保证2个容器在同一个网络环境即可，如果不在同一个网络环境，需要在其中一个容器添加另外一个容器的网络，命令如下</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker network connect my_net httpd</span><br></pre></td></tr></table></figure>
-
-<p>connect命令能够为httpd容器再添加一个my_net网络（假设httpd原来只有默认的bridge网络）。这样前面创建的busybox容器就能与此次connect的httpd容器进行通信。</p>
-<hr>
-<h5 id="Docker-DNS-Server"><a href="#Docker-DNS-Server" class="headerlink" title="Docker DNS Server"></a>Docker DNS Server</h5><p>通过 IP 访问容器虽然满足了通信的需求，但还是不够灵活。因为我们在部署应用之前可能无法确定IP，部署之后再指定要访问的IP会比较麻烦。对于这个问题，可以通过docker自带的DNS服解决。从Docker 1.10 版本开始，docker daemon 实现了一个内嵌的DNS server，使容器可以直接通过“容器名”通信。方法很简单，只要在启动时用–name为容器命名就可以了。下面的命令启动两个容器bbox1和bbox2：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -it --network=my_net --name=bbox1 busybox</span><br><span class="line">docker run -it --network=my_net --name=bbox2 busybox</span><br></pre></td></tr></table></figure>
-
-<p>然后，bbox2就可以直接ping到bbox1了，但是使用docker DNS有个限制，只能在user-defined网络中使用。默认的bridge网络是无法使用的。</p>
-<hr>
-<h4 id="Docker-网络管理"><a href="#Docker-网络管理" class="headerlink" title="Docker 网络管理"></a>Docker 网络管理</h4><h5 id="网络空间虚拟化"><a href="#网络空间虚拟化" class="headerlink" title="网络空间虚拟化"></a>网络空间虚拟化</h5><p>Docker网络虚拟化是基于Linux下的网络命名空间（net namespace）实现的。使用ip netns命令，可以创建自己的虚拟网络环境。</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ip netns add net0</span><br><span class="line">ip netns list</span><br><span class="line"><span class="meta">#</span><span class="bash">ip netns <span class="built_in">exec</span> 为net0网络空间中的网络设备eth0设置IP地址</span></span><br><span class="line">ip netns exec net0 ip addr add 172.17.42.99/16 dev eth0</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h5 id="网络设备虚拟化"><a href="#网络设备虚拟化" class="headerlink" title="网络设备虚拟化"></a>网络设备虚拟化</h5><p>网络接口和网络设备不一定是物理设备，也可以是虚拟设备，比如系统中的lo回环接口就是一个虚拟的网络接口。当我们在主机上启动Docker服务时，Docker引擎会在系统上创建一个名为docker0的虚拟以太网桥，并且为之随机分配一个未使用的私有IP地址和子网掩码。这个网桥将连接在它上面的所有容器组织成一个虚拟子网，并提供数据包转发功能。可以认为这个虚拟网桥是连接容器、容器和主机之间的路由中枢。Docker容器的网络互联依赖Linux底层的veth机制。每当启动一个容器时，Docker引擎会在主机上创建一个虚拟的以太网卡接口,并且会将这个接口一端放在主机网络空间并连接到docker0网桥，另一端放入Docker容器的网络空间中。容器退出时，虚拟网卡也会被销毁，下次启动容器时将创建一个新的虚拟网络接口并和docker0重新连接。</p>
-<hr>
-<h5 id="4种网络模式"><a href="#4种网络模式" class="headerlink" title="4种网络模式"></a>4种网络模式</h5><ul>
-<li><p>–net=bridge，容器默认的网络模式（连接到docker0网桥上）。可以通过DOCKER_OPTS=’-b=docker1’参数来指定默认网桥，docker1必须是合法的网桥。</p>
-</li>
-<li><p>–net=host，必会拥有自己的网络空间，与主机共享网络。</p>
-</li>
-<li><p>–net=container:NAME_or_ID，指定已经创建好的容器网络环境。两个容器将共享IP地址及端口等网络资源，可通过本地回环进行访问。</p>
-</li>
-<li><p>–net=none，不会配置网络环境，没有任何网络访问能力。可以手动配置一个网络环境。</p>
-</li>
-</ul>
-<hr>
-<h5 id="主机名配置"><a href="#主机名配置" class="headerlink" title="主机名配置"></a>主机名配置</h5><ul>
-<li>-h，修改容器/etc/hostname文件，同时也会修改/etc/hosts主机的ip对应的主机名</li>
-</ul>
-<hr>
-<h5 id="NDS配置"><a href="#NDS配置" class="headerlink" title="NDS配置"></a>NDS配置</h5><ul>
-<li>–dns=IP，修改容器/etc/resolv.conf文件</li>
-</ul>
-<hr>
-<h5 id="容器互联配置"><a href="#容器互联配置" class="headerlink" title="容器互联配置"></a>容器互联配置</h5><ul>
-<li><p>–icc=&lt;true|false&gt;,true使用ACCEPT策略进行配置。false使用DROP策略进行配置。该参数可通过DOCKER_OPTS=”–icc=(true|false)”来默认添加。</p>
-</li>
-<li><p>-P|–publish-all=&lt;true|false&gt;,Dockerfile文件中EXPOSE命令所指定的端口随机映射到主机49153~65535的端口范围。</p>
-</li>
-<li><p>-p SPEC|–publish=SPEC,指定可访问的端口。</p>
-</li>
-<li><p>–ip-forward=&lt;true|false&gt;,Docker服务每次启动时，都会修改/proc/sys/net/ipv4/ip_forward为1。如果是false，则不修改。大多数是true，以确保与外部网络以及其他容器正常通信。</p>
-</li>
-</ul>
-<hr>
-<h5 id="iptables"><a href="#iptables" class="headerlink" title="iptables"></a>iptables</h5><p>映射端口，直接操作防火墙对docker是无效的，根据官方文档应该对docker-user进行处理，官方文档对iptables的相关内容大致为：</p>
-<ul>
-<li>docker会把iptables规则写到DOCKER链里面 </li>
-<li>如果需要增加自己的规则，请写到DOCKER-USER链中操作</li>
-<li>默认docker是会自动管理iptables规则，我们可以选择关闭它，然后手动管理 （建议不要）</li>
-</ul>
-<p>初级方案：</p>
-<p> 手动创建容器网络，给容器指定网段，到时候开通规则直接网段间允许所有。</p>
-<p>升级方案：</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 在表nat中创建新的链DOCKER-FILTER</span></span><br><span class="line">iptables -t nat -N DOCKER-FILTER</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 禁止所有nat表中的访问，然后将所有LOCAL流量导到DOCKER-FILTER中</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 当我们在一个内置的链中使用了RETURN，那么，默认的策略会应用到这个包上，PREROUTING默认的策略是ACCEPT，不过不用担心，因为只要它不去DOCKER链，依然是无法访问程序的</span></span><br><span class="line">iptables -t nat -I PREROUTING -m addrtype --dst-type LOCAL -j RETURN </span><br><span class="line">iptables -t nat -I PREROUTING -m addrtype --dst-type LOCAL -j DOCKER-FILTER</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 添加规则</span></span><br><span class="line">iptables -t nat -A DOCKER-FILTER -p tcp -m tcp --dport 80 -m state --state NEW,ESTABLISHED -j DOCKER</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>nat表中的允许的流量变成了PREROUTING -&gt; DOCKER-FILTER -&gt; DOCKER</li>
-<li>nat表中禁止的流量变成了PREROUTING -&gt; DOCKER-FILTER -&gt; 禁止。 </li>
-</ul>
-]]></content>
-      <categories>
-        <category>docker</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>增加一个速查表</title>
-    <url>/addwiki/</url>
-    <content><![CDATA[<p>删除了一些命令记录，转移到速查表里面去了<a id="more"></a>，最近半年的资料会在近期更新，之前的一些运维文档也会搬运过来，速查表点右边WIKI。</p>
-]]></content>
-      <categories>
-        <category>杂七杂八</category>
       </categories>
   </entry>
 </search>
