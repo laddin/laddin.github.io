@@ -1539,4 +1539,34 @@
         <category>linux</category>
       </categories>
   </entry>
+  <entry>
+    <title>python安装</title>
+    <url>/python-install/</url>
+    <content><![CDATA[<p>安装3.7.1<a id="more"></a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum  groupinstall Development tools -y</span><br><span class="line">wget https://mirrors.huaweicloud.com/python/3.7.1/Python-3.7.1.tgz</span><br><span class="line">tar  xf  Python-3.7.1.tgz</span><br><span class="line">cd  Python-3.7.1</span><br><span class="line">yum install zlib* -y</span><br><span class="line">yum install libffi-devel -y</span><br><span class="line">yum install openssl-devel -y</span><br><span class="line">./configure --with-ssl</span><br><span class="line">make  </span><br><span class="line">make install</span><br><span class="line">pip3 install pipenv</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>nginx记录POST信息</title>
+    <url>/request-body/</url>
+    <content><![CDATA[<p>使用request_body记录POST信息<a id="more"></a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">log_format access escape=json '$remote_addr - $remote_user [$time_local] "$request" '</span><br><span class="line">'$status $body_bytes_sent $request_body "$http_referer" '</span><br><span class="line">'"$http_user_agent" $http_x_forwarded_for';</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>go-install</title>
+    <url>/go-install/</url>
+    <content><![CDATA[<p>go安装<a id="more"></a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget https://studygolang.com/dl/golang/go1.14.4.linux-amd64.tar.gz</span><br><span class="line">tar -zxvf go1.14.4.linux-amd64.tar.gz </span><br><span class="line">mv go /usr/local/go</span><br><span class="line">vim  /etc/profile.d/go.sh</span><br><span class="line">--------------------</span><br><span class="line">export GOROOT=/usr/local/go</span><br><span class="line">export PATH=$PATH:$GOROOT/bin</span><br><span class="line">export GO111MODULE=on</span><br><span class="line">export GOPROXY=https://goproxy.cn</span><br><span class="line">source /etc/profile.d/go.sh</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>go</category>
+      </categories>
+  </entry>
 </search>
