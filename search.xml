@@ -1569,4 +1569,24 @@
         <category>go</category>
       </categories>
   </entry>
+  <entry>
+    <title>expect交互</title>
+    <url>/expect/</url>
+    <content><![CDATA[<p>由于线上服务器是非root账号登陆的，需要在root用户下启动一个服务，这里采用expect来处理<a id="more"></a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">yum -y install expect</span><br><span class="line"></span><br><span class="line">vim test.sh</span><br><span class="line">-----------</span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh </span></span><br><span class="line">expect -c " </span><br><span class="line">spawn su - root </span><br><span class="line">expect \"Password:\" </span><br><span class="line">send \"cens#!12221\r\"</span><br><span class="line">send \"chmod +x /data/www/$&#123;1&#125;/man\r\"</span><br><span class="line">send \"cd /data/www/$&#123;1&#125;\r\"</span><br><span class="line">send \"./man restart\r\"</span><br><span class="line">expect eof</span><br><span class="line">"</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>ssh秘钥认证失败</title>
+    <url>/ssh/</url>
+    <content><![CDATA[<p>今天用ansible添加一个机器节点，秘钥发送后死活连接不上，提示输入密码<a id="more"></a><br>有以下几个原因会影响秘钥连接<br>1.selinux开启了<br>2.sshd_config配置禁止秘钥登录了<br>3..ssh的目录权限不为700<br>4.authorized_keys文件权限不为600</p>
+<p>检查客户端authorized_keys是否有key，宿主机ssh -v 配合客户端/var/log/secure 日志一起查看</p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
 </search>
