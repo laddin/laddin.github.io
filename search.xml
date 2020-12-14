@@ -1589,4 +1589,16 @@
         <category>linux</category>
       </categories>
   </entry>
+  <entry>
+    <title>oss跨域问题</title>
+    <url>/oss-cors/</url>
+    <content><![CDATA[<p>CDN回源到OSS，提示<code>No &#39;Access-Control-Allow-Origin&#39; header is present on the requested resource.</code><a id="more"></a><br>我已经在oss按照阿里云的提示配置了但是还是不行，后面是查找了半天发现是CDN覆盖了OSS的设置，直接在CDN设置自定义的http响应头就可以解决了。</p>
+<img src="/oss-cors/001.jpg" class title="This is an example image">
+<img src="/oss-cors/002.jpg" class title="This is an example image">
+
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
 </search>
