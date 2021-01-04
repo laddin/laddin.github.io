@@ -1652,4 +1652,15 @@
         <category>prometheus</category>
       </categories>
   </entry>
+  <entry>
+    <title>rm提示Argument list too long</title>
+    <url>/err1231/</url>
+    <content><![CDATA[<p>删除文件提示<code>-bash: /bin/rm: Argument list too long</code> <a id="more"></a>，这个是由于目录文件数过多，需要使用分割删除</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ls | xargs -n 10 rm -fr ls</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> -n  每十个为一组，以空格为切割符</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
 </search>
