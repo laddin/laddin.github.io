@@ -1725,4 +1725,14 @@
         <category>python</category>
       </categories>
   </entry>
+  <entry>
+    <title>mysql GTID同步报错1236</title>
+    <url>/err0305/</url>
+    <content><![CDATA[<p>GTID同步出现Got fatal error 1236 from master when reading data from binary log: ‘The slave is connecting using CHANGE MASTER TO MASTER_AUTO_POSITION = 1, but the master has purged binary logs containing GTIDs that the slave requires.’<a id="more"></a>，今天按照之前gtid同步rds出现1236错误，研究了一些这个错误发生在slave的IO线程从master拉取日志时，发现gtid_next在master的binlog.index中第一个文件中不存在，或者slave由于某些原因停止了一段时间，而这段时间master上的binlog被purge掉了，导致从库获取不到对应的binlog文件。<br>其实这个很好解决，要是要求数据一致性就等rds使用比较少的时候进行备份，然后重新跑一次就可以了，要是不要求数据一致性，直接按照下面的方式处理</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">主库</span></span><br><span class="line">show global variables like '%gtid_executed';</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">从库</span></span><br><span class="line">stop slave;</span><br><span class="line">reset master;</span><br><span class="line">set global gtid_purged='主库gtid_executed';</span><br><span class="line">start slave;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
 </search>

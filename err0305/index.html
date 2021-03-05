@@ -94,14 +94,14 @@
 
 
 
-<meta name="description" content="普罗米修斯和grafana安装">
+<meta name="description" content="GTID同步出现Got fatal error 1236 from master when reading data from binary log: ‘The slave is connecting using CHANGE MASTER TO MASTER_AUTO_POSITION &#x3D; 1, but the master has purged binary logs containing G">
 <meta property="og:type" content="article">
-<meta property="og:title" content="prometheus+grafana">
-<meta property="og:url" content="http://laddin.me/prometheus/index.html">
+<meta property="og:title" content="mysql GTID同步报错1236">
+<meta property="og:url" content="http://laddin.me/err0305/index.html">
 <meta property="og:site_name" content="Laddin&#39;Blog">
-<meta property="og:description" content="普罗米修斯和grafana安装">
-<meta property="article:published_time" content="2020-12-29T04:17:53.000Z">
-<meta property="article:modified_time" content="2020-12-29T08:58:29.869Z">
+<meta property="og:description" content="GTID同步出现Got fatal error 1236 from master when reading data from binary log: ‘The slave is connecting using CHANGE MASTER TO MASTER_AUTO_POSITION &#x3D; 1, but the master has purged binary logs containing G">
+<meta property="article:published_time" content="2021-03-05T08:03:09.000Z">
+<meta property="article:modified_time" content="2021-03-05T08:14:15.018Z">
 <meta property="article:author" content="多多">
 <meta name="twitter:card" content="summary">
 
@@ -132,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://laddin.me/prometheus/"/>
+  <link rel="canonical" href="http://laddin.me/err0305/"/>
 
 
 
 
 
-  <title>prometheus+grafana | Laddin'Blog</title>
+  <title>mysql GTID同步报错1236 | Laddin'Blog</title>
   
 
 
@@ -295,7 +295,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://laddin.me/prometheus/">
+    <link itemprop="mainEntityOfPage" href="http://laddin.me/err0305/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="多多">
@@ -312,7 +312,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">prometheus+grafana</h1>
+          <h1 class="post-title" itemprop="name headline">mysql GTID同步报错1236</h1>
         
 
         <div class="post-meta">
@@ -324,8 +324,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-12-29T12:17:53+08:00">
-                2020-12-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-03-05T16:03:09+08:00">
+                2021-03-05
               </time>
             
 
@@ -347,8 +347,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/prometheus/" itemprop="url" rel="index">
-                    <span itemprop="name">prometheus</span>
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
                   </a>
                 </span>
 
@@ -384,17 +384,8 @@
       
 
       
-        <p>普罗米修斯和grafana安装<a id="more"></a></p>
-<ul>
-<li>go：1.14.4</li>
-<li>prometheus： 2.19.0</li>
-<li>grafana：7.0.3</li>
-</ul>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">wget  https://github.com/prometheus/prometheus/releases/download/v2.19.0/prometheus-2.19.0.linux-amd64.tar.gz</span><br><span class="line">wget https://dl.grafana.com/oss/release/grafana-7.0.3-1.x86_64.rpm</span><br><span class="line">wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.0.linux-amd64.tar.gz</span><br><span class="line"></span><br><span class="line">tar -zxvf prometheus-2.19.0.linux-amd64.tar.gz -C /usr/local</span><br><span class="line">tar -zxvf node_exporter-1.0.0.linux-amd64.tar.gz -C /usr/local</span><br><span class="line">yum localinstall grafana-7.0.3-1.x86_64.rpm  -y</span><br><span class="line">systemctl start grafana-server</span><br><span class="line"></span><br><span class="line">vim  /usr/lib/systemd/system/node_exporter.service</span><br><span class="line">--------------------------------------------------</span><br><span class="line">[Unit]</span><br><span class="line">Description=node_exporter</span><br><span class="line">Documentation=https://prometheus.io</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">ExecStart=/usr/local/node_exporter-1.0.0.linux-amd64/node_exporter</span><br><span class="line">Restart=on-failure</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">vim /usr/lib/systemd/system/prometheus.service</span><br><span class="line">----------------------------------------------</span><br><span class="line">[Unit]</span><br><span class="line">Description=prometheus</span><br><span class="line">Documentation=https://prometheus.io</span><br><span class="line">After=network.target</span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">ExecStart=/usr/local/prometheus-2.19.0.linux-amd64/prometheus  --config.file=/usr/local/prometheus-2.19.0.linux-amd64/prometheus.yml</span><br><span class="line">Restart=on-failure</span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">systemctl daemon-reload </span><br><span class="line">systemctl start prometheus.service</span><br><span class="line">systemctl start node_exporter.service</span><br><span class="line"></span><br><span class="line">systemctl enable prometheus.service</span><br><span class="line">systemctl enable node_exporter.service</span><br><span class="line">systemctl enable grafana-server</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">vim /usr/local/prometheus-2.19.0.linux-amd64/prometheus.yml</span><br><span class="line">----------------------------------------------------------</span><br><span class="line">scrape_configs:</span><br><span class="line"><span class="meta">  #</span><span class="bash"> The job name is added as a label `job=&lt;job_name&gt;` to any timeseries scraped from this config.</span></span><br><span class="line">  - job_name: 'prometheus'</span><br><span class="line"></span><br><span class="line">    # metrics_path defaults to '/metrics'</span><br><span class="line">    # scheme defaults to 'http'.</span><br><span class="line"></span><br><span class="line">    static_configs:</span><br><span class="line">    - targets: ['localhost:9090']</span><br><span class="line"></span><br><span class="line">  - job_name: 'server'</span><br><span class="line">    static_configs:</span><br><span class="line">    - targets: ['localhost:9100']</span><br></pre></td></tr></table></figure>
-
-
-
-<p>这里node_exporter监控节点都需要systemd来守护进程，然后操作prometheus.yml 添加相关机器信息.</p>
+        <p>GTID同步出现Got fatal error 1236 from master when reading data from binary log: ‘The slave is connecting using CHANGE MASTER TO MASTER_AUTO_POSITION = 1, but the master has purged binary logs containing GTIDs that the slave requires.’<a id="more"></a>，今天按照之前gtid同步rds出现1236错误，研究了一些这个错误发生在slave的IO线程从master拉取日志时，发现gtid_next在master的binlog.index中第一个文件中不存在，或者slave由于某些原因停止了一段时间，而这段时间master上的binlog被purge掉了，导致从库获取不到对应的binlog文件。<br>其实这个很好解决，要是要求数据一致性就等rds使用比较少的时候进行备份，然后重新跑一次就可以了，要是不要求数据一致性，直接按照下面的方式处理</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">主库</span></span><br><span class="line">show global variables like '%gtid_executed';</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">从库</span></span><br><span class="line">stop slave;</span><br><span class="line">reset master;</span><br><span class="line">set global gtid_purged='主库gtid_executed';</span><br><span class="line">start slave;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -419,8 +410,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/alertmanager/" rel="next" title="alertmanager配合钉钉">
-                <i class="fa fa-chevron-left"></i> alertmanager配合钉钉
+              <a href="/py0127/" rel="next" title="阿里云安全组自动更新">
+                <i class="fa fa-chevron-left"></i> 阿里云安全组自动更新
               </a>
             
           </div>
@@ -428,10 +419,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/exporter/" rel="prev" title="常用的exporter">
-                常用的exporter <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
