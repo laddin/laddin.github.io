@@ -1735,4 +1735,15 @@
         <category>linux</category>
       </categories>
   </entry>
+  <entry>
+    <title>DELL linux系统安装omsa</title>
+    <url>/linux-omsa/</url>
+    <content><![CDATA[<p>记录一下linux安装omsa<a id="more"></a>,在官网下载客户端的安装包，这里以PowerEdge R740xd2 为例子。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">wget https://dl.dell.com/FOLDER06455061M/1/OM-SrvAdmin-Dell-Web-LX-9.5.0-4063_A00.tar.gz</span><br><span class="line">tar -zxvf  OM-SrvAdmin-Dell-Web-LX-9.5.0-4063_A00.tar.gz</span><br><span class="line"></span><br><span class="line">yum  groupinstall Development tools -y</span><br><span class="line">yum -y install net-snmp-utils</span><br><span class="line">yum -y install libcmpiCppImpl0</span><br><span class="line">yum -y install openwsman-server</span><br><span class="line">yum -y install sblim-sfcb</span><br><span class="line">yum -y install libwsman1</span><br><span class="line">yum -y install openwsman-client</span><br><span class="line"></span><br><span class="line">wget -q -O - http://linux.dell.com/repo/hardware/latest/bootstrap.cgi | bash</span><br><span class="line">yum -y install OpenIPMI srvadmin-all</span><br><span class="line"></span><br><span class="line">./setup.sh</span><br></pre></td></tr></table></figure>
+<p>查看是否开启1311端口.</p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
 </search>
