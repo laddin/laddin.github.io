@@ -1746,4 +1746,15 @@
         <category>linux</category>
       </categories>
   </entry>
+  <entry>
+    <title>nginx try_files</title>
+    <url>/try-files/</url>
+    <content><![CDATA[<p>nginx判断文件是否存在可以用<code>try_files</code>模块来进行处理<a id="more"></a>。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">location / &#123;</span><br><span class="line">	try_files  $uri  $uri/index.html  @mongrel;</span><br><span class="line">&#125;</span><br><span class="line">location @mongrel &#123;</span><br><span class="line">               proxy_pass http://127.0.0.1:8080;</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+<p>当用户请求 <a href="http://localhost/example" target="_blank" rel="noopener">http://localhost/example</a> 时，这里的 $uri 就是 /example。 try_files 会到硬盘里尝试找这个文件，如果存在名为 /$root/example的文件，就直接把这个文件的内容发送给用户。 如果没有就返回 example/index.html ，如果还是没有就代理到8080端口了。</p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
 </search>
