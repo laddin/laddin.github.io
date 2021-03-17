@@ -1757,4 +1757,23 @@
         <category>linux</category>
       </categories>
   </entry>
+  <entry>
+    <title>chrome time 解释</title>
+    <url>/chrome-time/</url>
+    <content><![CDATA[<p>chrome F12 time说明<a id="more"></a>，今天产品说网站请求很慢，对比了一下浏览器时间和日志时间发现相差很多，找了一下浏览器时间的说明，特此记录。</p>
+<img src="/chrome-time/001.jpg" class title="This is time">
+
+<ul>
+<li>Queueing：请求文件顺序的排序。浏览器是有线程限制的，发请求也不能所有的请求同时发送，会将请求加入队列中。此参数表示从添加到待处理队列，到实际开始处理的时间间隔标示。</li>
+<li>Stalled: 浏览器得到要发出这个请求的指令，到请求可以发出的等待时间，一般是代理协商、以及等待可复用的TCP连接释放的时间，不包括DNS查询、建立TCP连接等时间等。浏览器对同一个主机域名的并发连接数有限制，因此如果当前的连接数已经超过上限，那么其余请求就会被阻塞，等待新的可用连接，此外脚本也会阻塞其他组件的下载。</li>
+<li>Proxy negotiation：浏览器正在与代理服务器协商请求。</li>
+<li>Request sent：正在发送请求。</li>
+<li>Waiting (TTFB)：浏览器正在等待响应的第一个字节。TTFB代表到第一个字节的时间。此时间包括一次往返延迟和服务器准备响应所花费的时间。</li>
+<li>Content Download：浏览器正在接收响应。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
 </search>
