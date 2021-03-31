@@ -1776,4 +1776,44 @@
         <category>linux</category>
       </categories>
   </entry>
+  <entry>
+    <title>redis的坑</title>
+    <url>/redis/</url>
+    <content><![CDATA[<p>常见的一些redis坑<a id="more"></a></p>
+<ol>
+<li><p>key过期时间丢失</p>
+<p>用set设置key-value 之外，还可以设置 key 的过期时间，但是你想修改key的值，单纯的使用set 不加上过期时间参数，那这个key的值就会被刷新为永不过期</p>
+</li>
+<li><p>del 阻塞redis</p>
+<ul>
+<li>key 是 String 类型，DEL 时间复杂度是 O(1)</li>
+<li>key 是 List/Hash/Set/ZSet 类型，DEL 时间复杂度是 O(M)，M 为元素数量</li>
+</ul>
+<p>如果是一个非string类型的key，这个key的元素非常多，那么执行del的时间就会越久。可以用LLEN/HLEN/SCARD/ZCARD 来返回列表/哈希表/集合/有序集的数量，如果元素少直接del删除，如果元素多可以采用 LRANGE/HSCAN/SSCAN/ZSCAN + LPOP/RPOP/HDEL/SREM/ZREM 的方式删除。</p>
+</li>
+<li><p>randomkey 阻塞redis</p>
+<p>为什么随机查看一个key有可能会阻塞redis捏，这是因为redis的机制，randomkey 在随机拿出一个 key 后，首先会先检查这个 key 是否已过期。如果该 key 已经过期，那么 Redis 会删除它，这个过程就是<strong>懒惰清理</strong>。清理完了然后在随机拿个key在进行检查过期，直到找到一个未过期的key返回给客户端，如果你redis有大量key已经过期没有清理，用randomkey 就有可能会循环很久。如果你是在slave节点执行，那问题就会更严重，应为slave是不会清理过期key的，（key过期了，master会先清理然后向slave发送del，告诉slave也清理掉，达到主从一致性）。</p>
+</li>
+<li><p>执行monitor 导致redis OOM</p>
+<p> 当你在执行 monitor 命令时，redis 会把每一条命令写到客户端的输出缓冲区，然后客户端从这个缓冲区读取服务端返回的结果。如果QPS很高，这将会导致这个输出缓冲区内存持续增长，占用 Redis 大量的内存资源，如果你的机器的内存资源不足，那 redis 实例就会面临被 OOM 的风险。</p>
+</li>
+<li><p>持久化的坑</p>
+<ul>
+<li><p>RDB 数据快照</p>
+</li>
+<li><p>AOF 记录每一个写命令到日志文件中</p>
+<p>如果redis是用supervisor 这种软件管理，有可能会出现master 宕机，哨兵还未发起切换，此时 master 进程立即被 supervisor 自动拉起，但是这个时候master还没有开启任何数据持久化，启动是个空实例，slave会和master保持一致，会自动清空数据</p>
+</li>
+</ul>
+<p> 1.redis实例不使用进程管理工具自动拉起<br> 2.master 宕机后，让哨兵发起切换，把 slave 提升为 master<br> 3.切换完成后，再重启 master，让其退化成 slave</p>
+</li>
+<li><p>主从库返回结果不同</p>
+<p> 如果一个 key 已过期，但这个 key 还未被 master 清理，此时在 slave 上查询这个 key，会返回什么结果呢？有可能是NULL也有可能是返回key的值，如果在3.2的版本以下，只要这个 key 还未被 master 清理，那么，在 slave 上查询这个 key，它会返回 value。</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
 </search>
