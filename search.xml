@@ -1816,4 +1816,15 @@
         <category>linux</category>
       </categories>
   </entry>
+  <entry>
+    <title>clamav 杀毒</title>
+    <url>/clamav/</url>
+    <content><![CDATA[<p>开源病毒扫描程序<a id="more"></a>。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">安装</span></span><br><span class="line">yum -y install epel-release</span><br><span class="line">yum install –y clamav clamav-update</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">更新</span></span><br><span class="line">freshclam</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">查杀</span></span><br><span class="line">[root@localhost src]# clamscan -ri /data/data  -l clamscan.log --remove</span><br><span class="line"></span><br><span class="line">----------- SCAN SUMMARY -----------</span><br><span class="line">Known viruses: 8527249</span><br><span class="line">Engine version: 0.103.2</span><br><span class="line">Scanned directories: 3901</span><br><span class="line">Scanned files: 26793</span><br><span class="line">Infected files: 0</span><br><span class="line">Data scanned: 1382.41 MB</span><br><span class="line">Data read: 781.71 MB (ratio 1.77:1)</span><br><span class="line">Time: 567.707 sec (9 m 27 s)</span><br><span class="line">Start Date: 2021:05:08 11:30:11</span><br><span class="line">End Date:   2021:05:08 11:39:38</span><br></pre></td></tr></table></figure>
+<p><code>Infected files</code> 受感染的文件<br><code>-r</code> 递归扫面子文件<br><code>-i</code> 只显示被感染的文件<br><code>-l</code> 指定日志文件<br><code>--remove</code> 删除被感染文件<br><code>--move</code> 隔离被感染文件</p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
 </search>
