@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="Laddin&#39;Blog">
 <meta property="og:description" content="优化TCP减少TIME_WAIT。">
 <meta property="article:published_time" content="2019-07-14T21:49:17.000Z">
-<meta property="article:modified_time" content="2020-04-05T09:52:44.000Z">
+<meta property="article:modified_time" content="2021-05-17T06:51:52.157Z">
 <meta property="article:author" content="多多">
 <meta name="twitter:card" content="summary">
 
@@ -392,6 +392,7 @@
 <hr>
 <h4 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h4><ul>
 <li><p>增加可用端口范围，如上计算tcp并发</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/sysctl.conf</span><br><span class="line">net.ipv4.ip_local_port_range = 1024 65535</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>对tcp进行优化</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/sysctl.conf</span><br><span class="line"><span class="meta">#</span><span class="bash"> 启用tcp的时间戳配置，只有启用这个，下面reuse和recycle才生效。</span></span><br><span class="line">net.ipv4.tcp_timestamps = 1</span><br><span class="line"><span class="meta">#</span><span class="bash"> 允许TIME_WAIT SOCKETS重新用于新的TCP连接，依赖开启tcp优化中的tcp_timestamp</span></span><br><span class="line">net.ipv4.tcp_tw_reuse = 1</span><br><span class="line"><span class="meta">#</span><span class="bash"> 开启TCP连接中的TIME_WAIT SOCKETS快速回收，依赖开启tcp优化中的tcp_timestamp</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> nat网络下不建议开，自行谷歌</span></span><br><span class="line">net.ipv4.tcp_tw_recycle = 1</span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改FIN_WAIT2状态tcp的超时时间为30s</span></span><br><span class="line">net.ipv4.tcp_fin_timeout = 30</span><br></pre></td></tr></table></figure>
