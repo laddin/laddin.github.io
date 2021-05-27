@@ -1828,4 +1828,15 @@
         <category>linux</category>
       </categories>
   </entry>
+  <entry>
+    <title>ssh连接服务器慢</title>
+    <url>/sshslow/</url>
+    <content><![CDATA[<p>连接服务器响应慢，连接上去后正常<a id="more"></a>，可以检查一下DNS认证是否开启</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vim /etc/ssh/sshd_config</span><br><span class="line">------------------------</span><br><span class="line">GSSAPIAuthentication no</span><br><span class="line">UseDNS no</span><br></pre></td></tr></table></figure>
+<p>将上面2个配置改为<code>No</code>，关闭DNS认证，然后重启sshd服务即可。</p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
 </search>
