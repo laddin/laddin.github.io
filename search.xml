@@ -1850,4 +1850,13 @@
         <category>python</category>
       </categories>
   </entry>
+  <entry>
+    <title>ERR_SSL_VERSION_OR_CIPHER_MISMATCH</title>
+    <url>/err0531/</url>
+    <content><![CDATA[<p>https 提示 ERR_SSL_VERSION_OR_CIPHER_MISMATCH<a id="more"></a>，同一台服务器使用同一个证书文件，另外的域名正常，最后发现是阿里云CDN没有解析HTTPS，开启HTTPS证书解决。说明使用CDN你nginx配置https根本没有生效。</p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
 </search>
