@@ -1859,4 +1859,106 @@
         <category>linux</category>
       </categories>
   </entry>
+  <entry>
+    <title>systemctl整理</title>
+    <url>/systemctl/</url>
+    <content><![CDATA[<p>systemctl整理。<a id="more"></a></p>
+<h5 id="服务"><a href="#服务" class="headerlink" title="服务"></a>服务</h5><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">开机启动</span></span><br><span class="line">systemctl enable nginx.service</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">停止开机启动</span></span><br><span class="line">systemctl disable nginx.service</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">查看开机启动</span></span><br><span class="line">systemctl is-enabled nginx.service</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">启动/关闭/重启</span></span><br><span class="line">systemctl start/stop/restart nginx.service</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">查看服务状态</span></span><br><span class="line">systemctl status nginx.service</span><br></pre></td></tr></table></figure>
+
+<h5 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h5><p>一般在<code>/usr/lib/systemd/system/</code>下创建新的<code>service文件</code>，然后<code>systemctl daemon-reload</code>刷新生效，以下是常用的配置选项</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">以firewalld为例子</span></span><br><span class="line"></span><br><span class="line">[Unit]									#启动顺序和依赖</span><br><span class="line">Description=firewalld - dynamic firewall daemon				#描述</span><br><span class="line">Before=network-pre.target						#启动顺序</span><br><span class="line">Wants=network-pre.target						#启动顺序</span><br><span class="line">After=dbus.service							#启动顺序</span><br><span class="line">After=polkit.service							#启动顺序</span><br><span class="line"><span class="meta">#</span><span class="bash">冲突，以下这些服务在运行就不运行firewalld</span></span><br><span class="line">Conflicts=iptables.service ip6tables.service ebtables.service ipset.service	</span><br><span class="line">Documentation=man:firewalld(1)						#文档位置</span><br><span class="line"></span><br><span class="line">[Service]										#启动行为</span><br><span class="line">EnvironmentFile=-/etc/sysconfig/firewalld						#环境参数文件</span><br><span class="line">ExecStart=/usr/sbin/firewalld --nofork --nopid $FIREWALLD_ARGS				#启动执行命令</span><br><span class="line">ExecReload=/bin/kill -HUP $MAINPID							#重启执行命令</span><br><span class="line"><span class="meta">#</span><span class="bash">还有以下这些常用的</span></span><br><span class="line"><span class="meta">#</span><span class="bash">ExecStop	停止服务时执行的命令</span></span><br><span class="line"><span class="meta">#</span><span class="bash">ExecStartPre	启动服务之前执行的命令</span></span><br><span class="line"><span class="meta">#</span><span class="bash">ExecStartPost	启动服务之后执行的命令</span></span><br><span class="line"><span class="meta">#</span><span class="bash">ExecStopPost	停止服务之后执行的命令</span></span><br><span class="line"></span><br><span class="line">StandardOutput=null	#标准输出</span><br><span class="line">StandardError=null	#标准错误输出</span><br><span class="line">Type=dbus		#启动类型</span><br><span class="line"><span class="meta">#</span><span class="bash">启动类型介绍</span></span><br><span class="line"><span class="meta">#</span><span class="bash">simple		默认值，ExecStart字段启动的进程为主进程</span></span><br><span class="line"><span class="meta">#</span><span class="bash">forking	ExecStart字段将以fork()方式启动，此时父进程将会退出，子进程将成为主进程</span></span><br><span class="line"><span class="meta">#</span><span class="bash">oneshot	类似于simple，但只执行一次，Systemd 会等它执行完，才启动其他服务</span></span><br><span class="line"><span class="meta">#</span><span class="bash">dbus		类似于simple，但会等待 D-Bus 信号后启动</span></span><br><span class="line"><span class="meta">#</span><span class="bash">notify		类似于simple，启动结束后会发出通知信号，然后 Systemd 再启动其他服务</span></span><br><span class="line"><span class="meta">#</span><span class="bash">idle		类似于simple，但是要等到其他任务都执行完，才会启动该服务。一种使用场合是为让该服务的输出，不与其他服务的输出相混合</span></span><br><span class="line"></span><br><span class="line">BusName=org.fedoraproject.FirewallD1	#服务通信使用的 D-Bus 名称</span><br><span class="line">KillMode=mixed				#定义如何停止firewalld,还有以下参数</span><br><span class="line"><span class="meta">#</span><span class="bash">control-group		默认值，当前控制组里面的所有子进程，都会被杀掉</span></span><br><span class="line"><span class="meta">#</span><span class="bash">process		只杀主进程</span></span><br><span class="line"><span class="meta">#</span><span class="bash">mixed			主进程将收到 SIGTERM 信号，子进程收到 SIGKILL 信号</span></span><br><span class="line"><span class="meta">#</span><span class="bash">none			没有进程会被杀掉，只是执行服务的 stop 命令。</span></span><br><span class="line"></span><br><span class="line">[Install]						#如何安装，开机启动</span><br><span class="line">WantedBy=multi-user.target				#属于哪个服务组</span><br><span class="line">Alias=dbus-org.fedoraproject.FirewallD1.service		#服务别名信息</span><br></pre></td></tr></table></figure>
+<p>还有一些<code>[Service]</code>常用的模块</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">PIDFile		#指定该服务的 PID 文件路径</span><br><span class="line">Environment	#指定 Key=Value 的环境配置</span><br><span class="line">User		#指定用户</span><br><span class="line">Group		#指定用户组</span><br><span class="line">Restart		#当服务进程 正常退出、异常退出、被杀死、超时的时候， 是否重新启动该服务，选项如下</span><br><span class="line"><span class="meta">#</span><span class="bash">no		默认值,退出后不会重启</span></span><br><span class="line"><span class="meta">#</span><span class="bash">on-success	只有正常退出时（退出状态码为0），才会重启</span></span><br><span class="line"><span class="meta">#</span><span class="bash">on-failure	非正常退出时（退出状态码非0），包括被信号终止和超时，才会重启</span></span><br><span class="line"><span class="meta">#</span><span class="bash">on-abnormal	只有被信号终止和超时，才会重启</span></span><br><span class="line"><span class="meta">#</span><span class="bash">on-abort	只有在收到没有捕捉到的信号终止时，才会重启</span></span><br><span class="line"><span class="meta">#</span><span class="bash">on-watchdog	超时退出，才会重启</span></span><br><span class="line"><span class="meta">#</span><span class="bash">always		不管是什么退出原因，总是重启</span></span><br><span class="line">RestartSec		#多久后重启</span><br><span class="line">StartLimitBurst		#启动的最大次数限制，超过后停止继续重启</span><br><span class="line">StartLimitInterval	#启动时间的最大间隔</span><br></pre></td></tr></table></figure>
+<p>还有资源限制</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>等价的 ulimit 命令</th>
+<th>单位</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LimitCPU</td>
+<td>ulimit -t</td>
+<td>秒</td>
+</tr>
+<tr>
+<td>LimitFSIZE</td>
+<td>ulimit -f</td>
+<td>字节</td>
+</tr>
+<tr>
+<td>LimitDATA</td>
+<td>ulimit -d</td>
+<td>字节</td>
+</tr>
+<tr>
+<td>LimitSTACK</td>
+<td>ulimit -s</td>
+<td>字节</td>
+</tr>
+<tr>
+<td>LimitCORE</td>
+<td>ulimit -c</td>
+<td>字节</td>
+</tr>
+<tr>
+<td>LimitRSS</td>
+<td>ulimit -m</td>
+<td>字节</td>
+</tr>
+<tr>
+<td>LimitNOFILE</td>
+<td>ulimit -n</td>
+<td>文件描述符的数量</td>
+</tr>
+<tr>
+<td>LimitAS</td>
+<td>ulimit -v</td>
+<td>字节</td>
+</tr>
+<tr>
+<td>LimitNPROC</td>
+<td>ulimit -u</td>
+<td>进程的数量</td>
+</tr>
+<tr>
+<td>LimitMEMLOCK</td>
+<td>ulimit -l</td>
+<td>字节</td>
+</tr>
+<tr>
+<td>LimitLOCKS</td>
+<td>ulimit -x</td>
+<td>锁的数量</td>
+</tr>
+<tr>
+<td>LimitSIGPENDING</td>
+<td>ulimit -i</td>
+<td>信号队列的长度(排队的信号数量)</td>
+</tr>
+<tr>
+<td>LimitMSGQUEUE</td>
+<td>ulimit -q</td>
+<td>字节</td>
+</tr>
+<tr>
+<td>LimitNICE</td>
+<td>ulimit -e</td>
+<td>谦让度</td>
+</tr>
+<tr>
+<td>LimitRTPRIO</td>
+<td>ulimit -r</td>
+<td>实时优先级</td>
+</tr>
+</tbody></table>
+<p>给一个线上go程序的启动脚本参考</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[Unit]	</span><br><span class="line">Description=go-api	</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">User=root</span><br><span class="line">Group=root</span><br><span class="line">Environment=ROBOT_APP_ENV=pro</span><br><span class="line">Type=simple</span><br><span class="line">ExecStartPre= cd /data/robot</span><br><span class="line">ExecStart=/data/robot/go/go-api </span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=20s</span><br><span class="line">LimitNOFILE=infinity</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
 </search>
