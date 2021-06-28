@@ -1986,4 +1986,15 @@
         <category>python</category>
       </categories>
   </entry>
+  <entry>
+    <title>vmware挂载win共享目录</title>
+    <url>/cifs/</url>
+    <content><![CDATA[<p>vmware linux虚拟机挂载局域网 win 共享服务器<a id="more"></a>。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mkdir /mnt/video</span><br><span class="line">mount.cifs //192.168.2.11/video2021  /mnt/video   -o username=administrator,password=1235678</span><br><span class="line">vim  /etc/fstab</span><br><span class="line">---------------</span><br><span class="line">//192.168.2.11/video2021  /mnt/video  cifs   username=administrator,password=1235678   0   0</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# df  -h</span><br><span class="line">Filesystem            Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/sda2             7.7G  5.7G  1.7G  78% /</span><br><span class="line">/dev/sda1             9.7G  3.2G  6.0G  35% /data</span><br><span class="line">//192.168.2.11/video2021</span><br><span class="line">                       71T   70T  1.4T  99% /mnt/video</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
 </search>
