@@ -2007,4 +2007,24 @@
         <category>linux</category>
       </categories>
   </entry>
+  <entry>
+    <title>无法请求ECS端口</title>
+    <url>/err0714/</url>
+    <content><![CDATA[<p>办公室服务器无法请求固定ECS端口，ping正常，请求其他ECS正常<a id="more"></a>，最近办公室Jenkins服务器无法推送文件到某一台服务器，ping正常，mtr正常，telnet端口异常，阿里云云盾已开放白名单，安全组已经开放端口，防火墙已经允许，selinux已经关闭，最后抓包发现syn没有服务端的回报，咨询工单，查看<a href="https://help.aliyun.com/knowledge_detail/41334.html" target="_blank" rel="noopener">文档</a>，发现客户端是NAT模式的网络，远端服务器看到来自不同客户端的源IP相同，但NAT前每一台客户端的时间可能会有偏差，报文中的Timestamp就不是递增的情况。即视为无效，相应的数据包会被丢弃。意思就是同一个源IP来连接同一个目的端口的数据包时间戳必须是递增的。解决方法如下，在服务端修改内核参数。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">/etc/sysctl.conf</span><br><span class="line">----------------</span><br><span class="line">net.ipv4.tcp_tw_recycle=0</span><br><span class="line">net.ipv4.tcp_timestamps=0</span><br><span class="line"></span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>tcpdump简单用法</title>
+    <url>/tcpdump/</url>
+    <content><![CDATA[<p>常用抓包命令<a id="more"></a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 抓取 eth1网卡22端口的数据 </span></span><br><span class="line">tcpdump -s 0 -i eth1 port 22</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 抓取 eth1网卡 8.8.8.8这个ip的详细数据</span></span><br><span class="line">tcpdump -s 0 -i eth1 -vvv dst 8.8.8.8</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 抓取所有接口数据保存到test.cap文件，这里可以用Wireshark工具查看</span></span><br><span class="line">tcpdump -i any -s 0 -w test.cap</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
 </search>
