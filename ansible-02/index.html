@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Linux, python, devops" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/:/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="ansible常规配置命令记录。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ansible常规介绍">
+<meta property="og:url" content="http://laddin.me/ansible-02/index.html">
+<meta property="og:site_name" content="Laddin&#39;Blog">
+<meta property="og:description" content="ansible常规配置命令记录。">
+<meta property="article:published_time" content="2019-10-05T09:29:04.000Z">
+<meta property="article:modified_time" content="2020-04-05T21:34:48.000Z">
+<meta property="article:author" content="多多">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"always","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://laddin.me/ansible-02/"/>
+
+
+
+
+
+  <title>ansible常规介绍 | Laddin'Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Laddin'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">多多</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://laddin.me/ansible-02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="多多">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Laddin'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ansible常规介绍</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-05T17:29:04+08:00">
+                2019-10-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ansible/" itemprop="url" rel="index">
+                    <span itemprop="name">ansible</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>ansible常规配置命令记录。<a id="more"></a></p>
+<h4 id="Ansible-主要组成部分功能说明"><a href="#Ansible-主要组成部分功能说明" class="headerlink" title="Ansible 主要组成部分功能说明"></a>Ansible 主要组成部分功能说明</h4><ul>
+<li><p>PLAYBOOKS：任务剧本（任务集），编排定义Ansible任务集的配置文件，由Ansible顺序依次执行，通常是JSON格式的YML文件</p>
+</li>
+<li><p>INVENTORY：Ansible管理主机的清单/etc/anaible/hosts</p>
+</li>
+<li><p>MODULES：Ansible执行命令的功能模块，多数为内置的核心模块，也可自定义,ansible-doc –l 可查看模块</p>
+</li>
+<li><p>PLUGINS：模块功能的补充，如连接类型插件、循环插件、变量插件、过滤插件等，该功能不常用</p>
+</li>
+<li><p>API：供第三方程序调用的应用程序编程接口</p>
+</li>
+<li><p>ANSIBLE：组合INVENTORY、 API、 MODULES、PLUGINS的绿框，可以理解为是ansible命令工具，其为核心执行工具</p>
+</li>
+</ul>
+<h4 id="Ansible-配置文件详解"><a href="#Ansible-配置文件详解" class="headerlink" title="Ansible 配置文件详解"></a>Ansible 配置文件详解</h4><p>配置文件优先级如下：</p>
+<ul>
+<li><p>ANSIBLE_CONFIG （如果设置了环境变量）</p>
+</li>
+<li><p>ansible.cfg （在当前目录中）</p>
+</li>
+<li><p>~/.ansible.cfg （在主目录中）</p>
+</li>
+<li><p>/etc/ansible/ansible.cfg</p>
+</li>
+</ul>
+<hr>
+<table>
+<thead>
+<tr>
+<th>配置文件</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>/etc/ansible/ansible.cfg</td>
+<td>主配置文件，配置ansible工作特性</td>
+</tr>
+<tr>
+<td>/etc/ansible/hosts</td>
+<td>主机清单</td>
+</tr>
+<tr>
+<td>/etc/ansible/roles/</td>
+<td>存放角色的目录</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible</td>
+<td>主程序，临时命令执行工具</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible-doc</td>
+<td>查看配置文档，模块功能查看工具</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible-galaxy</td>
+<td>下载、上传优秀代码或Roles模块的官网平台</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible-playbook</td>
+<td>定制自动化任务，编排剧本工具</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible-pull</td>
+<td>远程执行命令的工具</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible-vault</td>
+<td>文件加密工具</td>
+</tr>
+<tr>
+<td>/usr/bin/ansible-console</td>
+<td>基于Console界面与用户交互的执行工具</td>
+</tr>
+</tbody></table>
+<hr>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>inventory = /etc/ansible/hosts</td>
+<td>主机列表配置文件</td>
+</tr>
+<tr>
+<td>library = /usr/share/my_modules/</td>
+<td>库文件存放目录</td>
+</tr>
+<tr>
+<td>remote_tmp = $HOME/.ansible/tmp</td>
+<td>临时py命令文件存放在远程主机目录</td>
+</tr>
+<tr>
+<td>local_tmp = $HOME/.ansible/tmp</td>
+<td>本机的临时命令执行目录</td>
+</tr>
+<tr>
+<td>forks = 5</td>
+<td>默认并发数</td>
+</tr>
+<tr>
+<td>sudo_user = root</td>
+<td>默认sudo 用户</td>
+</tr>
+<tr>
+<td>ask_sudo_pass = True</td>
+<td>每次执行ansible命令是否询问ssh密码</td>
+</tr>
+<tr>
+<td>ask_pass = True</td>
+<td>连接时提示输入ssh密码</td>
+</tr>
+<tr>
+<td>remote_port = 22</td>
+<td>远程主机的默认端口，生产中这个端口应该会不同</td>
+</tr>
+<tr>
+<td>log_path = /var/log/ansible.log</td>
+<td>日志</td>
+</tr>
+<tr>
+<td>host_key_checking = False</td>
+<td>检查对应服务器的host_key，建议取消注释。也就是不会弹出</td>
+</tr>
+</tbody></table>
+<h4 id="Inventory-参数说明"><a href="#Inventory-参数说明" class="headerlink" title="Inventory 参数说明"></a>Inventory 参数说明</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ansible_ssh_host</td>
+<td>远程主机名</td>
+</tr>
+<tr>
+<td>ansible_ssh_port</td>
+<td>ssh端口号</td>
+</tr>
+<tr>
+<td>ansible_ssh_user</td>
+<td>ssh 用户名</td>
+</tr>
+<tr>
+<td>ansible_ssh_pass</td>
+<td>ssh 密码</td>
+</tr>
+<tr>
+<td>ansible_sudo_pass</td>
+<td>sudo 密码</td>
+</tr>
+<tr>
+<td>ansible_sudo_exe (new in version 1.8)</td>
+<td>sudo 命令路径(适用于1.8及以上版本)</td>
+</tr>
+<tr>
+<td>ansible_connection</td>
+<td>与主机的连接类型</td>
+</tr>
+<tr>
+<td>ansible_ssh_private_key_file</td>
+<td>ssh 使用的私钥文件</td>
+</tr>
+<tr>
+<td>ansible_shell_type</td>
+<td>目标系统的shell类型</td>
+</tr>
+<tr>
+<td>ansible_python_interpreter</td>
+<td>目标主机的 python 路径</td>
+</tr>
+</tbody></table>
+<h4 id="Ansible-常用命令语法"><a href="#Ansible-常用命令语法" class="headerlink" title="Ansible 常用命令语法"></a>Ansible 常用命令语法</h4><ul>
+<li><p>ansible <host-pattern> [-m module_name] [options]</host-pattern></p>
+</li>
+<li><p>指令 匹配规则的主机清单 -m 模块名 选项</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>–version</td>
+<td>显示版本</td>
+</tr>
+<tr>
+<td>-a</td>
+<td>模块参数（如果有）</td>
+</tr>
+<tr>
+<td>-m module</td>
+<td>指定模块，默认为command</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>详细过程 –vv -vvv更详细</td>
+</tr>
+<tr>
+<td>–list-hosts</td>
+<td>显示主机列表，可简写–list</td>
+</tr>
+<tr>
+<td>-k, –ask-pass</td>
+<td>提示连接密码，默认Key验证</td>
+</tr>
+<tr>
+<td>-K，–ask-become-pass</td>
+<td>提示使用sudo密码</td>
+</tr>
+<tr>
+<td>-C, –check</td>
+<td>检查，并不执行</td>
+</tr>
+<tr>
+<td>-T, –timeout=TIMEOUT</td>
+<td>执行命令的超时时间，默认10s</td>
+</tr>
+<tr>
+<td>-u, –user=REMOTE_USER</td>
+<td>执行远程执行的用户</td>
+</tr>
+<tr>
+<td>-U， SUDO_USER, –sudo-user</td>
+<td>指定sudu用户</td>
+</tr>
+<tr>
+<td>-b, –become</td>
+<td>代替旧版的sudo 切换</td>
+</tr>
+</tbody></table>
+<h4 id="Ansible-常用参数"><a href="#Ansible-常用参数" class="headerlink" title="Ansible 常用参数"></a>Ansible 常用参数</h4><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>功能</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ping</td>
+<td>尝试连接到主机，验证并返回pong成功</td>
+<td>ansible all -m ping</td>
+</tr>
+<tr>
+<td>command</td>
+<td>在远程节点上执行命令</td>
+<td>ansible all -m command -a ‘echo $PATH’</td>
+</tr>
+<tr>
+<td>shell</td>
+<td>在远程节点上执行命令</td>
+<td>ansible all -m shell -a df</td>
+</tr>
+<tr>
+<td>script</td>
+<td>把脚本复制到远程节点后，在远程节点本地运行脚本</td>
+<td>ansible all -m script -a ‘./shell.sh’</td>
+</tr>
+<tr>
+<td>copy</td>
+<td>复制文件或目录到远程节点。默认会覆盖目标文件</td>
+<td>ansible all -m copy -a ‘src=/tmp/abc.txt  dest=/app backup=yes’<br>ansible all -m copy -a ‘src=/tmp/dir1  dest=/app’</td>
+</tr>
+<tr>
+<td>fetch</td>
+<td>从远程节点获取文件(只能是文件)到本地目录</td>
+<td>ansible all -m fetch -a ‘src=/var/log/messages dest=/app’</td>
+</tr>
+<tr>
+<td>file</td>
+<td>设置远程节点的文件的文件属性</td>
+<td>ansible all -m file -a ‘path=/tmp/abc.txt state=touch mode=0666 owner=ftp’<br> ansible all -m file -a ‘path=/tmp/abc state=directory mode=0666 owner=ftp’</td>
+</tr>
+<tr>
+<td>hostname</td>
+<td>设置远程节点主机名</td>
+<td>ansible all -m hostname -a ‘name=node1’</td>
+</tr>
+<tr>
+<td>cron</td>
+<td>管理计划任务</td>
+<td>ansible all -m cron -a ‘name=”test” minute=*/2 job=”/etc/init.d/tomcat restart”‘<br>ansible all -m cron -a ‘state=absent name=test’</td>
+</tr>
+<tr>
+<td>yum</td>
+<td>使用yum包管理器来管理软件包</td>
+<td>ansible all -m yum -a ‘name=tree state=present’</td>
+</tr>
+<tr>
+<td>yum_repository</td>
+<td>配置管理yum源</td>
+<td>ansible all -m yum_repository -a ‘state=present name=epel enabled=yes gpgcheck=yes description=”Aliyun EPEL” baseurl=”http://…,http://…” gpgkey=”https://…”‘</td>
+</tr>
+<tr>
+<td>service</td>
+<td>配置管理服务</td>
+<td>ansible all -m service -a ‘name=httpd state=started’</td>
+</tr>
+<tr>
+<td>setup</td>
+<td>收集关于远程主机的信息</td>
+<td>ansible all -m setup -a ‘filter=ansible_distribution_version’ –tree /tmp/</td>
+</tr>
+<tr>
+<td>user</td>
+<td>管理用户账号</td>
+<td>ansible all -m user -a ‘name=hunk4 shell=/sbin/nologin system=yes comment=”name is hunk”‘<br>ansible all -m user -a ‘name=hunk3 state=absent remove=yes’</td>
+</tr>
+<tr>
+<td>group</td>
+<td>添加组或删除组</td>
+<td>groupadd, groupdel, groupmod</td>
+</tr>
+<tr>
+<td>get_url</td>
+<td>从 HTTP, HTTPS, FTP 下载文件</td>
+<td>ansible all -m get_url -a ‘dest=/tmp/ url=”https://….”‘</td>
+</tr>
+<tr>
+<td>fail</td>
+<td>自定义消息失败</td>
+<td>默认返回 ‘Failed as requested from task’</td>
+</tr>
+<tr>
+<td>lineinfile</td>
+<td>替换一个文件中特定的行，或者使用一个反引用的正则表达式替换一个现有的行</td>
+<td></td>
+</tr>
+<tr>
+<td>replace</td>
+<td>替换一个文件中符合匹配的所有行，或者使用一个反引用的正则表达式替换所有的行</td>
+<td></td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ansible-01/" rel="next" title="ansible安装">
+                <i class="fa fa-chevron-left"></i> ansible安装
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ansible-03/" rel="prev" title="ansible-playbook">
+                ansible-playbook <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="多多" />
+          <p class="site-author-name" itemprop="name">多多</p>
+           
+              <p class="site-description motion-element" itemprop="description">活多觉少脾气好</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">104</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/laddin" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://wiki.laddin.me" target="_blank" title="Wiki">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Wiki
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Ansible-主要组成部分功能说明"><span class="nav-number">1.</span> <span class="nav-text">Ansible 主要组成部分功能说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ansible-配置文件详解"><span class="nav-number">2.</span> <span class="nav-text">Ansible 配置文件详解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Inventory-参数说明"><span class="nav-number">3.</span> <span class="nav-text">Inventory 参数说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ansible-常用命令语法"><span class="nav-number">4.</span> <span class="nav-text">Ansible 常用命令语法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ansible-常用参数"><span class="nav-number">5.</span> <span class="nav-text">Ansible 常用参数</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">多多</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="noopener">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

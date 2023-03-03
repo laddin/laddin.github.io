@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Linux, python, devops" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/:/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="centos7 只维护到2024年，把线上部分服务已经切换到阿里云的Alibaba Cloud Linux，这里有一个方便的漏洞升级操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="漏洞批量更新">
+<meta property="og:url" content="http://laddin.me/upgrade/index.html">
+<meta property="og:site_name" content="Laddin&#39;Blog">
+<meta property="og:description" content="centos7 只维护到2024年，把线上部分服务已经切换到阿里云的Alibaba Cloud Linux，这里有一个方便的漏洞升级操作">
+<meta property="article:published_time" content="2022-09-15T02:54:25.000Z">
+<meta property="article:modified_time" content="2022-11-07T11:42:03.409Z">
+<meta property="article:author" content="多多">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"always","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://laddin.me/upgrade/"/>
+
+
+
+
+
+  <title>漏洞批量更新 | Laddin'Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Laddin'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">多多</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://laddin.me/upgrade/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="多多">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Laddin'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">漏洞批量更新</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-09-15T10:54:25+08:00">
+                2022-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>centos7 只维护到2024年，把线上部分服务已经切换到阿里云的<code>Alibaba Cloud Linux</code>，这里有一个方便的漏洞升级操作<a id="more"></a>，如下演示。<a href="https://help.aliyun.com/document_detail/161297.html" target="_blank" rel="noopener">官网资料</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">Critical：高风险，必须更新</span></span><br><span class="line"><span class="meta">#</span><span class="bash">Important：较高风险，强烈建议更新</span></span><br><span class="line"><span class="meta">#</span><span class="bash">Moderate：中等风险，推荐更新</span></span><br><span class="line"><span class="meta">#</span><span class="bash">Low：低风险，可选更新</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Alibaba Cloud Linux 2</span></span><br><span class="line">yum upgrade --security --secseverity=Critical,Important,Moderate</span><br><span class="line"><span class="meta">#</span><span class="bash"> Alibaba Cloud Linux 3</span></span><br><span class="line">yum upgrade --security --secseverity=&#123;Critical,Important,Moderate&#125;</span><br><span class="line">----------------------------------------------------------------</span><br><span class="line">Loaded plugins: fastestmirror, langpacks, update-motd</span><br><span class="line">Loading mirror speeds from cached hostfile</span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> systemd-219-78.4.al7.3.x86_64 from @anaconda removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> libcom_err-devel-1.43.5-8.2.al7.x86_64 from @plus removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> libstoragemgmt-1.8.1-2.1.al7.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> systemd-sysv-219-78.4.al7.3.x86_64 from @anaconda removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> 14:libpcap-devel-1.5.3-13.1.al7.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> gtk-update-icon-cache-3.22.30-8.1.al7.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> 14:libpcap-1.5.3-13.1.al7.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> 14:libpcap-devel-1.5.3-12.1.al7.x86_64 from @updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> libss-1.43.5-8.3.al7.x86_64 from plus removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> kbd-legacy-1.15.5-15.1.al7.noarch from @anaconda removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> libsss_nss_idmap-1.16.5-10.1.al7.13.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> libcom_err-1.43.5-8.2.al7.x86_64 from @anaconda removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> ImageMagick-devel-6.9.10.68-6.1.al7.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> bash-4.2.46-35.1.al7.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> libcom_err-1.43.5-8.3.al7.x86_64 from plus removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> 1:openssl-devel-1.0.2k-25.1.al7.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> kpartx-0.4.9-135.1.al7.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> alinux-release-2.1903-9.al7.x86_64 from @anaconda removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> e2fsprogs-libs-1.43.5-8.3.al7.x86_64 from plus removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> libsss_nss_idmap-1.16.5-10.1.al7.12.x86_64 from @updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> tzdata-java-2022c-1.1.al7.noarch from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> kbd-1.15.5-15.1.al7.x86_64 from @anaconda removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> 1:nfs-utils-1.3.0-0.68.1.al7.2.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> tzdata-2022c-1.1.al7.noarch from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> systemd-sysv-219-78.5.al7.3.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> libstoragemgmt-1.8.1-1.1.al7.x86_64 from @anaconda removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> msodbcsql17-17.9.1.1-1.x86_64 from @packages-microsoft-com-prod removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> 1:openssl-1.0.2k-23.1.al7.x86_64 from @updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> 1:nfs-utils-1.3.0-0.68.1.al7.x86_64 from @updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> e2fsprogs-1.43.5-8.2.al7.x86_64 from @anaconda removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> systemd-python-219-78.5.al7.3.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> epel-release-7-13.noarch from @epel removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> ImageMagick-devel-6.9.10.68-5.1.al7.x86_64 from @updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> alinux-release-2.1903-11.al7.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> libstoragemgmt-python-clibs-1.8.1-1.1.al7.x86_64 from @anaconda removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> libstoragemgmt-python-clibs-1.8.1-2.1.al7.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> sos-3.9-5.1.al7.4.noarch from @updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> kbd-1.15.5-16.1.al7.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> kbd-legacy-1.15.5-16.1.al7.noarch from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> kpartx-0.4.9-134.1.al7.x86_64 from @anaconda removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> ImageMagick-6.9.10.68-5.1.al7.x86_64 from @updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> bash-4.2.46-34.1.al7.x86_64 from @anaconda removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> e2fsprogs-libs-1.43.5-8.2.al7.x86_64 from @anaconda removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> epel-release-7-14.noarch from epel removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> kbd-misc-1.15.5-16.1.al7.noarch from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> systemd-libs-219-78.5.al7.3.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> sos-3.9-5.1.al7.11.noarch from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> sssd-client-1.16.5-10.1.al7.12.x86_64 from @updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> 14:libpcap-1.5.3-12.1.al7.x86_64 from @anaconda removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> libsss_idmap-1.16.5-10.1.al7.12.x86_64 from @updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> mssql-tools-17.9.1.1-1.x86_64 from @packages-microsoft-com-prod removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> gtk-update-icon-cache-3.22.30-6.1.al7.x86_64 from @updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> ca-certificates-2021.2.50-72.1.al7.noarch from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> libss-1.43.5-8.2.al7.x86_64 from @anaconda removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> 2:microcode_ctl-2.1-73.13.1.al7.x86_64 from @updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> mdadm-4.1-7.1.al7.x86_64 from @updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> libcom_err-devel-1.43.5-8.3.al7.x86_64 from plus removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> kbd-misc-1.15.5-15.1.al7.noarch from @anaconda removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> sssd-client-1.16.5-10.1.al7.13.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> libsss_idmap-1.16.5-10.1.al7.13.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> 1:openssl-devel-1.0.2k-23.1.al7.x86_64 from @updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> 1:java-1.8.0-openjdk-headless-1.8.0.332.b09-1.1.al7.x86_64 from @updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> mdadm-4.1-9.1.al7.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> 1:openssl-libs-1.0.2k-25.1.al7.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> systemd-219-78.5.al7.3.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> 1:java-1.8.0-openjdk-1.8.0.332.b09-1.1.al7.x86_64 from @updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> ca-certificates-2020.2.41-70.0.1.al7.noarch from @anaconda removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> 1:java-1.8.0-openjdk-1.8.0.342.b07-1.1.al7.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> mssql-tools-17.10.1.1-1.x86_64 from packages-microsoft-com-prod removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> systemd-python-219-78.4.al7.3.x86_64 from @anaconda removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> libstoragemgmt-python-1.8.1-1.1.al7.noarch from @anaconda removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> libstoragemgmt-python-1.8.1-2.1.al7.noarch from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> 1:java-1.8.0-openjdk-headless-1.8.0.342.b07-1.1.al7.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> tzdata-java-2021e-1.1.al7.noarch from @updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> ImageMagick-6.9.10.68-6.1.al7.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> 2:microcode_ctl-2.1-73.14.1.al7.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> 1:openssl-1.0.2k-25.1.al7.x86_64 from updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> tzdata-2021a-1.1.al7.noarch from @updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> systemd-libs-219-78.4.al7.3.x86_64 from @anaconda removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> 1:openssl-libs-1.0.2k-23.1.al7.x86_64 from @updates removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> msodbcsql17-17.10.1.1-1.x86_64 from packages-microsoft-com-prod removed (updateinfo)</span></span><br><span class="line"><span class="meta"> --&gt;</span><span class="bash"> e2fsprogs-1.43.5-8.3.al7.x86_64 from plus removed (updateinfo)</span></span><br><span class="line">16 package(s) needed (+0 related) for security, out of 57 available</span><br><span class="line">Resolving Dependencies</span><br><span class="line"><span class="meta">--&gt;</span><span class="bash"> Running transaction check</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package gzip.x86_64 0:1.5-10.1.al7 will be updated</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package gzip.x86_64 0:1.5-11.1.al7 will be an update</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package kernel.x86_64 0:4.19.91-26.3.al7 will be installed</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package kernel-devel.x86_64 0:4.19.91-26.3.al7 will be installed</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package kernel-headers.x86_64 0:4.19.91-25.8.al7 will be updated</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package kernel-headers.x86_64 0:4.19.91-26.3.al7 will be an update</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package kernel-tools.x86_64 0:4.19.91-25.8.al7 will be updated</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package kernel-tools.x86_64 0:4.19.91-26.3.al7 will be an update</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package kernel-tools-libs.x86_64 0:4.19.91-25.8.al7 will be updated</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package kernel-tools-libs.x86_64 0:4.19.91-26.3.al7 will be an update</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package oniguruma.x86_64 0:6.8.2-1.el7 will be updated</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package oniguruma.x86_64 0:6.8.2-2.el7 will be an update</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package oniguruma-devel.x86_64 0:6.8.2-1.el7 will be updated</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package oniguruma-devel.x86_64 0:6.8.2-2.el7 will be an update</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package python.x86_64 0:2.7.5-90.2.al7 will be updated</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package python.x86_64 0:2.7.5-92.1.al7 will be an update</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package python-libs.x86_64 0:2.7.5-90.2.al7 will be updated</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package python-libs.x86_64 0:2.7.5-92.1.al7 will be an update</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package python-perf.x86_64 0:4.19.91-25.8.al7 will be updated</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package python-perf.x86_64 0:4.19.91-26.3.al7 will be an update</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package rsync.x86_64 0:3.1.2-10.1.al7 will be updated</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package rsync.x86_64 0:3.1.2-11.1.al7 will be an update</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package rsyslog.x86_64 0:8.24.0-57.1.al7 will be updated</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package rsyslog.x86_64 0:8.24.0-57.1.al7.3 will be an update</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package xz.x86_64 0:5.2.2-1.1.al7 will be updated</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package xz.x86_64 0:5.2.2-2.1.al7 will be an update</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package xz-devel.x86_64 0:5.2.2-1.1.al7 will be updated</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package xz-devel.x86_64 0:5.2.2-2.1.al7 will be an update</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package xz-libs.x86_64 0:5.2.2-1.1.al7 will be updated</span></span><br><span class="line"><span class="meta">---&gt;</span><span class="bash"> Package xz-libs.x86_64 0:5.2.2-2.1.al7 will be an update</span></span><br><span class="line"><span class="meta">--&gt;</span><span class="bash"> Finished Dependency Resolution</span></span><br><span class="line"></span><br><span class="line">Dependencies Resolved</span><br><span class="line"></span><br><span class="line">============================================================================================================================================================</span><br><span class="line"> Package                                   Arch                           Version                                     Repository                       Size</span><br><span class="line">============================================================================================================================================================</span><br><span class="line">Installing:</span><br><span class="line"> kernel                                    x86_64                         4.19.91-26.3.al7                            plus                             44 M</span><br><span class="line"> kernel-devel                              x86_64                         4.19.91-26.3.al7                            plus                             12 M</span><br><span class="line">Updating:</span><br><span class="line"> gzip                                      x86_64                         1.5-11.1.al7                                updates                         130 k</span><br><span class="line"> kernel-headers                            x86_64                         4.19.91-26.3.al7                            plus                            1.4 M</span><br><span class="line"> kernel-tools                              x86_64                         4.19.91-26.3.al7                            plus                            320 k</span><br><span class="line"> kernel-tools-libs                         x86_64                         4.19.91-26.3.al7                            plus                            218 k</span><br><span class="line"> oniguruma                                 x86_64                         6.8.2-2.el7                                 epel                            181 k</span><br><span class="line"> oniguruma-devel                           x86_64                         6.8.2-2.el7                                 epel                             41 k</span><br><span class="line"> python                                    x86_64                         2.7.5-92.1.al7                              updates                          96 k</span><br><span class="line"> python-libs                               x86_64                         2.7.5-92.1.al7                              updates                         5.6 M</span><br><span class="line"> python-perf                               x86_64                         4.19.91-26.3.al7                            plus                            314 k</span><br><span class="line"> rsync                                     x86_64                         3.1.2-11.1.al7                              updates                         408 k</span><br><span class="line"> rsyslog                                   x86_64                         8.24.0-57.1.al7.3                           updates                         622 k</span><br><span class="line"> xz                                        x86_64                         5.2.2-2.1.al7                               updates                         229 k</span><br><span class="line"> xz-devel                                  x86_64                         5.2.2-2.1.al7                               updates                          46 k</span><br><span class="line"> xz-libs                                   x86_64                         5.2.2-2.1.al7                               updates                         103 k</span><br><span class="line"></span><br><span class="line">Transaction Summary</span><br><span class="line">============================================================================================================================================================</span><br><span class="line">Install   2 Packages</span><br><span class="line">Upgrade  14 Packages</span><br><span class="line"></span><br><span class="line">Total download size: 65 M</span><br><span class="line">Is this ok [y/d/N]: y</span><br><span class="line">Downloading packages:</span><br><span class="line">Delta RPMs disabled because /usr/bin/applydeltarpm not installed.</span><br><span class="line">(1/16): gzip-1.5-11.1.al7.x86_64.rpm                                                                                                 | 130 kB  00:00:00     </span><br><span class="line">(2/16): kernel-devel-4.19.91-26.3.al7.x86_64.rpm                                                                                     |  12 MB  00:00:00     </span><br><span class="line">(3/16): kernel-headers-4.19.91-26.3.al7.x86_64.rpm                                                                                   | 1.4 MB  00:00:00     </span><br><span class="line">(4/16): kernel-tools-4.19.91-26.3.al7.x86_64.rpm                                                                                     | 320 kB  00:00:00     </span><br><span class="line">(5/16): kernel-tools-libs-4.19.91-26.3.al7.x86_64.rpm                                                                                | 218 kB  00:00:00     </span><br><span class="line">(6/16): oniguruma-devel-6.8.2-2.el7.x86_64.rpm                                                                                       |  41 kB  00:00:00     </span><br><span class="line">(7/16): python-libs-2.7.5-92.1.al7.x86_64.rpm                                                                                        | 5.6 MB  00:00:00     </span><br><span class="line">(8/16): python-2.7.5-92.1.al7.x86_64.rpm                                                                                             |  96 kB  00:00:00     </span><br><span class="line">(9/16): oniguruma-6.8.2-2.el7.x86_64.rpm                                                                                             | 181 kB  00:00:00     </span><br><span class="line">(10/16): rsync-3.1.2-11.1.al7.x86_64.rpm                                                                                             | 408 kB  00:00:00     </span><br><span class="line">(11/16): python-perf-4.19.91-26.3.al7.x86_64.rpm                                                                                     | 314 kB  00:00:00     </span><br><span class="line">(12/16): rsyslog-8.24.0-57.1.al7.3.x86_64.rpm                                                                                        | 622 kB  00:00:00     </span><br><span class="line">(13/16): xz-5.2.2-2.1.al7.x86_64.rpm                                                                                                 | 229 kB  00:00:00     </span><br><span class="line">(14/16): xz-devel-5.2.2-2.1.al7.x86_64.rpm                                                                                           |  46 kB  00:00:00     </span><br><span class="line">(15/16): xz-libs-5.2.2-2.1.al7.x86_64.rpm                                                                                            | 103 kB  00:00:00     </span><br><span class="line">(16/16): kernel-4.19.91-26.3.al7.x86_64.rpm                                                                                          |  44 MB  00:00:01     </span><br><span class="line">------------------------------------------------------------------------------------------------------------------------------------------------------------</span><br><span class="line">Total                                                                                                                        37 MB/s |  65 MB  00:00:01     </span><br><span class="line">Running transaction check</span><br><span class="line">Running transaction test</span><br><span class="line">Transaction test succeeded</span><br><span class="line">Running transaction</span><br><span class="line">  Updating   : python-libs-2.7.5-92.1.al7.x86_64                                                                                                       1/30 </span><br><span class="line">/sbin/ldconfig: /usr/local/lib64/libstdc++.so.6.0.24-gdb.py is not an ELF file - it has the wrong magic bytes at the start.</span><br><span class="line"></span><br><span class="line">  Updating   : xz-libs-5.2.2-2.1.al7.x86_64                                                                                                            2/30 </span><br><span class="line">/sbin/ldconfig: /usr/local/lib64/libstdc++.so.6.0.24-gdb.py is not an ELF file - it has the wrong magic bytes at the start.</span><br><span class="line"></span><br><span class="line">  Updating   : python-2.7.5-92.1.al7.x86_64                                                                                                            3/30 </span><br><span class="line">  Updating   : oniguruma-6.8.2-2.el7.x86_64                                                                                                            4/30 </span><br><span class="line">/sbin/ldconfig: /usr/local/lib64/libstdc++.so.6.0.24-gdb.py is not an ELF file - it has the wrong magic bytes at the start.</span><br><span class="line"></span><br><span class="line">  Updating   : kernel-tools-libs-4.19.91-26.3.al7.x86_64                                                                                               5/30 </span><br><span class="line">  Updating   : kernel-tools-4.19.91-26.3.al7.x86_64                                                                                                    6/30 </span><br><span class="line">/sbin/ldconfig: /usr/local/lib64/libstdc++.so.6.0.24-gdb.py is not an ELF file - it has the wrong magic bytes at the start.</span><br><span class="line"></span><br><span class="line">  Updating   : oniguruma-devel-6.8.2-2.el7.x86_64                                                                                                      7/30 </span><br><span class="line">  Updating   : python-perf-4.19.91-26.3.al7.x86_64                                                                                                     8/30 </span><br><span class="line">  Updating   : xz-5.2.2-2.1.al7.x86_64                                                                                                                 9/30 </span><br><span class="line">  Updating   : xz-devel-5.2.2-2.1.al7.x86_64                                                                                                          10/30 </span><br><span class="line">  Updating   : kernel-headers-4.19.91-26.3.al7.x86_64                                                                                                 11/30 </span><br><span class="line">  Installing : kernel-4.19.91-26.3.al7.x86_64                                                                                                         12/30 </span><br><span class="line">  Updating   : rsyslog-8.24.0-57.1.al7.3.x86_64                                                                                                       13/30 </span><br><span class="line">  Installing : kernel-devel-4.19.91-26.3.al7.x86_64                                                                                                   14/30 </span><br><span class="line">  Updating   : rsync-3.1.2-11.1.al7.x86_64                                                                                                            15/30 </span><br><span class="line">  Updating   : gzip-1.5-11.1.al7.x86_64                                                                                                               16/30 </span><br><span class="line">  Cleanup    : oniguruma-devel-6.8.2-1.el7.x86_64                                                                                                     17/30 </span><br><span class="line">  Cleanup    : xz-devel-5.2.2-1.1.al7.x86_64                                                                                                          18/30 </span><br><span class="line">  Cleanup    : python-perf-4.19.91-25.8.al7.x86_64                                                                                                    19/30 </span><br><span class="line">  Cleanup    : python-2.7.5-90.2.al7.x86_64                                                                                                           20/30 </span><br><span class="line">  Cleanup    : kernel-tools-4.19.91-25.8.al7.x86_64                                                                                                   21/30 </span><br><span class="line">/sbin/ldconfig: /usr/local/lib64/libstdc++.so.6.0.24-gdb.py is not an ELF file - it has the wrong magic bytes at the start.</span><br><span class="line"></span><br><span class="line">  Cleanup    : xz-5.2.2-1.1.al7.x86_64                                                                                                                22/30 </span><br><span class="line">  Cleanup    : kernel-headers-4.19.91-25.8.al7.x86_64                                                                                                 23/30 </span><br><span class="line">  Cleanup    : xz-libs-5.2.2-1.1.al7.x86_64                                                                                                           24/30 </span><br><span class="line">/sbin/ldconfig: /usr/local/lib64/libstdc++.so.6.0.24-gdb.py is not an ELF file - it has the wrong magic bytes at the start.</span><br><span class="line"></span><br><span class="line">  Cleanup    : kernel-tools-libs-4.19.91-25.8.al7.x86_64                                                                                              25/30 </span><br><span class="line">  Cleanup    : python-libs-2.7.5-90.2.al7.x86_64                                                                                                      26/30 </span><br><span class="line">/sbin/ldconfig: /usr/local/lib64/libstdc++.so.6.0.24-gdb.py is not an ELF file - it has the wrong magic bytes at the start.</span><br><span class="line"></span><br><span class="line">  Cleanup    : oniguruma-6.8.2-1.el7.x86_64                                                                                                           27/30 </span><br><span class="line">/sbin/ldconfig: /usr/local/lib64/libstdc++.so.6.0.24-gdb.py is not an ELF file - it has the wrong magic bytes at the start.</span><br><span class="line"></span><br><span class="line">  Cleanup    : rsyslog-8.24.0-57.1.al7.x86_64                                                                                                         28/30 </span><br><span class="line">  Cleanup    : rsync-3.1.2-10.1.al7.x86_64                                                                                                            29/30 </span><br><span class="line">  Cleanup    : gzip-1.5-10.1.al7.x86_64                                                                                                               30/30 </span><br><span class="line">  Verifying  : xz-5.2.2-2.1.al7.x86_64                                                                                                                 1/30 </span><br><span class="line">  Verifying  : kernel-tools-4.19.91-26.3.al7.x86_64                                                                                                    2/30 </span><br><span class="line">  Verifying  : gzip-1.5-11.1.al7.x86_64                                                                                                                3/30 </span><br><span class="line">  Verifying  : xz-devel-5.2.2-2.1.al7.x86_64                                                                                                           4/30 </span><br><span class="line">  Verifying  : oniguruma-devel-6.8.2-2.el7.x86_64                                                                                                      5/30 </span><br><span class="line">  Verifying  : python-2.7.5-92.1.al7.x86_64                                                                                                            6/30 </span><br><span class="line">  Verifying  : rsync-3.1.2-11.1.al7.x86_64                                                                                                             7/30 </span><br><span class="line">  Verifying  : xz-libs-5.2.2-2.1.al7.x86_64                                                                                                            8/30 </span><br><span class="line">  Verifying  : kernel-tools-libs-4.19.91-26.3.al7.x86_64                                                                                               9/30 </span><br><span class="line">  Verifying  : kernel-devel-4.19.91-26.3.al7.x86_64                                                                                                   10/30 </span><br><span class="line">  Verifying  : python-libs-2.7.5-92.1.al7.x86_64                                                                                                      11/30 </span><br><span class="line">  Verifying  : rsyslog-8.24.0-57.1.al7.3.x86_64                                                                                                       12/30 </span><br><span class="line">  Verifying  : python-perf-4.19.91-26.3.al7.x86_64                                                                                                    13/30 </span><br><span class="line">  Verifying  : oniguruma-6.8.2-2.el7.x86_64                                                                                                           14/30 </span><br><span class="line">  Verifying  : kernel-4.19.91-26.3.al7.x86_64                                                                                                         15/30 </span><br><span class="line">  Verifying  : kernel-headers-4.19.91-26.3.al7.x86_64                                                                                                 16/30 </span><br><span class="line">  Verifying  : python-libs-2.7.5-90.2.al7.x86_64                                                                                                      17/30 </span><br><span class="line">  Verifying  : gzip-1.5-10.1.al7.x86_64                                                                                                               18/30 </span><br><span class="line">  Verifying  : xz-5.2.2-1.1.al7.x86_64                                                                                                                19/30 </span><br><span class="line">  Verifying  : kernel-tools-4.19.91-25.8.al7.x86_64                                                                                                   20/30 </span><br><span class="line">  Verifying  : xz-devel-5.2.2-1.1.al7.x86_64                                                                                                          21/30 </span><br><span class="line">  Verifying  : kernel-headers-4.19.91-25.8.al7.x86_64                                                                                                 22/30 </span><br><span class="line">  Verifying  : python-perf-4.19.91-25.8.al7.x86_64                                                                                                    23/30 </span><br><span class="line">  Verifying  : oniguruma-devel-6.8.2-1.el7.x86_64                                                                                                     24/30 </span><br><span class="line">  Verifying  : xz-libs-5.2.2-1.1.al7.x86_64                                                                                                           25/30 </span><br><span class="line">  Verifying  : rsync-3.1.2-10.1.al7.x86_64                                                                                                            26/30 </span><br><span class="line">  Verifying  : rsyslog-8.24.0-57.1.al7.x86_64                                                                                                         27/30 </span><br><span class="line">  Verifying  : python-2.7.5-90.2.al7.x86_64                                                                                                           28/30 </span><br><span class="line">  Verifying  : kernel-tools-libs-4.19.91-25.8.al7.x86_64                                                                                              29/30 </span><br><span class="line">  Verifying  : oniguruma-6.8.2-1.el7.x86_64                                                                                                           30/30 </span><br><span class="line"></span><br><span class="line">Installed:</span><br><span class="line">  kernel.x86_64 0:4.19.91-26.3.al7                                          kernel-devel.x86_64 0:4.19.91-26.3.al7                                         </span><br><span class="line"></span><br><span class="line">Updated:</span><br><span class="line">  gzip.x86_64 0:1.5-11.1.al7                            kernel-headers.x86_64 0:4.19.91-26.3.al7           kernel-tools.x86_64 0:4.19.91-26.3.al7          </span><br><span class="line">  kernel-tools-libs.x86_64 0:4.19.91-26.3.al7           oniguruma.x86_64 0:6.8.2-2.el7                     oniguruma-devel.x86_64 0:6.8.2-2.el7            </span><br><span class="line">  python.x86_64 0:2.7.5-92.1.al7                        python-libs.x86_64 0:2.7.5-92.1.al7                python-perf.x86_64 0:4.19.91-26.3.al7           </span><br><span class="line">  rsync.x86_64 0:3.1.2-11.1.al7                         rsyslog.x86_64 0:8.24.0-57.1.al7.3                 xz.x86_64 0:5.2.2-2.1.al7                       </span><br><span class="line">  xz-devel.x86_64 0:5.2.2-2.1.al7                       xz-libs.x86_64 0:5.2.2-2.1.al7                    </span><br><span class="line"></span><br><span class="line">Complete!</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/fdisk/" rel="next" title="fdisk 对硬盘扩容">
+                <i class="fa fa-chevron-left"></i> fdisk 对硬盘扩容
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/err1020/" rel="prev" title="docker pull 异常">
+                docker pull 异常 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="多多" />
+          <p class="site-author-name" itemprop="name">多多</p>
+           
+              <p class="site-description motion-element" itemprop="description">活多觉少脾气好</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">104</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/laddin" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://wiki.laddin.me" target="_blank" title="Wiki">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Wiki
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">多多</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="noopener">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

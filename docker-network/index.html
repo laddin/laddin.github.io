@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Linux, python, devops" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/:/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="记录docker网络。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker-network">
+<meta property="og:url" content="http://laddin.me/docker-network/index.html">
+<meta property="og:site_name" content="Laddin&#39;Blog">
+<meta property="og:description" content="记录docker网络。">
+<meta property="og:image" content="http://laddin.me/docker-network/2-1.png">
+<meta property="og:image" content="http://laddin.me/docker-network/3-1.png">
+<meta property="og:image" content="http://laddin.me/docker-network/3-2.png">
+<meta property="article:published_time" content="2020-04-09T18:44:49.000Z">
+<meta property="article:modified_time" content="2020-04-10T07:51:16.000Z">
+<meta property="article:author" content="多多">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://laddin.me/docker-network/2-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"always","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://laddin.me/docker-network/"/>
+
+
+
+
+
+  <title>docker-network | Laddin'Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Laddin'Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">多多</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://laddin.me/docker-network/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="多多">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Laddin'Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">docker-network</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-10T02:44:49+08:00">
+                2020-04-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/docker/" itemprop="url" rel="index">
+                    <span itemprop="name">docker</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>记录docker网络。<a id="more"></a></p>
+<h4 id="网络模式"><a href="#网络模式" class="headerlink" title="网络模式"></a>网络模式</h4><p>Docker中的网络主要解决容器与容器、容器与外部网络、外部网络与容器之间的相互通信的问题，默认情况下，Docker使用网桥（bridge）+NAT的通信模式。docker网络大致可以分为以下5种。</p>
+<img src="/docker-network/2-1.png" class>
+
+<h5 id="Bridge模式"><a href="#Bridge模式" class="headerlink" title="Bridge模式"></a>Bridge模式</h5><p>Bridge桥接模式的实现步骤主要如下：</p>
+<ul>
+<li><p>Docker Daemon利用veth pair技术，在宿主机上创建两个虚拟网络接口设备，假设为veth0和veth1。而veth pair技术的特性可以保证无论哪一个veth接收到网络报文，都会将报文传输给另一方。</p>
+</li>
+<li><p>Docker Daemon将veth0附加到Docker Daemon创建的docker0网桥上。保证宿主机的网络报文可以发往veth0。</p>
+</li>
+<li><p>Docker Daemon将veth1添加到Docker Container所属的namespace下，并被改名为eth0。如此一来，保证宿主机的网络报文若发往veth0，则立即会被eth0接收，实现宿主机到Docker Container网络的联通性；同时，也保证Docker Container单独使用eth0，实现容器网络环境的隔离性。</p>
+</li>
+</ul>
+<hr>
+<h5 id="Host模式"><a href="#Host模式" class="headerlink" title="Host模式"></a>Host模式</h5><p>该模式将禁用Docker容器的网络隔离。因为容器共享了宿主机的网络命名空间，直接暴露在公共网络中。</p>
+<p>优势：</p>
+<ul>
+<li>可以直接使用宿主机的IP地址与外界进行通信，若宿主机的eth0是一个公有IP，那么容器也拥有这个公有IP。</li>
+<li>同时容器内服务的端口也可以使用宿主机的端口，无需额外进行NAT转换。</li>
+</ul>
+<p>缺陷：</p>
+<ul>
+<li>最明显的是Docker Container网络环境隔离性的弱化，即容器不再拥有隔离、独立的网络栈。</li>
+<li>使用host模式的Docker Container虽然可以让容器内部的服务和传统情况无差别、无改造的使用，但是由于网络隔离性的弱化，该容器会与宿主机共享竞争网络栈的使用；</li>
+<li>容器内部将不再拥有所有的端口资源，原因是部分端口资源已经被宿主机本身的服务占用，还有部分端口已经用以bridge网络模式容器的端口映射。</li>
+</ul>
+<hr>
+<h5 id="Container模式"><a href="#Container模式" class="headerlink" title="Container模式"></a>Container模式</h5><p>Docker Container的container网络模式在实现过程中，不涉及网桥，同样也不需要创建虚拟网卡veth pair。<br>  完成container网络模式的创建只需要两个步骤：</p>
+<ul>
+<li>查找container（即需要被共享网络环境的容器）的网络namespace；</li>
+<li>将新创建的Docker Container（也是需要共享其他网络的容器）的namespace，使用container的namespace</li>
+</ul>
+<p>优势：</p>
+<ul>
+<li>在这种模式下的Docker Container可以通过localhost来访问namespace下的其他容器，传输效率较高。</li>
+<li>虽然多个容器共享网络环境，但是多个容器形成的整体依然与宿主机以及其他容器形成网络隔离。</li>
+<li>这种模式还节约了一定数量的网络资源。</li>
+</ul>
+<p>缺陷：</p>
+<ul>
+<li>没有改善容器与宿主机以外世界通信的情况。</li>
+</ul>
+<hr>
+<h5 id="None模式"><a href="#None模式" class="headerlink" title="None模式"></a>None模式</h5><p>获取独立的network namespace，但不为容器进行任何网络配置，之后用户可以自己进行配置，容器内部只能使用loopback网络设备，不会再有其他的网络资源。none网络就是什么都没有的网络。挂在这个网络下的容器除了lo，没有其他任何网卡。容器run时，可以通过添加–network=none参数来指定该容器使用none网络。</p>
+<p>用途</p>
+<ul>
+<li>none网络应用与隔离场景，一些对安全性要求高并且不需要联网的应用可以使用none网络。</li>
+<li>比如某个容器的唯一用途是生成随机密码，就可以放到none网络中避免密码被窃取。</li>
+</ul>
+<hr>
+<h5 id="User-defined模式"><a href="#User-defined模式" class="headerlink" title="User-defined模式"></a>User-defined模式</h5><p>有时候可能用户需要指定自己的网络，以此来适应某些配置，如ip地址规划等等。自定义网桥，默认与bridge网络一样。docker提供三种user-defined网络驱动：bridge，overlay和macvlan。overlay和macvlan用于创建跨主机的网络</p>
+<p>创建bridge自定义网络</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker network create -d bridge --subnet 172.10.0.0/24 --gateway 172.10.0.1 my_net</span><br><span class="line">docker network inspect my_net</span><br><span class="line">docker run -it --network my_net --ip 172.10.0.3 busybox</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="网络访问原理"><a href="#网络访问原理" class="headerlink" title="网络访问原理"></a>网络访问原理</h4><p>Docker主要通过netfilter/iptables实现网络通信。iptables由netfilter和iptables组成，netfilter组件是Linux内核集成的信息包过滤系统，它维护一个信息包过滤表，这个表用于控制信息包过滤处理的规则集。而iptables只是一个在用户空间的工具，用于增删改查这个过滤表的规则。</p>
+<img src="/docker-network/3-1.png" class>
+
+<hr>
+<h5 id="容器访问外部"><a href="#容器访问外部" class="headerlink" title="容器访问外部"></a>容器访问外部</h5><p>容器默认是能访问外部网络的。通过NAT，docker实现了容器对外网（此处外网不一定是互联网）的访问。容器将数据报发送给容器网关，即docker0虚拟网桥，然后虚拟网桥再转发到实际的网卡并由实际网卡转发到物理网关，然后向目标进行层层转发直到抵达目标地址。</p>
+<hr>
+<h5 id="外部访问容器"><a href="#外部访问容器" class="headerlink" title="外部访问容器"></a>外部访问容器</h5><p>通过端口映射的方式实现外部网络访问容器，即通过-p参数实现将容器的端口映射到外部端口。容器通过将服务的实际端口在宿主机上进行端口映射，外部客户端通过连接宿主机的映射端口来访问容器内的服务。</p>
+<img src="/docker-network/3-2.png" class>
+
+<hr>
+<h5 id="容器之间互通"><a href="#容器之间互通" class="headerlink" title="容器之间互通"></a>容器之间互通</h5><p>如果是ip通信，保证2个容器在同一个网络环境即可，如果不在同一个网络环境，需要在其中一个容器添加另外一个容器的网络，命令如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network connect my_net httpd</span><br></pre></td></tr></table></figure>
+
+<p>connect命令能够为httpd容器再添加一个my_net网络（假设httpd原来只有默认的bridge网络）。这样前面创建的busybox容器就能与此次connect的httpd容器进行通信。</p>
+<hr>
+<h5 id="Docker-DNS-Server"><a href="#Docker-DNS-Server" class="headerlink" title="Docker DNS Server"></a>Docker DNS Server</h5><p>通过 IP 访问容器虽然满足了通信的需求，但还是不够灵活。因为我们在部署应用之前可能无法确定IP，部署之后再指定要访问的IP会比较麻烦。对于这个问题，可以通过docker自带的DNS服解决。从Docker 1.10 版本开始，docker daemon 实现了一个内嵌的DNS server，使容器可以直接通过“容器名”通信。方法很简单，只要在启动时用–name为容器命名就可以了。下面的命令启动两个容器bbox1和bbox2：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --network=my_net --name=bbox1 busybox</span><br><span class="line">docker run -it --network=my_net --name=bbox2 busybox</span><br></pre></td></tr></table></figure>
+
+<p>然后，bbox2就可以直接ping到bbox1了，但是使用docker DNS有个限制，只能在user-defined网络中使用。默认的bridge网络是无法使用的。</p>
+<hr>
+<h4 id="Docker-网络管理"><a href="#Docker-网络管理" class="headerlink" title="Docker 网络管理"></a>Docker 网络管理</h4><h5 id="网络空间虚拟化"><a href="#网络空间虚拟化" class="headerlink" title="网络空间虚拟化"></a>网络空间虚拟化</h5><p>Docker网络虚拟化是基于Linux下的网络命名空间（net namespace）实现的。使用ip netns命令，可以创建自己的虚拟网络环境。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ip netns add net0</span><br><span class="line">ip netns list</span><br><span class="line"><span class="meta">#</span><span class="bash">ip netns <span class="built_in">exec</span> 为net0网络空间中的网络设备eth0设置IP地址</span></span><br><span class="line">ip netns exec net0 ip addr add 172.17.42.99/16 dev eth0</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="网络设备虚拟化"><a href="#网络设备虚拟化" class="headerlink" title="网络设备虚拟化"></a>网络设备虚拟化</h5><p>网络接口和网络设备不一定是物理设备，也可以是虚拟设备，比如系统中的lo回环接口就是一个虚拟的网络接口。当我们在主机上启动Docker服务时，Docker引擎会在系统上创建一个名为docker0的虚拟以太网桥，并且为之随机分配一个未使用的私有IP地址和子网掩码。这个网桥将连接在它上面的所有容器组织成一个虚拟子网，并提供数据包转发功能。可以认为这个虚拟网桥是连接容器、容器和主机之间的路由中枢。Docker容器的网络互联依赖Linux底层的veth机制。每当启动一个容器时，Docker引擎会在主机上创建一个虚拟的以太网卡接口,并且会将这个接口一端放在主机网络空间并连接到docker0网桥，另一端放入Docker容器的网络空间中。容器退出时，虚拟网卡也会被销毁，下次启动容器时将创建一个新的虚拟网络接口并和docker0重新连接。</p>
+<hr>
+<h5 id="4种网络模式"><a href="#4种网络模式" class="headerlink" title="4种网络模式"></a>4种网络模式</h5><ul>
+<li><p>–net=bridge，容器默认的网络模式（连接到docker0网桥上）。可以通过DOCKER_OPTS=’-b=docker1’参数来指定默认网桥，docker1必须是合法的网桥。</p>
+</li>
+<li><p>–net=host，必会拥有自己的网络空间，与主机共享网络。</p>
+</li>
+<li><p>–net=container:NAME_or_ID，指定已经创建好的容器网络环境。两个容器将共享IP地址及端口等网络资源，可通过本地回环进行访问。</p>
+</li>
+<li><p>–net=none，不会配置网络环境，没有任何网络访问能力。可以手动配置一个网络环境。</p>
+</li>
+</ul>
+<hr>
+<h5 id="主机名配置"><a href="#主机名配置" class="headerlink" title="主机名配置"></a>主机名配置</h5><ul>
+<li>-h，修改容器/etc/hostname文件，同时也会修改/etc/hosts主机的ip对应的主机名</li>
+</ul>
+<hr>
+<h5 id="NDS配置"><a href="#NDS配置" class="headerlink" title="NDS配置"></a>NDS配置</h5><ul>
+<li>–dns=IP，修改容器/etc/resolv.conf文件</li>
+</ul>
+<hr>
+<h5 id="容器互联配置"><a href="#容器互联配置" class="headerlink" title="容器互联配置"></a>容器互联配置</h5><ul>
+<li><p>–icc=&lt;true|false&gt;,true使用ACCEPT策略进行配置。false使用DROP策略进行配置。该参数可通过DOCKER_OPTS=”–icc=(true|false)”来默认添加。</p>
+</li>
+<li><p>-P|–publish-all=&lt;true|false&gt;,Dockerfile文件中EXPOSE命令所指定的端口随机映射到主机49153~65535的端口范围。</p>
+</li>
+<li><p>-p SPEC|–publish=SPEC,指定可访问的端口。</p>
+</li>
+<li><p>–ip-forward=&lt;true|false&gt;,Docker服务每次启动时，都会修改/proc/sys/net/ipv4/ip_forward为1。如果是false，则不修改。大多数是true，以确保与外部网络以及其他容器正常通信。</p>
+</li>
+</ul>
+<hr>
+<h5 id="iptables"><a href="#iptables" class="headerlink" title="iptables"></a>iptables</h5><p>映射端口，直接操作防火墙对docker是无效的，根据官方文档应该对docker-user进行处理，官方文档对iptables的相关内容大致为：</p>
+<ul>
+<li>docker会把iptables规则写到DOCKER链里面 </li>
+<li>如果需要增加自己的规则，请写到DOCKER-USER链中操作</li>
+<li>默认docker是会自动管理iptables规则，我们可以选择关闭它，然后手动管理 （建议不要）</li>
+</ul>
+<p>初级方案：</p>
+<p> 手动创建容器网络，给容器指定网段，到时候开通规则直接网段间允许所有。</p>
+<p>升级方案：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 在表nat中创建新的链DOCKER-FILTER</span></span><br><span class="line">iptables -t nat -N DOCKER-FILTER</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 禁止所有nat表中的访问，然后将所有LOCAL流量导到DOCKER-FILTER中</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 当我们在一个内置的链中使用了RETURN，那么，默认的策略会应用到这个包上，PREROUTING默认的策略是ACCEPT，不过不用担心，因为只要它不去DOCKER链，依然是无法访问程序的</span></span><br><span class="line">iptables -t nat -I PREROUTING -m addrtype --dst-type LOCAL -j RETURN </span><br><span class="line">iptables -t nat -I PREROUTING -m addrtype --dst-type LOCAL -j DOCKER-FILTER</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 添加规则</span></span><br><span class="line">iptables -t nat -A DOCKER-FILTER -p tcp -m tcp --dport 80 -m state --state NEW,ESTABLISHED -j DOCKER</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>nat表中的允许的流量变成了PREROUTING -&gt; DOCKER-FILTER -&gt; DOCKER</li>
+<li>nat表中禁止的流量变成了PREROUTING -&gt; DOCKER-FILTER -&gt; 禁止。 </li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/try-files/" rel="next" title="nginx try_files">
+                <i class="fa fa-chevron-left"></i> nginx try_files
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/err0531/" rel="prev" title="ERR_SSL_VERSION_OR_CIPHER_MISMATCH">
+                ERR_SSL_VERSION_OR_CIPHER_MISMATCH <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="多多" />
+          <p class="site-author-name" itemprop="name">多多</p>
+           
+              <p class="site-description motion-element" itemprop="description">活多觉少脾气好</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">104</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/laddin" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://wiki.laddin.me" target="_blank" title="Wiki">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Wiki
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#网络模式"><span class="nav-number">1.</span> <span class="nav-text">网络模式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Bridge模式"><span class="nav-number">1.1.</span> <span class="nav-text">Bridge模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Host模式"><span class="nav-number">1.2.</span> <span class="nav-text">Host模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Container模式"><span class="nav-number">1.3.</span> <span class="nav-text">Container模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#None模式"><span class="nav-number">1.4.</span> <span class="nav-text">None模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#User-defined模式"><span class="nav-number">1.5.</span> <span class="nav-text">User-defined模式</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#网络访问原理"><span class="nav-number">2.</span> <span class="nav-text">网络访问原理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#容器访问外部"><span class="nav-number">2.1.</span> <span class="nav-text">容器访问外部</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#外部访问容器"><span class="nav-number">2.2.</span> <span class="nav-text">外部访问容器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#容器之间互通"><span class="nav-number">2.3.</span> <span class="nav-text">容器之间互通</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Docker-DNS-Server"><span class="nav-number">2.4.</span> <span class="nav-text">Docker DNS Server</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Docker-网络管理"><span class="nav-number">3.</span> <span class="nav-text">Docker 网络管理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#网络空间虚拟化"><span class="nav-number">3.1.</span> <span class="nav-text">网络空间虚拟化</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#网络设备虚拟化"><span class="nav-number">3.2.</span> <span class="nav-text">网络设备虚拟化</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4种网络模式"><span class="nav-number">3.3.</span> <span class="nav-text">4种网络模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#主机名配置"><span class="nav-number">3.4.</span> <span class="nav-text">主机名配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#NDS配置"><span class="nav-number">3.5.</span> <span class="nav-text">NDS配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#容器互联配置"><span class="nav-number">3.6.</span> <span class="nav-text">容器互联配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#iptables"><span class="nav-number">3.7.</span> <span class="nav-text">iptables</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">多多</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="noopener">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
