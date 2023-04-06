@@ -1478,7 +1478,7 @@ WantedBy=multi-user.target
 <li>阿里云专有网络开启ipv6</li>
 <li>交换机开启ipv6（有多个交换机，自己规划好网段）</li>
 <li>ECS网络信息开启ipv6，然后服务器运行<a href https: help.aliyun.com document_detail 108465.html"">脚本</a></li>
-<li>nginx 安装<code>--with-ipv6</code>模块，配置加上<code>listen [::]:80;</code></li>
+<li>nginx 安装<code>--with-ipv6</code>模块，配置加上<code>listen [::]:80;</code>和<code>listen [::]:443 ssl;</code></li>
 <li>安全组开启<code>源为::/0</code>的授权</li>
 <li>域名添加<code>AAAA</code>记录（cdn直接开启ipv6选项）</li>
 <li>专有网络购买IPV6网关，关联上</li>
