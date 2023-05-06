@@ -94,18 +94,16 @@
 
 
 
-<meta name="description" content="常用的普罗米修斯客户端">
+<meta name="description" content="阿里云默认是没有交换分区，需要手动开启一下">
 <meta property="og:type" content="article">
-<meta property="og:title" content="常用的exporter">
-<meta property="og:url" content="http://laddin.me/exporter/index.html">
+<meta property="og:title" content="swap设置">
+<meta property="og:url" content="http://laddin.me/swap01/index.html">
 <meta property="og:site_name" content="Laddin&#39;Blog">
-<meta property="og:description" content="常用的普罗米修斯客户端">
-<meta property="og:image" content="http://laddin.me/exporter/001.jpg">
-<meta property="article:published_time" content="2020-12-29T09:03:11.000Z">
-<meta property="article:modified_time" content="2020-12-29T10:17:06.189Z">
+<meta property="og:description" content="阿里云默认是没有交换分区，需要手动开启一下">
+<meta property="article:published_time" content="2020-05-06T01:51:27.000Z">
+<meta property="article:modified_time" content="2023-05-06T02:01:16.776Z">
 <meta property="article:author" content="多多">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://laddin.me/exporter/001.jpg">
 
 
 
@@ -134,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://laddin.me/exporter/"/>
+  <link rel="canonical" href="http://laddin.me/swap01/"/>
 
 
 
 
 
-  <title>常用的exporter | Laddin'Blog</title>
+  <title>swap设置 | Laddin'Blog</title>
   
 
 
@@ -297,7 +295,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://laddin.me/exporter/">
+    <link itemprop="mainEntityOfPage" href="http://laddin.me/swap01/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="多多">
@@ -314,7 +312,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">常用的exporter</h1>
+          <h1 class="post-title" itemprop="name headline">swap设置</h1>
         
 
         <div class="post-meta">
@@ -326,8 +324,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-12-29T17:03:11+08:00">
-                2020-12-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-06T09:51:27+08:00">
+                2020-05-06
               </time>
             
 
@@ -349,8 +347,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/prometheus/" itemprop="url" rel="index">
-                    <span itemprop="name">prometheus</span>
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
                   </a>
                 </span>
 
@@ -386,16 +384,8 @@
       
 
       
-        <p>常用的普罗米修斯客户端<a id="more"></a></p>
-<h4 id="zk"><a href="#zk" class="headerlink" title="zk"></a>zk</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/carlpett/zookeeper_exporter/releases/download/v1.1.0/zookeeper_exporter</span><br><span class="line"></span><br><span class="line">chmod +x  zookeeper_exporter</span><br><span class="line">mv zookeeper_exporter /usr/local/bin/</span><br><span class="line"></span><br><span class="line">vim  /usr/lib/systemd/system/zook_exporter.service</span><br><span class="line">--------------------------------------------------</span><br><span class="line">[Unit]</span><br><span class="line">Description=zook_exporter</span><br><span class="line">Documentation=https://github.com/carlpett/zookeeper_exporter</span><br><span class="line">After=network.target</span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">ExecStart=/usr/local/bin/zookeeper_exporter</span><br><span class="line">Restart=on-failure</span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl start zook_exporter.service</span><br><span class="line">systemctl enable zook_exporter.service</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">本机查看是否开启了9141端口，也可以用下面的命令验证</span></span><br><span class="line">curl localhost:9141/metrics</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">开启zk的4字命令</span></span><br><span class="line">yum  install  -y  nc</span><br><span class="line">echo "4lw.commands.whitelist=*"  &gt;&gt; /home/zk-3-5-8/conf/zoo.cfg</span><br><span class="line"></span><br><span class="line">/home/zk-3-5-8/bin/zkServer.sh restart</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">测试</span></span><br><span class="line">echo mntr | nc 127.0.0.1 2181</span><br></pre></td></tr></table></figure>
-
-<h4 id="mysql"><a href="#mysql" class="headerlink" title="mysql"></a>mysql</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/prometheus/mysqld_exporter/releases/download/v0.12.1/mysqld_exporter-0.12.1.linux-amd64.tar.gz</span><br><span class="line">tar xvf mysqld_exporter-0.12.1.linux-amd64.tar.gz  -C /usr/local/</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> mysql的监控账号</span></span><br><span class="line">vim /usr/local/mysqld_exporter-0.12.1.linux-amd64/conf/.192.168.1.30_3306.cnf</span><br><span class="line">-----------------------------------------------------------------------------</span><br><span class="line">[client]</span><br><span class="line">user=root</span><br><span class="line">password=root</span><br><span class="line">host=192.168.1.30</span><br><span class="line">port=3306</span><br><span class="line"></span><br><span class="line">vim  /usr/lib/systemd/system/mysqld1_exporter.service</span><br><span class="line">------------------------------------------------</span><br><span class="line">[Unit]</span><br><span class="line">Description=mysqld1_exporter</span><br><span class="line">After=network.target</span><br><span class="line">[Service]</span><br><span class="line">Type=simple</span><br><span class="line">ExecStart=/usr/local/mysqld_exporter-0.12.1.linux-amd64/mysqld_exporter --web.listen-address=192.168.1.26:9330 --config.my-cnf=/usr/local/mysqld_exporter-0.12.1.linux-amd64/conf/.192.168.1.30_3306.cnf --collect.auto_increment.columns --collect.binlog_size --collect.global_status --collect.global_variables --collect.info_schema.innodb_metrics --collect.info_schema.innodb_cmp --collect.info_schema.innodb_cmpmem --collect.info_schema.processlist --collect.info_schema.query_response_time --collect.info_schema.tables --collect.info_schema.tablestats --collect.info_schema.userstats --collect.perf_schema.eventswaits --collect.perf_schema.file_events --collect.perf_schema.indexiowaits --collect.perf_schema.tableiowaits --collect.perf_schema.tablelocks --collect.slave_status</span><br><span class="line">Restart=on-failure</span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">这里的192.168.1.26:9330 是本机开放9330端口 给prometheus提供数据</span></span><br><span class="line"></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl start mysqld1_exporter.service</span><br><span class="line">systemctl enable mysqld1_exporter.service</span><br></pre></td></tr></table></figure>
-
-<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><img src="/exporter/001.jpg" class>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">cat  requirements.txt</span><br><span class="line">---------------------</span><br><span class="line">prometheus_client==0.7.1</span><br><span class="line">flask==1.1.1</span><br><span class="line"></span><br><span class="line">curl http://192.168.122.126:31672/metrics</span><br><span class="line"><span class="meta">#</span><span class="bash"> HELP server_port_up Api response stats is:</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> TYPE server_port_up gauge</span></span><br><span class="line">server_port_up&#123;host="192.168.122.129",port="6379",sertype="redis_129"&#125; 1.0</span><br><span class="line">server_port_up&#123;host="192.168.122.130",port="3307",sertype="mysql_ck"&#125; 1.0</span><br><span class="line">server_port_up&#123;host="192.168.122.130",port="3306",sertype="mysql_ck"&#125; 1.0</span><br><span class="line">server_port_up&#123;host="127.0.0.1",port="9200",sertype="es_status"&#125; 0.0</span><br><span class="line">server_port_up&#123;host="192.168.122.131",port="6379",sertype="redis_131"&#125; 1.0</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding=utf-8</span></span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> prometheus_client</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> prometheus_client <span class="keyword">import</span> Gauge</span><br><span class="line"><span class="keyword">from</span> prometheus_client.core <span class="keyword">import</span> CollectorRegistry</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Response, Flask</span><br><span class="line"></span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 端口列表</span></span><br><span class="line">Getconfigdic=&#123;</span><br><span class="line">    <span class="string">'redis_131'</span>:&#123;<span class="string">'host'</span>:[<span class="string">'192.168.122.131'</span>],<span class="string">'port'</span>:[<span class="number">6379</span>]&#125;,</span><br><span class="line">    <span class="string">'redis_129'</span>:&#123;<span class="string">'host'</span>:[<span class="string">'192.168.122.129'</span>],<span class="string">'port'</span>:[<span class="number">6379</span>]&#125;,</span><br><span class="line">    <span class="string">'mysql_ck'</span>:&#123;<span class="string">'host'</span>:[<span class="string">'192.168.122.130'</span>],<span class="string">'port'</span>:[<span class="number">3306</span>,<span class="number">3307</span>]&#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># ES 红绿检测</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">GetES</span><span class="params">()</span>:</span></span><br><span class="line">    es_url=<span class="string">"http://127.0.0.1:9200/_cluster/health?pretty"</span></span><br><span class="line">    <span class="comment"># 登录之后获取Authorization</span></span><br><span class="line">    token_string=<span class="string">"ZWxhc3RpYzpib29rYW4tZXMtY2x1c3Rlcg=="</span></span><br><span class="line">    headers = &#123;<span class="string">"Authorization"</span>:<span class="string">"Basic &#123;&#125;"</span>.format(token_string)&#125;</span><br><span class="line">    r = requests.get(es_url, headers=headers)</span><br><span class="line">    resp = json.loads(r.text)</span><br><span class="line">    <span class="keyword">if</span> resp[<span class="string">"status"</span>] == <span class="string">"green"</span>:</span><br><span class="line">        result_dic = &#123;<span class="string">"sertype"</span>: <span class="string">"es_status"</span>, <span class="string">"host"</span>: <span class="string">'127.0.0.1'</span>, <span class="string">"port"</span>: <span class="string">'9200'</span>, <span class="string">"status"</span>: <span class="number">0</span>&#125;</span><br><span class="line">    <span class="keyword">elif</span> resp[<span class="string">"status"</span>] == <span class="string">"yellow"</span>:</span><br><span class="line">        result_dic = &#123;<span class="string">"sertype"</span>: <span class="string">"es_status"</span>, <span class="string">"host"</span>: <span class="string">'127.0.0.1'</span>, <span class="string">"port"</span>: <span class="string">'9200'</span>, <span class="string">"status"</span>: <span class="number">1</span>&#125;</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        result_dic = &#123;<span class="string">"sertype"</span>: <span class="string">"es_status"</span>, <span class="string">"host"</span>: <span class="string">'127.0.0.1'</span>, <span class="string">"port"</span>: <span class="string">'9200'</span>, <span class="string">"status"</span>: <span class="number">2</span>&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result_dic</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查端口是否存在</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Exploreport</span><span class="params">(sertype,ip,port)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        tel = socket.socket()</span><br><span class="line">        tel.connect((ip, int(port)))</span><br><span class="line">        socket.setdefaulttimeout(<span class="number">0.5</span>)</span><br><span class="line">        result_dic = &#123;<span class="string">"sertype"</span>: sertype, <span class="string">"host"</span>: ip, <span class="string">"port"</span>: str(port), <span class="string">"status"</span>: <span class="number">1</span>&#125;</span><br><span class="line">        <span class="keyword">return</span> result_dic</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        result_dic = &#123;<span class="string">"sertype"</span>: sertype, <span class="string">"host"</span>: ip, <span class="string">"port"</span>: str(port), <span class="string">"status"</span>: <span class="number">0</span>&#125;</span><br><span class="line">        <span class="keyword">return</span> result_dic</span><br><span class="line"><span class="comment"># 检测</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Checkport</span><span class="params">()</span>:</span></span><br><span class="line">    sdic = Getconfigdic</span><br><span class="line">    result_list = []</span><br><span class="line">    <span class="keyword">for</span> sertype <span class="keyword">in</span> sdic.keys():</span><br><span class="line">        iplist = sdic.get(sertype).get(<span class="string">"host"</span>)</span><br><span class="line">        portlist = sdic.get(sertype).get(<span class="string">"port"</span>)</span><br><span class="line">        <span class="keyword">for</span> ip <span class="keyword">in</span> iplist:</span><br><span class="line">            <span class="keyword">for</span> port <span class="keyword">in</span> portlist:</span><br><span class="line">                result_dic = Exploreport(sertype, ip, port)</span><br><span class="line">                result_list.append(result_dic)</span><br><span class="line">    es_status = GetES()</span><br><span class="line">    result_list.append(es_status)</span><br><span class="line">    <span class="keyword">return</span> result_list</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route("/metrics")</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ApiResponse</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Checkport() 取出来的数据是这样的</span></span><br><span class="line"><span class="string">    checkport = [&#123;"sertype":"zookeeper","host": "192.168.1.22", "port": "2181", "status": 0&#125;,</span></span><br><span class="line"><span class="string">                  &#123;"sertype":"zookeeper","host": "192.168.1.23", "port": "2181", "status": 1&#125;]</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    checkport = Checkport()</span><br><span class="line">    <span class="comment"># 定义metrics仓库，存放多条数据</span></span><br><span class="line">    REGISTRY = CollectorRegistry(auto_describe=<span class="literal">False</span>)</span><br><span class="line">    muxStatus = Gauge(<span class="string">"server_port_up"</span>, <span class="string">"Api response stats is:"</span>, [<span class="string">"sertype"</span>,<span class="string">"host"</span>, <span class="string">"port"</span>], registry=REGISTRY)</span><br><span class="line">    <span class="keyword">for</span> datas <span class="keyword">in</span> checkport:</span><br><span class="line">        sertype = <span class="string">""</span>.join(datas.get(<span class="string">"sertype"</span>))</span><br><span class="line">        host = <span class="string">""</span>.join(datas.get(<span class="string">"host"</span>))</span><br><span class="line">        port = <span class="string">""</span>.join(datas.get(<span class="string">"port"</span>))</span><br><span class="line">        status = datas.get(<span class="string">"status"</span>)</span><br><span class="line">        muxStatus.labels(sertype,host, port).set(status)</span><br><span class="line">    <span class="keyword">return</span> Response(prometheus_client.generate_latest(REGISTRY),</span><br><span class="line">                    mimetype=<span class="string">"text/plain"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    app.run(host=<span class="string">"192.168.122.126"</span>, port=<span class="number">31672</span>, debug=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
-
+        <p>阿里云默认是没有交换分区，需要手动开启一下<a id="more"></a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建一个8g的交换分区</span></span><br><span class="line">[root@ data]# dd if=/dev/zero of=/mnt/swap bs=1M count=8192</span><br><span class="line">8192+0 records in</span><br><span class="line">8192+0 records out</span><br><span class="line">8589934592 bytes (8.6 GB, 8.0 GiB) copied, 73.9426 s, 116 MB/s</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 设置交换分区文件</span></span><br><span class="line">[root@ data]# mkswap /mnt/swap</span><br><span class="line">mkswap: /mnt/swap: insecure permissions 0644, 0600 suggested.</span><br><span class="line">Setting up swapspace version 1, size = 8 GiB (8589930496 bytes)</span><br><span class="line">no label, UUID=8572c9d8-6883-4512-afcc-563d0e18a84d</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 启动交换分区</span></span><br><span class="line">[root@ data]# swapon /mnt/swap</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 开机挂载</span></span><br><span class="line">[root@ data]# vim /etc/fstab</span><br><span class="line">----------------------------</span><br><span class="line">/mnt/swap swap swap defaults 0 0</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 设置swappiness值，如果为10，就是空闲内存少于10%时才使用SWAP分区</span></span><br><span class="line">[root@ data]# echo 10 &gt;/proc/sys/vm/swappiness</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 设置swappiness永久配置</span></span><br><span class="line">[root@ data]# vim /etc/sysctl.conf</span><br><span class="line">----------------------------------</span><br><span class="line">vm.swappiness = 10</span><br><span class="line"></span><br><span class="line">[root@ data]# sysctl -p</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -420,8 +410,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/prometheus/" rel="next" title="prometheus+grafana">
-                <i class="fa fa-chevron-left"></i> prometheus+grafana
+              <a href="/docker-network/" rel="next" title="docker-network">
+                <i class="fa fa-chevron-left"></i> docker-network
               </a>
             
           </div>
@@ -430,8 +420,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/err1231/" rel="prev" title="rm提示Argument list too long">
-                rm提示Argument list too long <i class="fa fa-chevron-right"></i>
+              <a href="/err0531/" rel="prev" title="ERR_SSL_VERSION_OR_CIPHER_MISMATCH">
+                ERR_SSL_VERSION_OR_CIPHER_MISMATCH <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -484,17 +474,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -571,22 +552,6 @@
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#zk"><span class="nav-number">1.</span> <span class="nav-text">zk</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mysql"><span class="nav-number">2.</span> <span class="nav-text">mysql</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他"><span class="nav-number">3.</span> <span class="nav-text">其他</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
