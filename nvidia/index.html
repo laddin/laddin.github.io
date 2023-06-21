@@ -94,14 +94,14 @@
 
 
 
-<meta name="description" content="由于要测试centos6，发现自带的源和阿里的源都无法使用，记录一下后期使用。">
+<meta name="description" content="新采购了一台dell的GPU服务器，显卡L40记录一下安装过程。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="centos6 yum 源">
-<meta property="og:url" content="http://laddin.me/centos6-yum/index.html">
+<meta property="og:title" content="ubuntu22安装cuda cudnn">
+<meta property="og:url" content="http://laddin.me/nvidia/index.html">
 <meta property="og:site_name" content="Laddin&#39;Blog">
-<meta property="og:description" content="由于要测试centos6，发现自带的源和阿里的源都无法使用，记录一下后期使用。">
-<meta property="article:published_time" content="2021-09-01T11:29:12.000Z">
-<meta property="article:modified_time" content="2021-09-01T09:32:23.886Z">
+<meta property="og:description" content="新采购了一台dell的GPU服务器，显卡L40记录一下安装过程。">
+<meta property="article:published_time" content="2023-06-21T07:17:01.000Z">
+<meta property="article:modified_time" content="2023-06-21T07:41:30.938Z">
 <meta property="article:author" content="多多">
 <meta name="twitter:card" content="summary">
 
@@ -132,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://laddin.me/centos6-yum/"/>
+  <link rel="canonical" href="http://laddin.me/nvidia/"/>
 
 
 
 
 
-  <title>centos6 yum 源 | Laddin'Blog</title>
+  <title>ubuntu22安装cuda cudnn | Laddin'Blog</title>
   
 
 
@@ -295,7 +295,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://laddin.me/centos6-yum/">
+    <link itemprop="mainEntityOfPage" href="http://laddin.me/nvidia/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="多多">
@@ -312,7 +312,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">centos6 yum 源</h1>
+          <h1 class="post-title" itemprop="name headline">ubuntu22安装cuda cudnn</h1>
         
 
         <div class="post-meta">
@@ -324,8 +324,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-09-01T19:29:12+08:00">
-                2021-09-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2023-06-21T15:17:01+08:00">
+                2023-06-21
               </time>
             
 
@@ -384,8 +384,8 @@
       
 
       
-        <p>由于要测试centos6，发现自带的源和阿里的源都无法使用，记录一下后期使用。<a id="more"></a></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl -o /etc/yum.repos.d/CentOS-Base.repo http://file.kangle.odata.cc/repo/Centos-6.repo</span><br><span class="line">curl -o /etc/yum.repos.d/epel.repo http://file.kangle.odata.cc/repo/epel-6.repo</span><br><span class="line">yum makecache</span><br></pre></td></tr></table></figure>
+        <p>新采购了一台dell的GPU服务器，显卡L40记录一下安装过程。<a id="more"></a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">ubuntu22自动更新就能直接apt到最新的Nvidia 驱动，以下操作都在root下处理</span></span><br><span class="line">apt update</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">这里选择530这个版本</span></span><br><span class="line">apt install nvidia-driver-530</span><br><span class="line"></span><br><span class="line">nvidia-smi </span><br><span class="line">Wed Jun 21 15:27:24 2023       </span><br><span class="line">+---------------------------------------------------------------------------------------+</span><br><span class="line">| NVIDIA-SMI 530.41.03              Driver Version: 530.41.03    CUDA Version: 12.1     |</span><br><span class="line">|-----------------------------------------+----------------------+----------------------+</span><br><span class="line">| GPU  Name                  Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |</span><br><span class="line">| Fan  Temp  Perf            Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |</span><br><span class="line">|                                         |                      |               MIG M. |</span><br><span class="line">|=========================================+======================+======================|</span><br><span class="line">|   0  NVIDIA L40                      Off| 00000000:61:00.0 Off |                    0 |</span><br><span class="line">| N/A   27C    P0               76W / 300W|      5MiB / 46068MiB |      0%      Default |</span><br><span class="line">|                                         |                      |                  N/A |</span><br><span class="line">+-----------------------------------------+----------------------+----------------------+</span><br><span class="line">|   1  NVIDIA L40                      Off| 00000000:E1:00.0 Off |                    0 |</span><br><span class="line">| N/A   28C    P0               74W / 300W|      5MiB / 46068MiB |      0%      Default |</span><br><span class="line">|                                         |                      |                  N/A |</span><br><span class="line">+-----------------------------------------+----------------------+----------------------+</span><br><span class="line">                                                                                         </span><br><span class="line">+---------------------------------------------------------------------------------------+</span><br><span class="line">| Processes:                                                                            |</span><br><span class="line">|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |</span><br><span class="line">|        ID   ID                                                             Usage      |</span><br><span class="line">|=======================================================================================|</span><br><span class="line">|    0   N/A  N/A      3042      G   /usr/lib/xorg/Xorg                            4MiB |</span><br><span class="line">|    1   N/A  N/A      3042      G   /usr/lib/xorg/Xorg                            4MiB | </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">准备安装cuda，这里选择的是12.1，使用11.8测试会掉nvidia驱动，下载地址 https://developer.nvidia.com/cuda-downloads?target_os=Linux</span></span><br><span class="line"><span class="meta">#</span><span class="bash">选择 linux---&gt; x86_64 ---&gt; ubuntu ---&gt; 22.4 ---&gt; deb(<span class="built_in">local</span>)</span></span><br><span class="line">wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin</span><br><span class="line">sudo mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600</span><br><span class="line">wget https://developer.download.nvidia.com/compute/cuda/12.1.1/local_installers/cuda-repo-ubuntu2204-12-1-local_12.1.1-530.30.02-1_amd64.deb</span><br><span class="line">sudo dpkg -i cuda-repo-ubuntu2204-12-1-local_12.1.1-530.30.02-1_amd64.deb</span><br><span class="line">sudo cp /var/cuda-repo-ubuntu2204-12-1-local/cuda-*-keyring.gpg /usr/share/keyrings/</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get -y install cuda</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">配置环境变量</span></span><br><span class="line">vim  /etc/profile.d/cuda.sh</span><br><span class="line">---------------------------</span><br><span class="line">export PATH=/usr/local/cuda-12.1/bin$&#123;PATH:+:$&#123;PATH&#125;&#125;</span><br><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-12.1/lib64</span><br><span class="line"></span><br><span class="line">source /etc/profile.d/cuda.sh</span><br><span class="line">ldconfig</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">检查cuda</span></span><br><span class="line">nvcc -V</span><br><span class="line">nvcc: NVIDIA (R) Cuda compiler driver</span><br><span class="line">Copyright (c) 2005-2023 NVIDIA Corporation</span><br><span class="line">Built on Mon_Apr__3_17:16:06_PDT_2023</span><br><span class="line">Cuda compilation tools, release 12.1, V12.1.105</span><br><span class="line">Build cuda_12.1.r12.1/compiler.32688072_0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">准备安装cudnn，这里需要注册一个账号，下载地址 https://developer.nvidia.com/rdp/cudnn-download</span></span><br><span class="line"><span class="meta">#</span><span class="bash">选择 <span class="keyword">for</span> CUDA 12.X ---&gt;Local Installer <span class="keyword">for</span> Ubuntu22.04 x86_64 (Deb)</span></span><br><span class="line"><span class="meta">#</span><span class="bash">我这里下载的版本是 cudnn-local-repo-ubuntu2204-8.9.2.26_1.0-1_amd64.deb</span></span><br><span class="line">dpkg -i cudnn-local-repo-ubuntu2204-8.9.2.26_1.0-1_amd64.deb</span><br><span class="line">cp /var/cudnn-local-repo-*/cudnn-local-*-keyring.gpg /usr/share/keyrings/</span><br><span class="line">apt-get update</span><br><span class="line">apt-get install libcudnn8=8.9.2.26-1+cuda12.1</span><br><span class="line">apt-get install libcudnn8-dev=8.9.2.26-1+cuda12.1</span><br><span class="line">apt-get install libcudnn8-samples=8.9.2.26-1+cuda12.1</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">测试cudnn</span></span><br><span class="line">apt-get install libfreeimage3 libfreeimage-dev</span><br><span class="line"></span><br><span class="line">cp -r /usr/src/cudnn_samples_v8/ $HOME</span><br><span class="line">cd $HOME/cudnn_samples_v8/mnistCUDNN</span><br><span class="line">make clean &amp;&amp; make</span><br><span class="line">./mnistCUDNN</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">这里要是显示Test passed！ 就是成功了</span></span><br></pre></td></tr></table></figure>
 
 
       
@@ -411,8 +411,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/py0803/" rel="next" title="阿里云安全组自动更新(下)">
-                <i class="fa fa-chevron-left"></i> 阿里云安全组自动更新(下)
+              <a href="/gzip/" rel="next" title="gzip引起404">
+                <i class="fa fa-chevron-left"></i> gzip引起404
               </a>
             
           </div>
@@ -420,10 +420,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/upstart/" rel="prev" title="upstart">
-                upstart <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
