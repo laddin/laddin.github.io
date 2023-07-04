@@ -2619,4 +2619,20 @@ WantedBy=multi-user.target
         <category>linux</category>
       </categories>
   </entry>
+  <entry>
+    <title>通过cdn的edgescript实现防刷功能</title>
+    <url>/cdnes/</url>
+    <content><![CDATA[<p>通过阿里云CDN的EdgeScript功能实现混淆防刷功能<a id="more"></a>。简单逻辑如下：</p>
+<ul>
+<li>收集异常ip</li>
+<li>如果是黑名单ip，返回随机信息</li>
+<li>通过aly提供的api更新脚本</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">例子，如果是黑名单的请求，返回异常信息</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> https://detail.tmall.com/item.htm?abbucket=0&amp;id=710291341081&amp;ns=1</span></span><br><span class="line">black_ip=['8.8.8.8','114.114.114.144']</span><br><span class="line"></span><br><span class="line">c_ip = tostring(client_addr())</span><br><span class="line">if not(c_ip) &#123;</span><br><span class="line">    add_rsp_header('HTTP-DEBUG', 'not client ip')</span><br><span class="line">    exit(403)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">num = rand(1, 10)</span><br><span class="line"></span><br><span class="line">def echo_each(k, v, u) &#123;</span><br><span class="line">    if  eq(v, c_ip)&#123;</span><br><span class="line">		pcs1 = capture_re($request_uri,'^/item.htm?(.*)')</span><br><span class="line">		url = get(pcs1, 1)</span><br><span class="line">		pcs2 = capture_re(url, 'abbucket=(\d+)&amp;id=(\d+)&amp;ns=(\d+)')</span><br><span class="line"></span><br><span class="line">		if null(pcs2)&#123;</span><br><span class="line">			add_rsp_header('HTTP-DEBUG', 'dev')</span><br><span class="line">			exit(404)</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		sec1 = get(pcs2, 1)</span><br><span class="line">		sec2 = get(pcs2, 2)</span><br><span class="line">		sec3 = get(pcs2, 3)</span><br><span class="line"></span><br><span class="line">		if ge(tonumber(sec2), 10)&#123;</span><br><span class="line">			sec2=num</span><br><span class="line">		&#125;		</span><br><span class="line">		rewrite(concat('item.htm?abbucket=','sec1','&amp;id=','sec2','&amp;ns=','sec3'), 'break')</span><br><span class="line">		&#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">foreach(black_ip, echo_each, [])</span><br></pre></td></tr></table></figure>
+<p>还有很多种其他方案，可以根据实际业务来处理。<a href="https://help.aliyun.com/document_detail/126694.html?spm=a2c4g.126869.0.0.201b39a0ATHNDj" target="_blank" rel="noopener">参考资料</a></p>
+]]></content>
+      <categories>
+        <category>aly</category>
+      </categories>
+  </entry>
 </search>
