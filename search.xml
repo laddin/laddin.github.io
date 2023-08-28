@@ -1703,7 +1703,7 @@ WantedBy=multi-user.target
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">proxy_cache_path /home/proxy_cache/123456 levels=1:2 keys_zone=caches_123456:200m inactive=30m max_size=2g use_temp_path=off;</span><br><span class="line"><span class="meta">#</span><span class="bash"> levels=1:2，表示创建两层目录缓存</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> keys_zone=caches_123456:200m 定义缓存区域名称及大小</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> inactive=30m 在指定时间内没人访问则被删除</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> max_size=2g  最大缓存空间</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> use_temp_path=off</span></span><br><span class="line">upstream web_123456&#123;</span><br><span class="line">        server 127.0.0.1:8093;</span><br><span class="line">&#125;</span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name  123456.com www.123456.com;</span><br><span class="line">    index index.html index.htm index.php forum.php index.asp index.jsp index.aspx;</span><br><span class="line">    access_log  /home/wwwlogs/123456.log;</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://web_123456;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 定义后端访问地址</span></span><br><span class="line">		</span><br><span class="line">	proxy_set_header Accept-Encoding "";</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 清除编码</span></span><br><span class="line">		</span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 定义主机头</span></span><br><span class="line">		</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 向后端传递访客ip </span></span><br><span class="line">		</span><br><span class="line">        proxy_cache caches_123456;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 缓存区名称，与前面定义的相同</span></span><br><span class="line">		</span><br><span class="line">        proxy_cache_key  $host$uri$is_args$query_string;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 缓存key的规则</span></span><br><span class="line">		</span><br><span class="line">        proxy_cache_valid  200 304 60m;</span><br><span class="line">        proxy_cache_valid  301 10m;</span><br><span class="line">        proxy_cache_valid  500 502 503 504 0s;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 状态缓存时效</span></span><br><span class="line">		</span><br><span class="line">        proxy_cache_valid any 1s;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 没有定义状态缓存1s</span></span><br><span class="line">		</span><br><span class="line">        proxy_cache_min_uses 1;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 访问1次就缓存</span></span><br><span class="line">		</span><br><span class="line">        expires 12h;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 失效时间</span></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>linux</category>
+        <category>nginx</category>
       </categories>
   </entry>
   <entry>
@@ -2644,6 +2644,28 @@ WantedBy=multi-user.target
 ]]></content>
       <categories>
         <category>docker</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>nginx CORS</title>
+    <url>/nginx-cors/</url>
+    <content><![CDATA[<p>nignx 多域名跨域。<a id="more"></a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set $cors_origin &quot;*&quot;;</span><br><span class="line">if ($http_origin ~* &quot;^https:&#x2F;&#x2F;baidu.bookan.com$&quot;)&#123;</span><br><span class="line">        set $cors_origin $http_origin;</span><br><span class="line">&#125;</span><br><span class="line">if ($http_origin ~* &quot;^https:&#x2F;&#x2F;163.bookan.com$&quot;)&#123;</span><br><span class="line">        set $cors_origin $http_origin;</span><br><span class="line">&#125;</span><br><span class="line">add_header Access-Control-Allow-Origin $http_origin always; </span><br><span class="line">add_header Access-Control-Allow-Credentials true;</span><br><span class="line">add_header Access-Control-Allow-Methods &quot;GET, PUT, POST, DELETE, OPTIONS&quot;;</span><br><span class="line">add_header Access-Control-Allow-Headers &quot;Origin, Accept, Content-Type, Content-Length, X-Auth-Token, Authorization&quot;;</span><br></pre></td></tr></table></figure>
+<p>如果是<code>baidu</code>或者<code>163</code>请求过来的连接，<code>Access-Control-Allow-Origin</code>就为<code>baidu</code>或者<code>163</code>，其他的为<code>*</code>，或者不要上面的判断，什么域名过来的请求<code>Access-Control-Allow-Origin</code>就是什么.</p>
+]]></content>
+      <categories>
+        <category>nginx</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>nginx 流式响应</title>
+    <url>/nginx-proxy2/</url>
+    <content><![CDATA[<p>nginx 4层代理实现流式响应，类似打字机效果<a id="more"></a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">location &#x2F; &#123;</span><br><span class="line">proxy_pass http:&#x2F;&#x2F;127.0.0.1:8000;</span><br><span class="line">proxy_cache  off;</span><br><span class="line">proxy_buffering off;</span><br><span class="line">chunked_transfer_encoding  on;</span><br><span class="line">tcp_nopush on;</span><br><span class="line">tcp_nodelay on;</span><br><span class="line">keepalive_timeout 300; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>proxy_cache off; # 关闭缓存,防止代理服务器缓存流式响应内容,导致客户端收不到完整响应。<br>proxy_buffering off; # 关闭代理服务器对响应的缓冲,防止其缓冲整个响应后再发送给客户端,无法实现流式传输效果。<br>chunked_transfer_encoding on; # 开启分块传输编码,允许将响应分成多个块进行传输,实现流式传输。<br>tcp_nopush on; # 开启TCP NOPUSH选项,禁用Nagle算法,防止小块数据的合并,实时发送给客户端。<br>tcp_nodelay on; # 开启TCP NODELAY选项,禁用延迟ACK算法,防止ACK包的延迟,及时发送给客户端。<br>keepalive_timeout 300; # 增加keepalive超时时间,防止在流式响应未完成时,代理与源服务器的连接就被关闭。<br>通过关闭缓存和代理缓冲,开启分块编码、禁用Nagle与延迟ACK算法,以及增加keepalive超时时间,可以实现代理服务器与客户端间的流式响应传输。</p>
+]]></content>
+      <categories>
+        <category>nginx</category>
       </categories>
   </entry>
 </search>
