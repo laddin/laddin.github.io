@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="Laddin&#39;Blog">
 <meta property="og:description" content="内网一个文件服务器资料要共享出来，首先就想到NFS来处理">
 <meta property="article:published_time" content="2020-11-16T01:53:10.000Z">
-<meta property="article:modified_time" content="2021-01-05T17:08:34.312Z">
+<meta property="article:modified_time" content="2023-10-12T00:57:24.531Z">
 <meta property="article:author" content="多多">
 <meta name="twitter:card" content="summary">
 
@@ -385,7 +385,7 @@
 
       
         <p>内网一个文件服务器资料要共享出来，首先就想到NFS来处理<a id="more"></a>，这里是内网就不说防火墙等设置了，只是简单记录一下过程。</p>
-<h5 id="共享端0-97"><a href="#共享端0-97" class="headerlink" title="共享端0.97"></a>共享端0.97</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">yum -y install nfs-utils rpcbind</span><br><span class="line"><span class="meta">#</span><span class="bash"> 这里直接把/mnt/Files 文件进行共享到0.142</span></span><br><span class="line"></span><br><span class="line">vim  /etc/exports</span><br><span class="line">-----------------</span><br><span class="line">/mnt/Files 192.168.0.142/31(rw,sync)</span><br><span class="line"></span><br><span class="line">exportfs -r </span><br><span class="line">systemctl start rpcbind</span><br><span class="line">systemctl start nfs</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">查看端口是否启动</span></span><br><span class="line">netstat -lnpt</span><br><span class="line"></span><br><span class="line">``</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#### 同步端0.142</span></span></span><br><span class="line">```shell</span><br><span class="line">yum -y install nfs-utils rpcbind</span><br><span class="line"></span><br><span class="line">systemctl start rpcbind</span><br><span class="line">systemctl start nfs</span><br><span class="line"></span><br><span class="line">mkdir   /mnt/Files</span><br><span class="line">showmount -e 192.168.0.97</span><br><span class="line">mount -t nfs 192.168.0.97:/mnt/Files  /mnt/Files</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# df -h</span><br><span class="line">Filesystem                   Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/centos-root       50G  3.9G   47G   8% /</span><br><span class="line">devtmpfs                     3.8G     0  3.8G   0% /dev</span><br><span class="line">tmpfs                        3.9G     0  3.9G   0% /dev/shm</span><br><span class="line">tmpfs                        3.9G  172M  3.7G   5% /run</span><br><span class="line">tmpfs                        3.9G     0  3.9G   0% /sys/fs/cgroup</span><br><span class="line">/dev/sda1                   1014M  142M  873M  14% /boot</span><br><span class="line">/dev/mapper/centos-home      441G  138G  304G  32% /home</span><br><span class="line">192.168.0.97:/mnt/Files     1008G  854G  104G  90% /mnt/Files</span><br><span class="line">tmpfs                        781M     0  781M   0% /run/user/0</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#### 共享端0.97</span></span></span><br><span class="line">yum -y install nfs-utils rpcbind</span><br><span class="line"><span class="meta">#</span><span class="bash"> 这里直接把/mnt/Files 文件进行共享到0.142</span></span><br><span class="line"></span><br><span class="line">vim  /etc/exports</span><br><span class="line">-----------------</span><br><span class="line">/mnt/Files 192.168.0.142/31(rw,sync,no_root_squash)</span><br><span class="line"></span><br><span class="line">exportfs -r </span><br><span class="line">systemctl start rpcbind</span><br><span class="line">systemctl start nfs</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">查看端口是否启动</span></span><br><span class="line">netstat -lnpt</span><br><span class="line"></span><br><span class="line">``</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment">#### 同步端0.142</span></span></span><br><span class="line">```shell</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mkdir   /mnt/Files</span><br><span class="line">showmount -e 192.168.0.97</span><br><span class="line">mount -t nfs 192.168.0.97:/mnt/Files  /mnt/Files</span><br><span class="line"></span><br><span class="line">[root@localhost ~]# df -h</span><br><span class="line">Filesystem                   Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/centos-root       50G  3.9G   47G   8% /</span><br><span class="line">devtmpfs                     3.8G     0  3.8G   0% /dev</span><br><span class="line">tmpfs                        3.9G     0  3.9G   0% /dev/shm</span><br><span class="line">tmpfs                        3.9G  172M  3.7G   5% /run</span><br><span class="line">tmpfs                        3.9G     0  3.9G   0% /sys/fs/cgroup</span><br><span class="line">/dev/sda1                   1014M  142M  873M  14% /boot</span><br><span class="line">/dev/mapper/centos-home      441G  138G  304G  32% /home</span><br><span class="line">192.168.0.97:/mnt/Files     1008G  854G  104G  90% /mnt/Files</span><br><span class="line">tmpfs                        781M     0  781M   0% /run/user/0</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -474,17 +474,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -561,22 +552,6 @@
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#共享端0-97"><span class="nav-number">1.</span> <span class="nav-text">共享端0.97</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
