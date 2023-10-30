@@ -2668,4 +2668,15 @@ WantedBy=multi-user.target
         <category>nginx</category>
       </categories>
   </entry>
+  <entry>
+    <title>php升级openssl</title>
+    <url>/phpopenssl/</url>
+    <content><![CDATA[<p>cnetos7，php7.4，openssl1.0.2k 升级到openssl 1.1.1w<a id="more"></a>。<br>下载最新的openssl <a href="https://www.openssl.org/source/" target="_blank" rel="noopener">官网</a>。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tar xf openssl-1.1.1w.tar.gz</span><br><span class="line">cd openssl-1.1.1w/</span><br><span class="line">./config shared --openssldir=/usr/local/openssl-1.1.1w --prefix=/usr/local/openssl-1.1.1w</span><br><span class="line">make &amp;&amp; make install</span><br><span class="line"></span><br><span class="line">mv /usr/bin/openssl /usr/bin/openssl.bak</span><br><span class="line">mv /usr/include/openssl /usr/include/openssl.bak</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">默认是使用了软连接：/usr/lib64/libssl.so -&gt; libssl.so.1.0.2k</span></span><br><span class="line"><span class="meta">#</span><span class="bash">而真实文件路径则是：/usr/lib64/libssl.so.1.0.2k</span></span><br><span class="line">unlink /usr/lib64/libssl.so</span><br><span class="line"></span><br><span class="line">ln -s /usr/local/openssl-1.1.1w/bin/openssl /usr/bin/openssl</span><br><span class="line">ln -s /usr/local/openssl-1.1.1w/include/openssl /usr/include/openssl</span><br><span class="line">ln -s /usr/local/openssl-1.1.1w/lib/libssl.so /usr/lib64/libssl.so</span><br><span class="line">echo '/usr/local/openssl-1.1.1w/lib' &gt;&gt; /etc/ld.so.conf</span><br><span class="line">ldconfig -v</span><br><span class="line"></span><br><span class="line">ln -s /usr/local/openssl-1.1.1w/lib/libssl.so.1.1 /usr/lib64/libssl.so.1.1 </span><br><span class="line">ln -s /usr/local/openssl-1.1.1w/lib/libcrypto.so.1.1 /usr/lib64/libcrypto.so.1.1 </span><br><span class="line"></span><br><span class="line">[root@ ~]# openssl version</span><br><span class="line">OpenSSL 1.1.1w  11 Sep 2023</span><br></pre></td></tr></table></figure>
+<p>这里有的说重新编译一下openssl模块然后引用就可以了，有的说需要重新编译一下，我是直接重新编译处理的，<code>--with-openssl</code>不用指定新目录，直接编译，如果重新编译模块<code>phpize</code>出现<code>Cannot find config.m4.</code>的错误，直接<code>cp config0.m4 config.m4</code>。</p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
 </search>
