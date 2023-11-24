@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="Laddin&#39;Blog">
 <meta property="og:description" content="Nginx代理，方便后期查询。">
 <meta property="article:published_time" content="2017-07-02T11:10:27.000Z">
-<meta property="article:modified_time" content="2023-08-28T01:15:42.746Z">
+<meta property="article:modified_time" content="2023-11-16T10:09:30.162Z">
 <meta property="article:author" content="多多">
 <meta name="twitter:card" content="summary">
 
@@ -387,6 +387,9 @@
         <p>Nginx代理，方便后期查询。<a id="more"></a></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">proxy_cache_path /home/proxy_cache/123456 levels=1:2 keys_zone=caches_123456:200m inactive=30m max_size=2g use_temp_path=off;</span><br><span class="line"><span class="meta">#</span><span class="bash"> levels=1:2，表示创建两层目录缓存</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> keys_zone=caches_123456:200m 定义缓存区域名称及大小</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> inactive=30m 在指定时间内没人访问则被删除</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> max_size=2g  最大缓存空间</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> use_temp_path=off</span></span><br><span class="line">upstream web_123456&#123;</span><br><span class="line">        server 127.0.0.1:8093;</span><br><span class="line">&#125;</span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name  123456.com www.123456.com;</span><br><span class="line">    index index.html index.htm index.php forum.php index.asp index.jsp index.aspx;</span><br><span class="line">    access_log  /home/wwwlogs/123456.log;</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://web_123456;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 定义后端访问地址</span></span><br><span class="line">		</span><br><span class="line">	proxy_set_header Accept-Encoding "";</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 清除编码</span></span><br><span class="line">		</span><br><span class="line">        proxy_set_header Host $host;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 定义主机头</span></span><br><span class="line">		</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 向后端传递访客ip </span></span><br><span class="line">		</span><br><span class="line">        proxy_cache caches_123456;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 缓存区名称，与前面定义的相同</span></span><br><span class="line">		</span><br><span class="line">        proxy_cache_key  $host$uri$is_args$query_string;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 缓存key的规则</span></span><br><span class="line">		</span><br><span class="line">        proxy_cache_valid  200 304 60m;</span><br><span class="line">        proxy_cache_valid  301 10m;</span><br><span class="line">        proxy_cache_valid  500 502 503 504 0s;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 状态缓存时效</span></span><br><span class="line">		</span><br><span class="line">        proxy_cache_valid any 1s;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 没有定义状态缓存1s</span></span><br><span class="line">		</span><br><span class="line">        proxy_cache_min_uses 1;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 访问1次就缓存</span></span><br><span class="line">		</span><br><span class="line">        expires 12h;</span><br><span class="line"><span class="meta">	#</span><span class="bash"> 失效时间</span></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<h4 id="proxy-pass-解析异常问题（by：20231124）"><a href="#proxy-pass-解析异常问题（by：20231124）" class="headerlink" title="proxy_pass 解析异常问题（by：20231124）"></a>proxy_pass 解析异常问题（by：20231124）</h4><p>线上<code>proxy_pass</code>后端域名，那个节点的服务器更换后面出现服务异常，解析的还是之前的ip，需要调整一下配置，配置如下。<a href="https://community.f5.com/t5/technical-forum/does-nginx-1-20-or-newer-re-resolve-dns-for-proxy-pass/td-p/303654" target="_blank" rel="noopener">文档</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"> location ^~ /_example/ &#123;</span><br><span class="line">           proxy_pass https://example.com/_example/;</span><br><span class="line">           proxy_set_header Host my-site;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">----------------------------------------------------</span><br><span class="line">  location ^~ /_example/ &#123;</span><br><span class="line">           set $backend_server example.com;</span><br><span class="line">           proxy_pass https://$backend_server/_example/;</span><br><span class="line">           proxy_set_header Host my-site;</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+
       
     </div>
     
@@ -474,8 +477,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -490,7 +502,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">111</span>
+                <span class="site-state-item-count">112</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -552,6 +564,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#proxy-pass-解析异常问题（by：20231124）"><span class="nav-number">1.</span> <span class="nav-text">proxy_pass 解析异常问题（by：20231124）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
