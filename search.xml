@@ -1234,7 +1234,53 @@ WantedBy=multi-user.target
     <url>/ffmpeg/</url>
     <content><![CDATA[<p>centos7安装ffmpeg<a id="more"></a>，编译安装出现过各种异常错误，最后成功还是差一些参数，可以产考官网的<a href="https://trac.ffmpeg.org/wiki/CompilationGuide/Centos" target="_blank" rel="noopener">说明</a>，也可以产考这个<a href="https://github.com/hostsoft/ffmpegtoolkit/blob/master/function.sh" target="_blank" rel="noopener">GitHub</a>，开始我是编译安装然后出现异常谷歌搜索得不到解决，后来采用yum安装，解决大部分的问题，但是有一些库出现冲突，然后用调整了一下yum的编译参数，重新编译问题得到解决，过程如下。</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">编译异常略过</span></span><br><span class="line"><span class="meta">#</span><span class="bash">yum安装</span></span><br><span class="line">yum install epel-release -y</span><br><span class="line">yum localinstall --nogpgcheck https://download1.rpmfusion.org/free/el/rpmfusion-free-release-7.noarch.rpm</span><br><span class="line">yum install ffmpeg ffmpeg-devel</span><br><span class="line">ffmpeg   -v</span><br><span class="line">-----------</span><br><span class="line">ffmpeg version 3.4.8 Copyright (c) 2000-2020 the FFmpeg developers</span><br><span class="line">  built with gcc 4.8.5 (GCC) 20150623 (Red Hat 4.8.5-44)</span><br><span class="line">  configuration: --prefix=/usr --bindir=/usr/bin --datadir=/usr/share/ffmpeg --docdir=/usr/share/doc/ffmpeg --incdir=/usr/include/ffmpeg --libdir=/usr/lib64 --mandir=/usr/share/man --arch=x86_64 --optflags='-O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -m64 -mtune=generic' --extra-ldflags='-Wl,-z,relro ' --extra-cflags=' ' --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvo-amrwbenc --enable-version3 --enable-bzlib --disable-crystalhd --enable-fontconfig --enable-gcrypt  --enable-libass --enable-libbluray --enable-libcdio --enable-libdrm --enable-indev=jack --enable-libfreetype --enable-libfribidi --enable-libgsm --enable-libmp3lame --enable-nvenc --enable-openal --enable-opencl --enable-opengl --enable-libopenjpeg --enable-libopus --disable-encoder=libopus --enable-libpulse --enable-librsvg --enable-libsoxr --enable-libspeex --enable-libtheora --enable-libvorbis --enable-libv4l2 --enable-libvidstab --enable-libvpx --enable-libx264 --enable-libx265 --enable-libxvid --enable-libzvbi --enable-avfilter --enable-avresample --enable-libmodplug --enable-postproc --enable-pthreads --disable-static --enable-shared --enable-gpl --disable-debug --disable-stripping --shlibdir=/usr/lib64 --enable-libmfx --enable-runtime-cpudetect</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">由于之前编译失败过，在使用yum安装会造成ffmpeg与链接的版本不一致，这里出现了--<span class="built_in">enable</span>-libopus --<span class="built_in">disable</span>-encoder=libopus，opus完全无法使用，咨询过开发我们只需要固定的几个参数，然后去GitHub下载了一份3.4.8的版本，参考yum的编译参数进处理，最后完美解决</span></span><br><span class="line">tar -zxvf FFmpeg-n3.4.8.tar.gz</span><br><span class="line">cd   FFmpeg-n3.4.8</span><br><span class="line">PATH="$HOME/bin:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure --prefix=/usr --bindir=/usr/bin --datadir=/usr/share/ffmpeg --docdir=/usr/share/doc/ffmpeg --incdir=/usr/include/ffmpeg --libdir=/usr/lib64 --mandir=/usr/share/man --arch=x86_64 --optflags='-O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -m64 -mtune=generic' --extra-ldflags='-Wl,-z,relro ' --extra-cflags=' '  --enable-libopus  --enable-libvpx --enable-libvorbis  --enable-libfdk_aac</span><br><span class="line"></span><br><span class="line">make -j  4</span><br><span class="line">make install </span><br><span class="line"></span><br><span class="line">ffmpeg -v</span><br><span class="line">---------</span><br><span class="line">ffmpeg version 3.4.8 Copyright (c) 2000-2020 the FFmpeg developers</span><br><span class="line">  built with gcc 4.8.5 (GCC) 20150623 (Red Hat 4.8.5-44)</span><br><span class="line">  configuration: --prefix=/usr --bindir=/usr/bin --datadir=/usr/share/ffmpeg --docdir=/usr/share/doc/ffmpeg --incdir=/usr/include/ffmpeg --libdir=/usr/lib64 --mandir=/usr/share/man --arch=x86_64 --optflags='-O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -m64 -mtune=generic' --extra-ldflags='-Wl,-z,relro ' --extra-cflags=' ' --enable-libopus --enable-libvpx --enable-libvorbis --enable-libfdk_aac</span><br><span class="line">  libavutil      55. 78.100 / 55. 78.100</span><br><span class="line">  libavcodec     57.107.100 / 57.107.100</span><br><span class="line">  libavformat    57. 83.100 / 57. 83.100</span><br><span class="line">  libavdevice    57. 10.100 / 57. 10.100</span><br><span class="line">  libavfilter     6.107.100 /  6.107.100</span><br><span class="line">  libswscale      4.  8.100 /  4.  8.100</span><br><span class="line">  libswresample   2.  9.100 /  2.  9.100</span><br><span class="line">Missing argument for option 'v'.</span><br><span class="line">Error splitting the argument list: Invalid argument</span><br></pre></td></tr></table></figure>
-]]></content>
+
+<h4 id="20240416更新，阿里云Alibaba-Cloud-Linux-3-2"><a href="#20240416更新，阿里云Alibaba-Cloud-Linux-3-2" class="headerlink" title="20240416更新，阿里云Alibaba Cloud Linux 3.2"></a>20240416更新，阿里云Alibaba Cloud Linux 3.2</h4><pre><code> wget http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz
+ tar   -zxvf   yasm-1.3.0.tar.gz 
+ cd  yasm-1.3.0/
+ ./configure 
+ make
+ make  install
+
+
+tar   -zxvf  fdk-aac-0.1.5.tar.gz 
+ cd fdk-aac-0.1.5/
+ ./configure 
+ make  
+ make  install  
+
+
+tar  -jxvf  nasm-2.13.tar.bz2 
+cd  nasm-2.13/
+./configure 
+make  
+make  install 
+# 这里会出现` error: ‘pure’ attribute on function returning ‘void’ [-Werror=attributes]` 的错误是因为gcc的版本太高了，注释掉 `ism-2.13/nclude/nasmlib.h` 这个文件的194行`void pure_func seg_init(void);` 即可
+
+
+tar  -jxvf  x264-snapshot-20191201-2245-stable.tar.bz2 
+cd x264-snapshot-20191201-2245-stable/
+./configure --enable-static --enable-shared –enable-yasm
+make  
+make  install 
+
+
+ tar   -zxvf   FFmpeg-n3.4.8.tar.gz 
+ cd FFmpeg-n3.4.8/
+ ./configure --prefix=/usr/local/ffmpeg  --enable-gpl --enable-shared --enable-libfdk-aac --enable-nonfree  --enable-libx264
+make  
+make install 
+
+vim  /etc/ld.so.conf
+--------------------
+/usr/local/ffmpeg/lib
+/usr/local/src/fdk-aac-0.1.5/.libs
+/usr/local/lib
+
+ ldconfig -v
+
+echo &quot;export PATH=$PATH:/usr/local/ffmpeg/bin&quot;  &gt;&gt;  /etc/profile.d/ffmpeg.sh
+source /etc/profile.d/ffmpeg.sh</code></pre>]]></content>
       <categories>
         <category>linux</category>
       </categories>
