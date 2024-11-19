@@ -2748,4 +2748,66 @@ source /etc/profile.d/ffmpeg.sh</code></pre>]]></content>
         <category>linux</category>
       </categories>
   </entry>
+  <entry>
+    <title>ubuntu dist 问题</title>
+    <url>/ubuntu-dist/</url>
+    <content><![CDATA[<p>ubuntu 安装时候dist选择默认模式，硬盘会预留空间，逻辑分区和实际硬盘容量不一致。<a id="more"></a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">lvextend -l +100%FREE  &#x2F;dev&#x2F;ubuntu-vg&#x2F;ubuntu-lv </span><br><span class="line">resize2fs &#x2F;dev&#x2F;ubuntu-vg&#x2F;ubuntu-lv</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>ubuntu</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>ubuntu重启dns消失</title>
+    <url>/ubuntu-dns/</url>
+    <content><![CDATA[<p>Ubuntu重启<code>/etc/resolv.conf</code>重置<a id="more"></a>。因为是映射 systemd-resolved 服务的，这里直接关闭然后删除映射文件在创建一个新文件就OK了。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl stop systemd-resolved</span><br><span class="line">systemctl disable systemd-resolved</span><br><span class="line">rm  -rf  &#x2F;etc&#x2F;resolv.conf</span><br><span class="line">vim   &#x2F;etc&#x2F;resolv.conf</span><br><span class="line">----------------------</span><br><span class="line">nameserver 8.8.8.8</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line"></span><br><span class="line">chattr +i  &#x2F;etc&#x2F;resolv.conf</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>ubuntu</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>openssh 升级</title>
+    <url>/openssh/</url>
+    <content><![CDATA[<p>网信办进行检查，要求使用目前最新版的openssh,OpenSSL 1.1.1w,openssh 9.9p1<a id="more"></a>。</p>
+<pre><code class="shell">yum install openssl-devel zlib-devel readline-devel
+cd   /usr/local/src/
+wget https://www.openssl.org/source/openssl-1.1.1w.tar.gz 
+tar -xzf openssl-1.1.1w.tar.gz 
+cd  openssl-1.1.1w
+yum remove openssl -y
+ ./config --prefix=/usr
+make   -j  4 
+make  install  
+openssl version
+
+
+vim  /etc/selinux/config
+------------------------
+SELINUX=disabled
+
+vim  /etc/ssh/sshd_config
+-------------------------
+PermitRootLogin yes
+PubkeyAuthentication yes
+
+
+yum install -y gcc make automake autoconf libtool libselinux-devel
+cd  /usr/local/src
+wget https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-9.9p1.tar.gz
+tar -xzf openssh-9.9p1.tar.gz 
+cd  openssh-9.9p1
+./configure --prefix=/usr --sysconfdir=/etc/ssh --with-privsep-path=/var/lib/sshd
+make  -j  4
+make  install  
+systemctl restart sshd
+ssh  -V</code></pre>
+<p>出现<code>Permissions 0640 for &#39;/etc/ssh/ssh_host_ed25519_key&#39; are too open</code> 就刷一下权限 <code>chmod 600  -R   /etc/ssh/</code></p>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
 </search>
